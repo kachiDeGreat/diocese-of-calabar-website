@@ -1,12 +1,10 @@
 import logoCalabar from "./image/logo.png";
-// import logoWhite from "./images/logo-white.png";
-// import heroImage from "./images/hero-bg.jpg";
-// import defaultAvatar from "./images/default-avatar.png";
+import carouselImgOne from "./image/carousel-img1.png";
+import carouselImgTwo from "./image/carousel-img2.jpg";
 
 // Export them as a named object
 export const Images = {
   logoCalabar,
-  //   logoWhite,
-  //   heroImage,
-  //   defaultAvatar,
+  carouselImgOne,
+  carouselImgTwo,
 };

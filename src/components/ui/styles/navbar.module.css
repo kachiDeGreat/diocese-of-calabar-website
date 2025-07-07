@@ -1,6 +1,6 @@
 /* Header Container */
 .header {
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   z-index: 1000;
@@ -232,7 +232,7 @@ a {
   background: #ffffff;
   min-width: 200px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  border-radius: 0 0 8px 8px;
+  /* border-radius: 0 0 8px 8px; */
   padding: 20px 0;
   opacity: 0;
   visibility: hidden;

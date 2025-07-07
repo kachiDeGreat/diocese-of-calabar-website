@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../page-components/Navbar";
+import Carousel from "../page-components/Carousel";
 
 function Home() {
   return (
     <div>
-      <Navbar />
+      <Carousel />
     </div>
   );
 }
