@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
-import Home from "./components/ui/pages/Home";
+import Index from "./components/routes/Index";
 
 function App() {
   return (
     <div className="App">
-      <Home />
+      <Index />
     </div>
   );
 }
