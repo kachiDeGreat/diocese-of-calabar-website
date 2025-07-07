@@ -23,7 +23,7 @@ const slides: Slide[] = [
       <>
         Diocese of Calabar
         <br />
-        (Anglican Communion)
+        <i style={{ fontSize: "3rem" }}>(Anglican Communion)</i>
       </>
     ),
     description:
