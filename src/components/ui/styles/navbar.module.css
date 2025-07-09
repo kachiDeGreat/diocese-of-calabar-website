@@ -409,7 +409,7 @@ a:focus {
   .megaMenuColumn {
     border-right: none;
     border-bottom: none;
-    /* padding: 15px 0; */
+    overflow: hidden;
   }
 
   .megaMenuColumn:last-child {
