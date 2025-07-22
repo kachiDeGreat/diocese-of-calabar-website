@@ -18,6 +18,15 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
+    image: Images.carouselImgTwo,
+    title: "Join Our Sunday Service",
+    description:
+      "Experience heartfelt worship and inspiring messages every Sunday. All are welcome to join our church family.",
+    buttonText: "Service Times",
+    buttonLink: "/worship",
+  },
+  {
+    id: 2,
     image: Images.carouselImgOne,
     title: (
       <>
@@ -27,18 +36,18 @@ const slides: Slide[] = [
       </>
     ),
     description:
-      "The Premier Diocese in the Church of Nigeria, Anglican Communion. Join us in worship, fellowship, and service to our community.",
+      "The Anglican Diocese of Calabar is one of ten within the Anglican Province of the Niger Delta...",
     buttonText: "Learn More",
     buttonLink: "/about",
   },
   {
-    id: 2,
-    image: Images.carouselImgTwo,
-    title: "Join Our Sunday Service",
+    id: 3,
+    image: Images.carouselImgOne,
+    title: <>See upcoming events</>,
     description:
-      "Experience heartfelt worship and inspiring messages every Sunday. All are welcome to join our church family.",
-    buttonText: "Service Times",
-    buttonLink: "/worship",
+      "Stay connected with our diocese through various events and activities. Check out our calendar for details.",
+    buttonText: "See Events",
+    buttonLink: "/about",
   },
 ];
 

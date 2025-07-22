@@ -298,13 +298,14 @@
   }
 
   .nameCard {
-    margin-top: -200px;
+    margin-top: -180px;
     padding: 12px;
   }
 
   .welcomeText {
     font-size: 0.95rem;
     margin-bottom: 15px;
+    text-align: left;
   }
 }
 

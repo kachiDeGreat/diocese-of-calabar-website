@@ -234,7 +234,7 @@ a:focus {
 .simpleDropdown {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: -25%;
   background: #ffffff;
   min-width: 200px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -354,7 +354,7 @@ a:focus {
     top: 100px;
     flex-direction: column;
     background-color: #ffffff;
-    width: 100%;
+    width: 90%;
     text-align: left;
     transition: 0.3s;
     /* box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05); */

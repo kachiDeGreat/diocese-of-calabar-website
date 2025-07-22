@@ -29,33 +29,6 @@ function Featured() {
     },
   ];
 
-  // Type-safe transition configuration
-  const cardTransition: Transition = {
-    duration: 0.6,
-    ease: "easeOut", // Using one of Framer Motion's predefined easing functions
-  };
-
-  // Properly typed variants
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-        when: "beforeChildren",
-      },
-    },
-  };
-
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: cardTransition,
-    },
-  };
-
   const handleImageError = (
     e: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
@@ -65,24 +38,12 @@ function Featured() {
   };
 
   return (
-    <motion.section
-      className={styles.featuredSection}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      variants={containerVariants}
-    >
+    <section className={styles.featuredSection}>
       <div className={styles.featuredContainer}>
         <br />
-        <motion.div className={styles.cardsContainer}>
+        <div className={styles.cardsContainer}>
           {featuredPeople.map((person) => (
-            <motion.div
-              key={person.id}
-              className={styles.card}
-              variants={cardVariants}
-              whileHover={{ scale: 1.03 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
+            <div key={person.id} className={styles.card}>
               <img
                 src={person.imageUrl}
                 alt={person.name}
@@ -96,11 +57,11 @@ function Featured() {
                   <p className={styles.church}>{person.church}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
 
