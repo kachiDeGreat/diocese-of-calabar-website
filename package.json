@@ -13,10 +13,12 @@
     "@types/react-dom": "^19.1.6",
     "firebase": "^11.10.0",
     "framer-motion": "^12.23.1",
+    "keen-slider": "^6.8.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
+    "swiper": "^11.2.10",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

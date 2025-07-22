@@ -1,0 +1,108 @@
+.arch-section {
+    width: 87%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 50px;
+    position: relative;
+    margin-top: 50px;
+  }
+  
+  .arch-title {
+    font-size: 2.2rem;
+    color: #333333;
+    margin-top: -0.011px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+  }
+  
+  .arch-section {
+    padding: 2rem;
+  }
+  
+  .arch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .arch-header-text {
+    text-align: center;
+    flex: 1;
+    margin-right: -150px;
+  }
+  
+  .arch-header-sub {
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #c52810;
+  }
+  
+  .arch-title {
+    font-size: 2rem;
+    margin: 0.2rem 0;
+  }
+  
+  .archtitle-underline {
+    width: 60px;
+    height: 3px;
+    background-color: #c52810;
+    margin: 0.5rem auto;
+  }
+  
+  .arch-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem;
+  }
+  
+  .arch-controls button {
+    background: #c52810;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .arch-controls button:hover {
+    background: #000;
+  }
+  
+  .arch-slider {
+    margin-top: 2rem;
+    padding: 10px 0;
+  }
+  
+  /* Swiper overrides */
+  .swiper-slide {
+    height: auto;
+    display: flex;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .arch-header-text {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .arch-controls {
+      margin: 1rem auto;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .arch-section {
+      padding: 2rem 1rem;
+    }
+    
+    .arch-title {
+      font-size: 1.8rem;
+    }
+  }

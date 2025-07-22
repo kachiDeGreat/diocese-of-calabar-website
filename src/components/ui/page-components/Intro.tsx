@@ -33,7 +33,7 @@ function Intro() {
             <div className={styles.textWrapper}>
               <span
                 style={{
-                  fontSize: "1.1em",
+                  fontSize: "0.9em",
                   fontWeight: "600",
                   textTransform: "uppercase",
                   color: "#c52810",
