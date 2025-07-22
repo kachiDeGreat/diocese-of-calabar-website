@@ -1,10 +1,10 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import styles from "../styles/carousel.module.css";
 import { Images } from "../../Assets/assets";
 
 import { ReactNode } from "react";
+import Button from "./button";
+import { useNavigate } from "react-router-dom";
 
 interface Slide {
   id: number;
@@ -78,6 +78,7 @@ function Carousel() {
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
+const navigate = useNavigate();
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     setIsAutoPlaying(false);
@@ -110,9 +111,16 @@ function Carousel() {
               <div className={styles.contentWrapper}>
                 <h1 className={styles.slideTitle}>{slide.title}</h1>
                 <p className={styles.slideDescription}>{slide.description}</p>
-                <a href={slide.buttonLink} className={styles.slideButton}>
+                {/* <a href={slide.buttonLink} className={styles.slideButton}>
                   {slide.buttonText}
-                </a>
+                </a> */}
+                <Button
+                style={{marginLeft: "-10px"}}
+                  size="medium"
+                  onClick={() => navigate(slide.buttonLink)}
+                >
+                  {slide.buttonText}
+                </Button>
               </div>
             </div>
           </div>

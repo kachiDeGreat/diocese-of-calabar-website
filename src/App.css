@@ -7,3 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden !important;
 }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
