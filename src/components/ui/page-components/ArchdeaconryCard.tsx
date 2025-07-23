@@ -1,33 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./ArchdeaconryCard.css";
+import type React from "react";
 
 interface ArchdeaconryCardProps {
   image: string;
   title: string;
   description: string;
-  link?: string;
+  link: string;
 }
 
 const ArchdeaconryCard: React.FC<ArchdeaconryCardProps> = ({
   image,
   title,
   description,
-  link = "#",
+  link,
 }) => {
   return (
     <div className="arch-card">
-      <img src={image} alt={title} className="arch-card-image" />
+      <div className="arch-card-image-container">
+        <img
+          src={image || "/placeholder.svg"}
+          alt={title}
+          className="arch-card-image"
+        />
+      </div>
       <div className="arch-card-content">
-        <Link to={link} className="arch-card-title">
-          {title}
-        </Link>
-        <br /><br />
+        <h3 className="arch-card-title">{title}</h3>
         <p className="arch-card-description">{description}</p>
-        <br />
-        <Link to={link} className="arch-card-link">
+        <a href={link} className="arch-read-more-btn">
           Read More
-        </Link>
+        </a>
       </div>
     </div>
   );

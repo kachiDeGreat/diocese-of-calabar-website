@@ -42,7 +42,7 @@ const slides: Slide[] = [
   },
   {
     id: 3,
-    image: Images.carouselImgOne,
+    image: "https://i.postimg.cc/Dzqr7x6F/Untitled-design.png",
     title: <>See upcoming events</>,
     description:
       "Stay connected with our diocese through various events and activities. Check out our calendar for details.",
@@ -78,7 +78,7 @@ function Carousel() {
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     setIsAutoPlaying(false);
@@ -115,7 +115,7 @@ const navigate = useNavigate();
                   {slide.buttonText}
                 </a> */}
                 <Button
-                style={{marginLeft: "-10px"}}
+                  style={{ marginLeft: "-10px" }}
                   size="medium"
                   onClick={() => navigate(slide.buttonLink)}
                 >

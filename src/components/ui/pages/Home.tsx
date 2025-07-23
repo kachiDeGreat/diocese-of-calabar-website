@@ -1,9 +1,10 @@
 import React from "react";
 import Carousel from "../page-components/Carousel";
 import Intro from "../page-components/Intro";
-import Featured from "../page-components/Featured";
 import BishopMessage from "../page-components/BishopMessage";
-import Archdeaconrey from "../page-components/Archdeaconrey";
+import EventSection from "../page-components/EventSection";
+import ArchTest from "../page-components/ArchTest";
+import GallerySection from "../page-components/GallerySection";
 
 function Home() {
   return (
@@ -11,7 +12,9 @@ function Home() {
       <Carousel />
       <Intro />
       <BishopMessage />
-     <Archdeaconrey />
+      <ArchTest />
+      <EventSection />
+      <GallerySection />
       {/* <Featured /> */}
     </div>
   );

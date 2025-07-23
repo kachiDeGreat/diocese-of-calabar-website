@@ -1,11 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import "./Archdeaconry.css";
-import ArchdeaconryCard from "./ArchdeaconryCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
+import "./Archdeaconry.css";
 import "swiper/css";
 import "swiper/css/navigation";
+import styles from "../styles/event.module.css";
+import ArchdeaconryCard from "./ArchdeaconryCard";
+import type { Swiper as SwiperType } from "swiper";
+import { useEffect, useRef, useState } from "react";
 
 interface ArchdeaconryData {
   image: string;
@@ -107,85 +108,108 @@ const archdeaconries: ArchdeaconryData[] = [
     link: "/archdeaconries/yala-west",
   },
 ];
-function Archdeaconry() {
+
+export default function ArchTest() {
   const navigationPrevRef = useRef<HTMLButtonElement>(null);
   const navigationNextRef = useRef<HTMLButtonElement>(null);
-  const swiperRef = useRef<SwiperType | null>(null);
+  const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   useEffect(() => {
-    if (swiperRef.current) {
-      // Update navigation after refs are set
-      swiperRef.current.navigation.update();
+    if (swiper) {
+      swiper.navigation.init();
+      swiper.navigation.update();
     }
-  }, []);
+  }, [swiper]);
 
   return (
-    <section className="arch-section">
-      <div className="arch-header">
-        <div className="arch-header-text">
-          <span className="arch-header-sub">ARCHDEACONRIES</span>
-          <h1 className="arch-title">Our Archdeaconries</h1>
-          <div className="archtitle-underline"></div>
+    <section
+      className={styles.eventSection}
+      style={{ marginTop: "40px", backgroundColor: "#fff" }}
+    >
+      <div className={styles.container}>
+        <br />
+        <div className="arch-header">
+          <div className="arch-header-text">
+            <span className="arch-header-sub">ARCHDEACONRIES</span>
+            <h1 className="arch-title">Our Archdeaconries</h1>
+            <div className="archtitle-underline"></div>
+          </div>
+          <div className="arch-controls">
+            <button
+              ref={navigationPrevRef}
+              onClick={() => swiper?.slidePrev()}
+              className="arch-nav-btn arch-nav-prev"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              ref={navigationNextRef}
+              onClick={() => swiper?.slideNext()}
+              className="arch-nav-btn arch-nav-next"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-
-        <div className="arch-controls">
-          <button
-            ref={navigationPrevRef}
-            onClick={() => swiperRef.current?.slidePrev()}
-          >
-            &larr;
-          </button>
-          <button
-            ref={navigationNextRef}
-            onClick={() => swiperRef.current?.slideNext()}
-          >
-            &rarr;
-          </button>
-        </div>
+        <Swiper
+          modules={[Navigation]}
+          navigation={{
+            prevEl: navigationPrevRef.current,
+            nextEl: navigationNextRef.current,
+          }}
+          onSwiper={setSwiper}
+          spaceBetween={30}
+          slidesPerView={1}
+          breakpoints={{
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+          className={styles.swiper}
+        >
+          {archdeaconries.map((item, index) => (
+            <SwiperSlide key={index}>
+              <ArchdeaconryCard
+                image={item.image}
+                title={item.title}
+                description={item.description}
+                link={item.link}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-
-      <Swiper
-        modules={[Navigation]}
-        navigation={{
-          prevEl: navigationPrevRef.current,
-          nextEl: navigationNextRef.current,
-        }}
-        loop={true}
-        breakpoints={{
-          320: {
-            slidesPerView: 1,
-            spaceBetween: 15,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          1024: {
-            slidesPerView: 3,
-            spaceBetween: 20,
-          },
-        }}
-        onSwiper={(swiper: SwiperType) => {
-          swiperRef.current = swiper;
-          // Initialize navigation after swiper is created
-          swiper.navigation.init();
-          swiper.navigation.update();
-        }}
-        className="arch-slider"
-      >
-        {archdeaconries.map((item, index) => (
-          <SwiperSlide key={index}>
-            <ArchdeaconryCard
-              image={item.image}
-              title={item.title}
-              description={item.description}
-              link={item.link}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
     </section>
   );
 }
-
-export default Archdeaconry;

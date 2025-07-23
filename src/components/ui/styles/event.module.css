@@ -1,0 +1,196 @@
+.eventSection {
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.swiper {
+  padding-bottom: 60px !important;
+}
+
+.eventCard {
+  background: white;
+  /* border-radius: 16px; */
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.eventCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.imageContainer {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.eventImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.eventCard:hover .eventImage {
+  transform: scale(1.05);
+}
+
+.dateTag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #c52810, #c52810);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: 0.5s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.dateTag:hover {
+  background: linear-gradient(135deg, #000, #000);
+}
+
+.dateText {
+  display: block;
+}
+
+.eventContent {
+  padding: 24px;
+}
+
+.eventTitle {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #2d3748;
+  margin: 0 0 20px 0;
+  min-height: 56px;
+}
+
+.readMoreBtn {
+  display: inline-block;
+  color: #c52810;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.readMoreBtn::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #c52810, #c52810);
+  transition: width 0.3s ease;
+}
+
+.readMoreBtn:hover {
+  color: #c52810;
+}
+
+.readMoreBtn:hover::after {
+  width: 100%;
+}
+
+/* Custom Water Droplet Pagination */
+.paginationBullet {
+  width: 32px !important;
+  height: 16px !important;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40% !important;
+  background: #cbd5e0 !important;
+  opacity: 1 !important;
+  margin: 0 6px !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+}
+
+.paginationBullet::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: inherit;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.paginationBulletActive {
+  background: linear-gradient(135deg, #4299e1, #3182ce) !important;
+  transform: scale(1.2) !important;
+  box-shadow: 0 2px 8px rgba(66, 153, 225, 0.4) !important;
+}
+
+.paginationBulletActive::before {
+  background: linear-gradient(135deg, #4299e1, #3182ce);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .eventSection {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .eventTitle {
+    font-size: 18px;
+    min-height: auto;
+  }
+
+  .eventContent {
+    padding: 20px;
+  }
+
+  .imageContainer {
+    height: 240px;
+  }
+
+  .swiper {
+    padding-bottom: 50px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dateTag {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  .eventTitle {
+    font-size: 16px;
+  }
+
+  .readMoreBtn {
+    font-size: 14px;
+  }
+}
+
+/* Swiper container adjustments */
+.swiper-pagination {
+  bottom: 20px !important;
+}
+
+.swiper-pagination-bullet {
+  cursor: pointer;
+}
