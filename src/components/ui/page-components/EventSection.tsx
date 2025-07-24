@@ -99,6 +99,7 @@ export default function EventSection() {
         <Swiper
           modules={[Pagination]}
           spaceBetween={30}
+          loop={true}
           slidesPerView={1}
           pagination={{
             clickable: true,

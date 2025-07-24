@@ -196,13 +196,10 @@ export default function ArchdeaconrySlider() {
             className="d-none arch-controls"
             variants={containerVariants}
           >
-            <motion.button
+            <button
               ref={navigationPrevRef}
               onClick={() => swiper?.slidePrev()}
               className="arch-nav-btn arch-nav-prev"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
             >
               <svg
                 width="20"
@@ -219,14 +216,11 @@ export default function ArchdeaconrySlider() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </motion.button>
-            <motion.button
+            </button>
+            <button
               ref={navigationNextRef}
               onClick={() => swiper?.slideNext()}
               className="arch-nav-btn arch-nav-next"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
             >
               <svg
                 width="20"
@@ -243,7 +237,7 @@ export default function ArchdeaconrySlider() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </motion.button>
+            </button>
           </motion.div>
         </motion.div>
 
@@ -253,6 +247,7 @@ export default function ArchdeaconrySlider() {
             prevEl: navigationPrevRef.current,
             nextEl: navigationNextRef.current,
           }}
+          loop={true}
           onSwiper={setSwiper}
           spaceBetween={30}
           slidesPerView={1}

@@ -50,6 +50,7 @@
   display: flex;
   gap: 12px;
   margin: 1rem;
+  z-index: 10000;
 }
 
 .arch-nav-btn {
