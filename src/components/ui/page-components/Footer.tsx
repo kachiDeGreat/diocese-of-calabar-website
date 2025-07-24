@@ -214,7 +214,19 @@ export default function Footer() {
           <div className={styles.bottomContent}>
             <div className={styles.copyright}>
               <p>
-                &copy; 2025 Anglican Diocese of Calabar. All rights reserved.
+                &copy; 2025 Anglican Diocese of Calabar. Website by{" "}
+                <a
+                  href="https://www.onyekachi.dev/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontWeight: "bolder",
+                    textDecoration: "none",
+                    color: "#c52810",
+                  }}
+                >
+                  KACHIDEGREAT
+                </a>
               </p>
             </div>
             <div className={styles.footerLinks}>
