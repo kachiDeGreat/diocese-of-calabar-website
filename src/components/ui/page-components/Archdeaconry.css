@@ -294,3 +294,23 @@
     min-width: 1000px;
   }
 }
+/* Animation optimizations */
+.arch-header {
+  will-change: transform, opacity;
+}
+
+.arch-nav-btn {
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+
+/* Ensure smooth text animations */
+.arch-header-text > * {
+  will-change: transform, opacity;
+}
+
+/* Underline animation */
+.archtitle-underline {
+  transform-origin: left center;
+  will-change: transform, opacity;
+}

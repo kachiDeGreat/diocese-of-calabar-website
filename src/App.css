@@ -9,7 +9,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .event-header {
@@ -42,4 +44,14 @@ body {
   height: 3px;
   background-color: #c52810;
   margin: 0.5rem auto;
+}
+@media (max-width: 768px) {
+  .intro-subtitle {
+    text-align: right;
+    display: flex;
+  }
+
+  .d-none {
+    display: none !important;
+  }
 }

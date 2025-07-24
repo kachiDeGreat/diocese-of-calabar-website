@@ -240,7 +240,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 10000;
   padding: 20px;
   animation: fadeIn 0.3s ease;
 }
@@ -421,4 +421,22 @@
   .navNext {
     right: -40px;
   }
+}
+
+/* Animation optimizations */
+.galleryCard,
+.lightboxContent,
+.lightboxImage {
+  will-change: transform, opacity;
+}
+
+/* Smooth transitions */
+.galleryImage,
+.overlay {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Prevent layout shifts */
+.skeletonCard {
+  overflow: hidden;
 }

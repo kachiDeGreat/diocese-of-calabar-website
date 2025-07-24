@@ -1,8 +1,10 @@
+import { motion, Variants } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import styles from "../styles/event.module.css";
+import { Link } from "react-router-dom";
 
 const events = [
   {
@@ -43,16 +45,56 @@ const events = [
   },
 ];
 
+// Animation variants
+const headerVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1], // cubic-bezier curve
+      staggerChildren: 0.1,
+      when: "beforeChildren",
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  },
+};
+
 export default function EventSection() {
   return (
     <section className={styles.eventSection}>
       <div className={styles.container}>
         <br />
-        <div className="event-header-text">
-          <span className="event-header-sub">NEWS</span>
-          <h1 className="event-title">latest news</h1>
-          <div className="eventtitle-underline"></div>
-        </div>
+        <motion.div
+          className="event-header-text"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={headerVariants}
+        >
+          <motion.span className="event-header-sub" variants={itemVariants}>
+            NEWS
+          </motion.span>
+          <motion.h1 className="event-title" variants={itemVariants}>
+            latest news
+          </motion.h1>
+          <motion.div
+            className="eventtitle-underline"
+            variants={itemVariants}
+          />
+        </motion.div>
         <br />
         <Swiper
           modules={[Pagination]}
@@ -88,9 +130,9 @@ export default function EventSection() {
                 </div>
                 <div className={styles.eventContent}>
                   <h3 className={styles.eventTitle}>{event.title}</h3>
-                  <a href={event.readMoreLink} className={styles.readMoreBtn}>
+                  <Link to={event.readMoreLink} className={styles.readMoreBtn}>
                     Read More
-                  </a>
+                  </Link>
                 </div>
               </div>
             </SwiperSlide>

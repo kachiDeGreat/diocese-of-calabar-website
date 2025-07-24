@@ -1,17 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "../ui/pages/Home";
 import About from "../ui/pages/About";
+import ScrollToTop from "../ui/page-components/ScrollToTop ";
 
 function Index() {
   return (
-    <Router>
+    <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         {/* Add more routes as needed */}
       </Routes>
-    </Router>
+    </>
   );
 }
 

@@ -194,3 +194,16 @@
 .swiper-pagination-bullet {
   cursor: pointer;
 }
+.event-header-text {
+  will-change: transform, opacity;
+}
+
+.event-header-sub,
+.event-title,
+.eventtitle-underline {
+  will-change: transform, opacity;
+}
+
+.eventtitle-underline {
+  transform-origin: left center;
+}

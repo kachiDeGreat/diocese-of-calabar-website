@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styles from "../styles/navbar.module.css";
 import { Images } from "../../Assets/assets";
 
@@ -47,13 +48,13 @@ function Navbar() {
       <div className={styles.topBar}>
         <div className={styles.topBarContainer}>
           <div className={styles.topBarLeft}>
-            <a href="/find-church" className={styles.topBarLink}>
+            <Link to="/find-church" className={styles.topBarLink}>
               Address: 81 Calabar Rd, Calabar, Cross River State
-            </a>
+            </Link>
             <span>/</span>
-            <a href="/vacancies" className={styles.topBarLink}>
+            <Link to="/vacancies" className={styles.topBarLink}>
               info@dioceseofcalabar.org
-            </a>
+            </Link>
           </div>
           <div className={styles.topBarRight}>
             <div className={styles.socialIcons}>
@@ -98,11 +99,11 @@ function Navbar() {
                 </svg>
               </a>
             </div>
-            <a href="/give" className={styles.giveButton}>
+            <Link to="/give" className={styles.giveButton}>
               GIVE
-            </a>
+            </Link>
           </div>
-        </div>
+        </div>  
       </div>
 
       {/* Main Navigation */}
@@ -110,7 +111,10 @@ function Navbar() {
         <div className={styles.navContainer}>
           {/* Logo */}
           <div className={styles.navLogo}>
-            <a href="/" onClick={closeAllMenus}>
+            {/* <Link to="" onClick={closeAllMenus}>
+              <img src={Images.logoCalabar} alt="Diocese of Calabar" />
+            </Link> */}
+            <a href="">
               <img src={Images.logoCalabar} alt="Diocese of Calabar" />
             </a>
           </div>
@@ -128,8 +132,8 @@ function Navbar() {
                 !isMobile ? () => setActiveMegaMenu(null) : undefined
               }
             >
-              <a
-                href="#"
+              <Link
+                to="#"
                 className={styles.navLink}
                 onClick={(e) => {
                   if (isMobile) {
@@ -155,7 +159,7 @@ function Navbar() {
                     fill="none"
                   />
                 </svg>
-              </a>
+              </Link>
               <div
                 className={`${styles.megaMenu} ${
                   activeMegaMenu === "about" ? styles.show : ""
@@ -166,39 +170,39 @@ function Navbar() {
                     <h4>THE DIOCESE</h4>
                     <ul>
                       <li>
-                        <a href="/mission-vision" onClick={closeAllMenus}>
+                        <Link to="/mission-vision" onClick={closeAllMenus}>
                           Our Mission And Vision
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/beliefs" onClick={closeAllMenus}>
+                        <Link to="/beliefs" onClick={closeAllMenus}>
                           Our Beliefs
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/history" onClick={closeAllMenus}>
+                        <Link to="/history" onClick={closeAllMenus}>
                           History
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/bishop" onClick={closeAllMenus}>
+                        <Link to="/bishop" onClick={closeAllMenus}>
                           The Bishop of Calabar
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/past-bishops" onClick={closeAllMenus}>
+                        <Link to="/past-bishops" onClick={closeAllMenus}>
                           Past Bishops of Calabar
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/diocesan-officials" onClick={closeAllMenus}>
+                        <Link to="/diocesan-officials" onClick={closeAllMenus}>
                           Diocesan Officials
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/synod-office" onClick={closeAllMenus}>
+                        <Link to="/synod-office" onClick={closeAllMenus}>
                           Synod Office
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -207,19 +211,19 @@ function Navbar() {
                     <h4>CHURCHES</h4>
                     <ul>
                       <li>
-                        <a href="/cathedral" onClick={closeAllMenus}>
+                        <Link to="/cathedral" onClick={closeAllMenus}>
                           The Cathedral
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/archdeaconries" onClick={closeAllMenus}>
+                        <Link to="/archdeaconries" onClick={closeAllMenus}>
                           Our Archdeaconries / Deaneries
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/schools" onClick={closeAllMenus}>
+                        <Link to="/schools" onClick={closeAllMenus}>
                           Our Schools
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -228,19 +232,19 @@ function Navbar() {
                     <h4>DIRECTORATE </h4>
                     <ul>
                       <li>
-                        <a href="/find-church" onClick={closeAllMenus}>
+                        <Link to="/find-church" onClick={closeAllMenus}>
                           Find A Church
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/clergy-directory" onClick={closeAllMenus}>
+                        <Link to="/clergy-directory" onClick={closeAllMenus}>
                           Clergy Directory
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/contact" onClick={closeAllMenus}>
+                        <Link to="/contact" onClick={closeAllMenus}>
                           Contact Us
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -252,29 +256,29 @@ function Navbar() {
                     <h4>MINISTRIES / ORGANISATIONS </h4>
                     <ul>
                       <li>
-                        <a href="/directorates" onClick={closeAllMenus}>
+                        <Link to="/directorates" onClick={closeAllMenus}>
                           Directorates
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/womens-girls" onClick={closeAllMenus}>
+                        <Link to="/womens-girls" onClick={closeAllMenus}>
                           Women's & Girls Organisations
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/children" onClick={closeAllMenus}>
+                        <Link to="/children" onClick={closeAllMenus}>
                           Children
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/young-people" onClick={closeAllMenus}>
+                        <Link to="/young-people" onClick={closeAllMenus}>
                           Young People
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/elders" onClick={closeAllMenus}>
+                        <Link to="/elders" onClick={closeAllMenus}>
                           Elders
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -291,8 +295,8 @@ function Navbar() {
                 !isMobile ? () => setActiveMegaMenu(null) : undefined
               }
             >
-              <a
-                href="#"
+              <Link
+                to="#"
                 className={styles.navLink}
                 onClick={(e) => {
                   if (isMobile) {
@@ -318,7 +322,7 @@ function Navbar() {
                     fill="none"
                   />
                 </svg>
-              </a>
+              </Link>
               <div
                 className={`${styles.megaMenu} ${
                   activeMegaMenu === "resources" ? styles.show : ""
@@ -329,29 +333,29 @@ function Navbar() {
                     <h4>MEDIA</h4>
                     <ul>
                       <li>
-                        <a href="/video" onClick={closeAllMenus}>
+                        <Link to="/video" onClick={closeAllMenus}>
                           Bishop's New month message
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/video" onClick={closeAllMenus}>
+                        <Link to="/video" onClick={closeAllMenus}>
                           Video
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/podcast" onClick={closeAllMenus}>
+                        <Link to="/podcast" onClick={closeAllMenus}>
                           Podcast
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/lagoon-radio" onClick={closeAllMenus}>
+                        <Link to="/lagoon-radio" onClick={closeAllMenus}>
                           Radio
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/lagoon-tv" onClick={closeAllMenus}>
+                        <Link to="/lagoon-tv" onClick={closeAllMenus}>
                           LagoonTV
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -360,14 +364,14 @@ function Navbar() {
                     <h4>STORE & DOWNLOADS</h4>
                     <ul>
                       <li>
-                        <a href="/store" onClick={closeAllMenus}>
+                        <Link to="/store" onClick={closeAllMenus}>
                           Our Store
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/downloads" onClick={closeAllMenus}>
+                        <Link to="/downloads" onClick={closeAllMenus}>
                           Our Downloads Hub
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -376,39 +380,39 @@ function Navbar() {
                     <h4>LIBRARY</h4>
                     <ul>
                       <li>
-                        <a href="/diocesan-reports" onClick={closeAllMenus}>
+                        <Link to="/diocesan-reports" onClick={closeAllMenus}>
                           Diocesan Reports
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/policies" onClick={closeAllMenus}>
+                        <Link to="/policies" onClick={closeAllMenus}>
                           Policies and Procedures
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/catechism" onClick={closeAllMenus}>
+                        <Link to="/catechism" onClick={closeAllMenus}>
                           Catechism
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/creeds" onClick={closeAllMenus}>
+                        <Link to="/creeds" onClick={closeAllMenus}>
                           Collection of Creeds
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/39-articles" onClick={closeAllMenus}>
+                        <Link to="/39-articles" onClick={closeAllMenus}>
                           39 Articles of Religion
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/gafcon" onClick={closeAllMenus}>
+                        <Link to="/gafcon" onClick={closeAllMenus}>
                           GAFCON Statements
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/others-library" onClick={closeAllMenus}>
+                        <Link to="/others-library" onClick={closeAllMenus}>
                           Others
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -420,14 +424,14 @@ function Navbar() {
                     <h4>OTHERS</h4>
                     <ul>
                       <li>
-                        <a href="/forms" onClick={closeAllMenus}>
+                        <Link to="/forms" onClick={closeAllMenus}>
                           Forms and Applications
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="/vacancies" onClick={closeAllMenus}>
+                        <Link to="/vacancies" onClick={closeAllMenus}>
                           Vacancies
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -444,8 +448,8 @@ function Navbar() {
                 !isMobile ? () => setActiveMegaMenu(null) : undefined
               }
             >
-              <a
-                href="#"
+              <Link
+                to="#"
                 className={styles.navLink}
                 onClick={(e) => {
                   if (isMobile) {
@@ -471,7 +475,7 @@ function Navbar() {
                     fill="none"
                   />
                 </svg>
-              </a>
+              </Link>
               <div
                 className={`${styles.simpleDropdown} ${
                   activeMegaMenu === "news" ? styles.show : ""
@@ -479,14 +483,14 @@ function Navbar() {
               >
                 <ul>
                   <li>
-                    <a href="/news" onClick={closeAllMenus}>
+                    <Link to="/news" onClick={closeAllMenus}>
                       News
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="/events" onClick={closeAllMenus}>
+                    <Link to="/events" onClick={closeAllMenus}>
                       Events
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>

@@ -1,4 +1,5 @@
 import type React from "react";
+import { Link } from "react-router-dom";
 
 interface ArchdeaconryCardProps {
   image: string;
@@ -25,9 +26,10 @@ const ArchdeaconryCard: React.FC<ArchdeaconryCardProps> = ({
       <div className="arch-card-content">
         <h3 className="arch-card-title">{title}</h3>
         <p className="arch-card-description">{description}</p>
-        <a href={link} className="arch-read-more-btn">
+
+        <Link to={link} className="arch-read-more-btn">
           Read More
-        </a>
+        </Link>
       </div>
     </div>
   );

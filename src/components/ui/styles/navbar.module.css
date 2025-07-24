@@ -156,7 +156,7 @@ a:focus {
   top: 120px;
   left: 0;
   right: 0;
-  width: 83vw;
+  width: 90vw;
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   border-radius: 0;
@@ -354,7 +354,7 @@ a:focus {
     top: 100px;
     flex-direction: column;
     background-color: #ffffff;
-    width: 90%;
+    width: 100%;
     text-align: left;
     transition: 0.3s;
     /* box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05); */

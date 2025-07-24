@@ -1,3 +1,4 @@
+import { motion, Variants } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "./Archdeaconry.css";
@@ -38,7 +39,7 @@ const archdeaconries: ArchdeaconryData[] = [
     link: "/archdeaconries/cathedral",
   },
   {
-    image: "https://placehold.co/600x400/png?text=Calabar",
+    image: "https://i.postimg.cc/bJby6gTr/image.png",
     title: "Calabar Archdeaconry",
     description:
       "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -109,7 +110,7 @@ const archdeaconries: ArchdeaconryData[] = [
   },
 ];
 
-export default function ArchTest() {
+export default function ArchdeaconrySlider() {
   const navigationPrevRef = useRef<HTMLButtonElement>(null);
   const navigationNextRef = useRef<HTMLButtonElement>(null);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
@@ -121,6 +122,49 @@ export default function ArchTest() {
     }
   }, [swiper]);
 
+  // Animation variants with proper typing
+  const containerVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        when: "beforeChildren",
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.1,
+        duration: 0.2,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const buttonVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+        delay: 0.1,
+      },
+    },
+    hover: { scale: 1.1 },
+    tap: { scale: 0.95 },
+  };
+
   return (
     <section
       className={styles.eventSection}
@@ -128,17 +172,37 @@ export default function ArchTest() {
     >
       <div className={styles.container}>
         <br />
-        <div className="arch-header">
-          <div className="arch-header-text">
-            <span className="arch-header-sub">ARCHDEACONRIES</span>
-            <h1 className="arch-title">Our Archdeaconries</h1>
-            <div className="archtitle-underline"></div>
-          </div>
-          <div className="arch-controls">
-            <button
+        <motion.div
+          className="arch-header"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={containerVariants}
+        >
+          <motion.div className="arch-header-text" variants={containerVariants}>
+            <motion.span className="arch-header-sub" variants={itemVariants}>
+              ARCHDEACONRIES
+            </motion.span>
+            <motion.h1 className="arch-title" variants={itemVariants}>
+              Our Archdeaconries
+            </motion.h1>
+            <motion.div
+              className="archtitle-underline"
+              variants={itemVariants}
+            />
+          </motion.div>
+
+          <motion.div
+            className="d-none arch-controls"
+            variants={containerVariants}
+          >
+            <motion.button
               ref={navigationPrevRef}
               onClick={() => swiper?.slidePrev()}
               className="arch-nav-btn arch-nav-prev"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               <svg
                 width="20"
@@ -155,11 +219,14 @@ export default function ArchTest() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               ref={navigationNextRef}
               onClick={() => swiper?.slideNext()}
               className="arch-nav-btn arch-nav-next"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               <svg
                 width="20"
@@ -176,9 +243,10 @@ export default function ArchTest() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
-          </div>
-        </div>
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
         <Swiper
           modules={[Navigation]}
           navigation={{
@@ -189,6 +257,9 @@ export default function ArchTest() {
           spaceBetween={30}
           slidesPerView={1}
           breakpoints={{
+            640: {
+              slidesPerView: 1,
+            },
             768: {
               slidesPerView: 2,
             },

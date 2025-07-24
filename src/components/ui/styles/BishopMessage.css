@@ -284,3 +284,22 @@
     font-size: 0.9rem;
   }
 }
+/* Add these to enhance the animations */
+.BishopMessage-videoWrapper {
+  transform-origin: center;
+}
+
+.BishopMessage-ctaButton {
+  transition: transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.BishopMessage-ctaButton svg {
+  transition: transform 0.3s ease;
+}
+
+.BishopMessage-ctaButton:hover svg {
+  transform: translateX(3px);
+}

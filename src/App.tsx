@@ -5,6 +5,8 @@ import "./App.css";
 import Index from "./components/routes/Index";
 import Navbar from "./components/ui/page-components/Navbar";
 import LoadingScreen from "./components/ui/page-components/LoadingScreen";
+import Footer from "./components/ui/page-components/Footer";
+import BackToTopButton from "./components/ui/page-components/BackToTopButton";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +44,8 @@ function App() {
     <div className="App">
       <Navbar />
       <Index />
+      <BackToTopButton />
+      <Footer />
     </div>
   );
 }
