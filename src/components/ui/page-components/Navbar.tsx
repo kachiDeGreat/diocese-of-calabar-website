@@ -114,7 +114,7 @@ function Navbar() {
             {/* <Link to="" onClick={closeAllMenus}>
               <img src={Images.logoCalabar} alt="Diocese of Calabar" />
             </Link> */}
-            <a href="">
+            <a href="/">
               <img src={Images.logoCalabar} alt="Diocese of Calabar" />
             </a>
           </div>

@@ -2,181 +2,181 @@
 
 /* Main Container */
 .CardSlider-container {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    overflow: hidden;
-  }
-  
-  /* Controls */
-  .CardSlider-controls {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    z-index: 10;
-  }
-  
-  .CardSlider-navButton {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .CardSlider-navButton:hover {
-    background: #c52810;
-    color: white;
-    transform: scale(1.1);
-  }
-  
-  .CardSlider-dots {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .CardSlider-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-  
-  .CardSlider-dotActive {
-    background: #c52810;
-    transform: scale(1.2);
-  }
-  
-  /* Card Track */
-  .CardSlider-track {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* Individual Cards */
-  .CardSlider-card {
-    flex: 0 0 100%;
-    min-width: 0;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Controls */
+.CardSlider-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10;
+}
+
+.CardSlider-navButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.CardSlider-navButton:hover {
+  background: #c52810;
+  color: white;
+  transform: scale(1.1);
+}
+
+.CardSlider-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.CardSlider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.CardSlider-dotActive {
+  background: #c52810;
+  transform: scale(1.2);
+}
+
+/* Card Track */
+.CardSlider-track {
+  display: flex;
+  transition: transform 0.5s ease;
+  width: 100%;
+  height: 100%;
+}
+
+/* Individual Cards */
+.CardSlider-card {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  opacity: 0.3;
+  transform: scale(0.9);
+}
+
+.CardSlider-cardActive {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.CardSlider-imageContainer {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+}
+
+.CardSlider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.CardSlider-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.CardSlider-card:hover .CardSlider-overlay {
+  opacity: 1;
+}
+
+.CardSlider-crossIcon {
+  width: 60px;
+  height: 60px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+.CardSlider-card:hover .CardSlider-crossIcon {
+  transform: rotate(0deg);
+}
+
+.CardSlider-content {
+  padding: 1.5rem 0.5rem;
+  text-align: center;
+}
+
+.CardSlider-cardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #222;
+}
+
+.CardSlider-cardDescription {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .CardSlider-container {
     padding: 1rem;
-    transition: all 0.3s ease;
-    opacity: 0.3;
-    transform: scale(0.9);
   }
-  
-  .CardSlider-cardActive {
-    opacity: 1;
-    transform: scale(1);
+
+  .CardSlider-controls {
+    top: 0.5rem;
+    right: 0.5rem;
   }
-  
-  .CardSlider-imageContainer {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    aspect-ratio: 16/9;
+
+  .CardSlider-navButton {
+    width: 36px;
+    height: 36px;
   }
-  
-  .CardSlider-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-  
-  .CardSlider-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.3s ease;
-  }
-  
-  .CardSlider-card:hover .CardSlider-overlay {
-    opacity: 1;
-  }
-  
-  .CardSlider-crossIcon {
-    width: 60px;
-    height: 60px;
-    border: 2px solid white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: rotate(45deg);
-    transition: all 0.3s ease;
-  }
-  
-  .CardSlider-card:hover .CardSlider-crossIcon {
-    transform: rotate(0deg);
-  }
-  
-  .CardSlider-content {
-    padding: 1.5rem 0.5rem;
-    text-align: center;
-  }
-  
+
   .CardSlider-cardTitle {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    color: #222;
+    font-size: 1.3rem;
   }
-  
-  .CardSlider-cardDescription {
-    font-size: 1rem;
-    color: #666;
-    margin: 0;
-    line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .CardSlider-card {
+    padding: 0.5rem;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .CardSlider-container {
-      padding: 1rem;
-    }
-    
-    .CardSlider-controls {
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-    
-    .CardSlider-navButton {
-      width: 36px;
-      height: 36px;
-    }
-    
-    .CardSlider-cardTitle {
-      font-size: 1.3rem;
-    }
+
+  .CardSlider-content {
+    padding: 1rem 0;
   }
-  
-  @media (max-width: 480px) {
-    .CardSlider-card {
-      padding: 0.5rem;
-    }
-    
-    .CardSlider-content {
-      padding: 1rem 0;
-    }
-  }
+}

@@ -193,7 +193,7 @@ export default function ArchdeaconrySlider() {
           </motion.div>
 
           <motion.div
-            className="d-none arch-controls"
+            className="display-none arch-controls"
             variants={containerVariants}
           >
             <button

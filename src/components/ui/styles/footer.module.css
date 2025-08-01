@@ -1,24 +1,23 @@
 .footer {
   margin-top: auto;
+  background: url("https://dropimg.onyekachi.dev/qa3xoupmngktvl0mkqru")
+    no-repeat center center;
+  background-size: cover; /* Make sure it covers the whole footer */
+  background-attachment: fixed;
+  color: white;
 }
 
 .mainFooter {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: white;
-  padding: 80px 0 40px;
   position: relative;
 }
 
-.mainFooter::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #c52810, #e53e3e, #c52810);
+.cover {
+  width: 100%;
+  padding: 80px 0 40px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.864);
+  z-index: -1;
 }
-
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -47,12 +46,12 @@
 .logoContainer {
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #c52810, #e53e3e);
+  /* background: linear-gradient(135deg, #c52810, #e53e3e); */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(197, 40, 16, 0.3);
+  /* box-shadow: 0 4px 15px rgba(197, 40, 16, 0.3); */
 }
 
 .logo {
@@ -259,9 +258,8 @@
 
 /* Bottom Footer */
 .bottomFooter {
-  background: #0f0f0f;
+  background: rgba(15, 15, 15, 0.926);
   padding: 25px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .bottomContent {
@@ -310,8 +308,9 @@
 }
 
 @media (max-width: 992px) {
-  .mainFooter {
+  .cover {
     padding: 60px 0 30px;
+    background: rgba(0, 0, 0, 0.922);
   }
 
   .footerContent {
@@ -339,7 +338,7 @@
 }
 
 @media (max-width: 768px) {
-  .mainFooter {
+  .cover {
     padding: 50px 0 25px;
   }
 
@@ -428,9 +427,3 @@ html {
 }
 
 /* Focus styles for accessibility */
-.socialLink:focus,
-.linksList a:focus,
-.footerLinks a:focus {
-  outline: 2px solid #c52810;
-  outline-offset: 2px;
-}

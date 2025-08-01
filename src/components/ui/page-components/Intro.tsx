@@ -74,7 +74,7 @@ function Intro() {
               </h3>
               <p className={styles.cardCredentials}>
                 B.Sc(Calabar), M.Sc(Ibadan), Ph.D(Aberdeen), MARN, FASL, GMSRP,
-                MIPEM
+                MIPEM, AMLNSEP
               </p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
             </motion.div>
@@ -89,7 +89,7 @@ function Intro() {
               variants={containerVariants}
             >
               <motion.span
-              className="intro-subtitle"
+                className="intro-subtitle"
                 style={{
                   fontSize: "0.9em",
                   fontWeight: "600",

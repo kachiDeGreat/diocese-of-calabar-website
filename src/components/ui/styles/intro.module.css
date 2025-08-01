@@ -273,6 +273,9 @@
     gap: 30px;
   }
 
+  .textContent {
+    padding: 0;
+  }
   /* .imageContainer {
     max-width: 280px;
   } */
