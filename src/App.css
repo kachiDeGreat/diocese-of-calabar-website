@@ -59,5 +59,12 @@ body {
 
 .b-p {
   font-size: 20px;
+  color: #7a7a7a;
+  line-height: 1.5;
+}
+
+.h-p {
+  font-size: 15px;
+  color: #7a7a7a;
   line-height: 1.5;
 }

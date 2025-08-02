@@ -103,7 +103,7 @@ function Navbar() {
               GIVE
             </Link>
           </div>
-        </div>  
+        </div>
       </div>
 
       {/* Main Navigation */}
@@ -170,17 +170,17 @@ function Navbar() {
                     <h4>THE DIOCESE</h4>
                     <ul>
                       <li>
-                        <Link to="/mission-vision" onClick={closeAllMenus}>
+                        <Link to="/about#mission" onClick={closeAllMenus}>
                           Our Mission And Vision
                         </Link>
                       </li>
                       <li>
-                        <Link to="/beliefs" onClick={closeAllMenus}>
+                        {/* <Link to="/beliefs" onClick={closeAllMenus}>
                           Our Beliefs
-                        </Link>
+                        </Link> */}
                       </li>
                       <li>
-                        <Link to="/history" onClick={closeAllMenus}>
+                        <Link to="/about#history" onClick={closeAllMenus}>
                           History
                         </Link>
                       </li>
@@ -190,8 +190,8 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/past-bishops" onClick={closeAllMenus}>
-                          Past Bishops of Calabar
+                        <Link to="/about#bishop" onClick={closeAllMenus}>
+                          Bishops of Calabar
                         </Link>
                       </li>
                       <li>

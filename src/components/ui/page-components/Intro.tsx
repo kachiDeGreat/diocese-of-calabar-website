@@ -43,32 +43,20 @@ const imageVariants: Variants = {
 
 function Intro() {
   return (
-    <motion.div
-      className={styles.introSection}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={containerVariants}
-    >
+    <div className={styles.introSection}>
       <div className={styles.container}>
         <div className={styles.introContent}>
           {/* Bishop Image */}
-          <motion.div
-            className={styles.imageWrapper}
-            variants={containerVariants}
-          >
-            <motion.div
-              className={styles.imageContainer}
-              variants={imageVariants}
-            >
+          <div className={styles.imageWrapper}>
+            <div className={styles.imageContainer}>
               <img
                 src={Images.bishopTwo || "/placeholder.svg"}
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
               />
-            </motion.div>
+            </div>
             {/* Name Card Below Image */}
-            <motion.div className={styles.nameCard} variants={itemVariants}>
+            <div className={styles.nameCard}>
               <h3 className={styles.cardBishopName}>
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
               </h3>
@@ -77,18 +65,12 @@ function Intro() {
                 MIPEM, AMLNSEP
               </p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          <motion.div
-            className={styles.textContent}
-            variants={containerVariants}
-          >
-            <motion.div
-              className={styles.textWrapper}
-              variants={containerVariants}
-            >
-              <motion.span
+          <div className={styles.textContent}>
+            <div className={styles.textWrapper}>
+              <span
                 className="intro-subtitle"
                 style={{
                   fontSize: "0.9em",
@@ -96,57 +78,44 @@ function Intro() {
                   textTransform: "uppercase",
                   color: "#c52810",
                 }}
-                variants={itemVariants}
               >
                 About Us
-              </motion.span>
+              </span>
 
-              <motion.h1 className={styles.mainTitle} variants={itemVariants}>
+              <h1 className={styles.mainTitle}>
                 Welcome to the Anglican Diocese of Calabar
                 <span className={styles.titleYear}> </span>
-              </motion.h1>
+              </h1>
 
-              <motion.div
-                className={styles.titleUnderline}
-                variants={itemVariants}
-              />
+              <div className={styles.titleUnderline} />
 
-              <motion.div
-                className={styles.messageContent}
-                variants={containerVariants}
-              >
-                <motion.p
-                  className={styles.welcomeText}
-                  variants={itemVariants}
-                >
+              <div className={styles.messageContent}>
+                <p className={styles.welcomeText}>
                   "Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Atque vitae blanditiis nisi, facilis provident molestias
                   harum? Unde, fugiat iste distinctio aut ratione quaerat illo
                   officiis fuga nam cupiditate tempora, omnis cum maxime,
                   architecto illum itaque."
-                </motion.p>
-                <motion.p
-                  className={styles.welcomeText}
-                  variants={itemVariants}
-                >
+                </p>
+                <p className={styles.welcomeText}>
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                   Ullam quis officiis odit voluptates optio dolor, tempore qui
                   sunt minus? Iste dicta facilis modi, adipisci quos eaque! Et
                   est esse eum. Lorem, ipsum dolor sit amet consectetur
                   adipisicing elit. Animi, totam.
-                </motion.p>
-              </motion.div>
+                </p>
+              </div>
 
-              <motion.div variants={itemVariants}>
+              <div>
                 <Button size="medium" onClick={() => console.log("Clicked!")}>
                   about the diocese
                 </Button>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

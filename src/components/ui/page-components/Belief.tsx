@@ -9,14 +9,17 @@ function Belief() {
         <div className="row">
           <div className="col-12 col-lg-5 p-0">
             <img
-              src="https://placehold.co/600x700"
+              src="https://placehold.co/600x500"
               className="img-fluid"
               alt="..."
             ></img>
           </div>
           <div className="col-12 col-lg-7 p-4 pr">
-            <h1 className={styles.mainTitle} style={{textTransform: "uppercase"}}>
-              Our Belief
+            <h1
+              className={styles.mainTitle}
+              style={{ textTransform: "uppercase", color: "#000" }}
+            >
+              Our <span style={{ backgroundColor: "#c52810" }}>Belief</span>
               <span className={styles.titleYear}> </span>
             </h1>
 

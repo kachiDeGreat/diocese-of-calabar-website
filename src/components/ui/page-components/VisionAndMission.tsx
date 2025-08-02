@@ -8,10 +8,10 @@ function VisionAndMission() {
       <div className="container mt-5">
         <div className="row">
           <div className="col-12">
-            <h1 className="fs-1 text-center fw-bold text-uppercase mt-4">
+            {/* <h1 className="fs-1 text-center fw-bold text-uppercase mt-4">
               mission & <span style={{ background: "#c52810" }}>vision</span>
             </h1>
-            <div className="archtitle-underline"></div>
+            <div className="archtitle-underline"></div> */}
 
             <div className="mt-3">
               <p className="v-p">

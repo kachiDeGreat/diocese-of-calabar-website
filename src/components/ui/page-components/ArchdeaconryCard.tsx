@@ -5,7 +5,7 @@ interface ArchdeaconryCardProps {
   image: string;
   title: string;
   description: string;
-  link: string;
+  link?: string; // now optional
 }
 
 const ArchdeaconryCard: React.FC<ArchdeaconryCardProps> = ({
@@ -27,9 +27,12 @@ const ArchdeaconryCard: React.FC<ArchdeaconryCardProps> = ({
         <h3 className="arch-card-title">{title}</h3>
         <p className="arch-card-description">{description}</p>
 
-        <Link to={link} className="arch-read-more-btn">
-          Read More
-        </Link>
+        {/* Only render if link exists */}
+        {link && (
+          <Link to={link} className="arch-read-more-btn">
+            Read More
+          </Link>
+        )}
       </div>
     </div>
   );
