@@ -4,6 +4,7 @@ import Home from "../ui/pages/Home";
 import About from "../ui/pages/About";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
 import LineLoader from "../ui/page-components/LineLoader";
+import Bishops from "../ui/pages/Bishops";
 
 function Index() {
   return (
@@ -13,6 +14,7 @@ function Index() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/bishop-of-calabar" element={<Bishops />} />
         {/* Add more routes as needed */}
       </Routes>
     </>

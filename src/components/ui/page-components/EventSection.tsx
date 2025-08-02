@@ -87,7 +87,11 @@ export default function EventSection() {
           <motion.span className="event-header-sub" variants={itemVariants}>
             NEWS
           </motion.span>
-          <motion.h1 className="event-title" variants={itemVariants}>
+          <motion.h1
+            style={{ fontWeight: "bold" }}
+            className="event-title"
+            variants={itemVariants}
+          >
             latest news
           </motion.h1>
           <motion.div

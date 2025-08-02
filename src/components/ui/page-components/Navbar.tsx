@@ -185,7 +185,7 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/bishop" onClick={closeAllMenus}>
+                        <Link to="/bishop-of-calabar" onClick={closeAllMenus}>
                           The Bishop of Calabar
                         </Link>
                       </li>
