@@ -1,0 +1,177 @@
+.officialsSection {
+  background-color: #f8f9fa;
+  padding: 40px 0 50px 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.officialCard {
+  background: white;
+  overflow: hidden;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  margin-bottom: 30px;
+  border-radius: 8px;
+}
+
+.officialCard:hover {
+  transform: translateY(-8px);
+  /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12); */
+}
+
+.imageContainer {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.officialImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.officialCard:hover .officialImage {
+  transform: scale(1.05);
+}
+
+.officialContent {
+  padding: 24px;
+  text-align: center;
+}
+
+.officialTitle {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #2d3748;
+  margin: 0 0 15px 0;
+  text-align: center;
+}
+
+.officialDescription {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555555;
+  margin: 0;
+  text-align: center;
+}
+
+/* Header Styles */
+.officials-header-text {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.officials-header-sub {
+  display: block;
+  color: #c52810;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.officials-title {
+  font-size: 42px;
+  color: #2d3748;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+
+.officialstitle-underline {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #c52810, #c52810);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .officialsSection {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .officialTitle {
+    font-size: 18px;
+  }
+
+  .officialDescription {
+    font-size: 13px;
+  }
+
+  .officialContent {
+    padding: 20px;
+  }
+
+  .imageContainer {
+    height: 240px;
+  }
+
+  .officials-title {
+    font-size: 32px;
+  }
+
+  .officials-header-text {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .officialTitle {
+    font-size: 16px;
+  }
+
+  .officialDescription {
+    font-size: 12px;
+  }
+
+  .officials-title {
+    font-size: 28px;
+  }
+
+  .officialCard {
+    margin-bottom: 20px;
+  }
+
+  .officialContent {
+    padding: 16px;
+  }
+}
+
+/* Additional styling for better visual appeal */
+.officialCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(197, 40, 16, 0.05) 50%, transparent 51%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.officialCard:hover::before {
+  opacity: 1;
+}
+
+/* Focus states for accessibility */
+.officialCard:focus-within {
+  outline: 2px solid #c52810;
+  outline-offset: 2px;
+}

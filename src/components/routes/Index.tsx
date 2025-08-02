@@ -5,16 +5,18 @@ import About from "../ui/pages/About";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
 import LineLoader from "../ui/page-components/LineLoader";
 import Bishops from "../ui/pages/Bishops";
+import DiocesanOfficials from "../ui/pages/DiocesanOfficials";
 
 function Index() {
   return (
     <>
       <ScrollToTop />
-      {/* <LineLoader /> */}
+      <LineLoader />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/bishop-of-calabar" element={<Bishops />} />
+        <Route path="/diocesan-officials" element={<DiocesanOfficials />} />
         {/* Add more routes as needed */}
       </Routes>
     </>
