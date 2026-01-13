@@ -13,7 +13,7 @@ export const bishop: BishopData[] = [
     // link: "/archdeaconries/akampka",
   },
   {
-    image: "https://placehold.co/600x400/png?text=Adeleye",
+    image: "https://dropimg.onyekachi.dev/rgam72tuhgjfako1q0ix",
     title: "The Most. Rev. Tunde A (Rtd)",
     description: "Bishop of Calabar (1999–2021)",
     // link: "/archdeaconries/ascension",
