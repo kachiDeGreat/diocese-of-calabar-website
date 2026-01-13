@@ -65,6 +65,18 @@ body {
 
 .h-p {
   font-size: 15px;
-  color: #333;
+  color: #686767;
   line-height: 1.5;
+  text-align: justify;
+}
+
+.h-h3 {
+  font-size: 15px;
+  color: rgb(197, 40, 16);
+  text-transform: uppercase;
+}
+
+.link_text {
+  font-style: italic;
+  font-weight: bold;
 }

@@ -66,8 +66,6 @@ export default function Footer() {
                       />
                     </svg>
                   </a>
-              
-               
                 </div>
               </div>
 
@@ -79,7 +77,7 @@ export default function Footer() {
                     <Link to="/about">About Us</Link>
                   </li>
                   <li>
-                    <Link to="/bishop-of-calabar">Our Bishop</Link>
+                    <Link to="/bishop-of-calabar/">Our Bishop</Link>
                   </li>
                   <li>
                     <Link to="/archdeaconries">Archdeaconries</Link>

@@ -14,9 +14,9 @@ function About() {
     <>
       <Banner title="About US" />
       <br />
-      <div id="mission">
+      {/* <div id="mission">
         <VisionAndMission />
-      </div>
+      </div> */}
       <br />
       {/* <Belief /> */}
       {/* <br /> */}

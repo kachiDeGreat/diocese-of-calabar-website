@@ -9,22 +9,19 @@ export const bishop: BishopData[] = [
   {
     image: "https://placehold.co/600x400/png?text=Ekprikpo",
     title: "The Rt. Rev. Wilfred G. Ekprikpo",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    description: "Bishop of Calabar (1990–1999)",
     // link: "/archdeaconries/akampka",
   },
   {
     image: "https://placehold.co/600x400/png?text=Adeleye",
     title: "The Most. Rev. Tunde A (Rtd)",
-    description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    description: "Bishop of Calabar (1999–2021)",
     // link: "/archdeaconries/ascension",
   },
   {
-    image: "https://placehold.co/600x400/png?text=Egbe",
+    image: "https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p",
     title: "The Rt. Rev. Nneoyi O. Egbe",
-    description:
-      "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    link: "/bishop-of-calabar",
+    description: "Bishop of Calabar (2021–Present)",
+    // link: "/bishop-of-calabar/",
   },
 ];

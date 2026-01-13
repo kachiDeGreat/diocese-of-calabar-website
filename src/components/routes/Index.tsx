@@ -14,9 +14,9 @@ function Index() {
       <LineLoader />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/bishop-of-calabar" element={<Bishops />} />
-        <Route path="/diocesan-officials" element={<DiocesanOfficials />} />
+        <Route path="/about-us/" element={<About />} />
+        <Route path="/bishop-of-calabar/" element={<Bishops />} />
+        <Route path="/diocesan-officials/" element={<DiocesanOfficials />} />
         {/* Add more routes as needed */}
       </Routes>
     </>

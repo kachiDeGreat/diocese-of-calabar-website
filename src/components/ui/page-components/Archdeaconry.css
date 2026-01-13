@@ -88,17 +88,18 @@
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); */
+  text-align: center;
   transition: all 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.arch-card:hover {
+/* .arch-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
+} */
 
 .arch-card-image-container {
   position: relative;
@@ -129,8 +130,8 @@
   font-weight: 700;
   line-height: 1.4;
   color: #2d3748;
-  margin: 0 0 12px 0;
-  min-height: 56px;
+  /* margin: 0 0 12px 0; */
+  /* min-height: 56px; */
 }
 
 .arch-card-description {
