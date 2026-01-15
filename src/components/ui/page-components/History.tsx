@@ -125,13 +125,21 @@ function History() {
               in parishes and institutions.
             </p>
             <p className="h-p mt-3">
-              Rt. Rev. Prof. Nneoyi Onen Egbe (2021–present): Elected by the
+              Rt. Rev. Prof. Nneoyi Onen Egbe (2021–present) was elected by the
               Provincial Episcopal Synod and enthroned on 17 July 2021 at the
-              Cathedral Church of the Holy Trinity in Calabar, succeeding
-              Adeleye directly with no recorded interim period. These details
-              are drawn primarily from official Church of Nigeria records and
-              Anglican Communion directories, with no gaps in succession noted
-              beyond standard transitional periods post-election.
+              Cathedral Church of the Holy Trinity, Calabar. Since his
+              enthronement, he has promoted the integration of academic and
+              theological disciplines, drawing on his professorship in
+              radiography and his advanced degrees in physics and theology to
+              bridge science and faith within diocesan training programs. From
+              2021 onward, he has strengthened youth evangelism through
+              mentorship initiatives, university fellowships, and worship
+              leadership. This includes the establishment of praise bands at the
+              University of Calabar’s Chapel of Redemption to enhance youth
+              engagement in worship. Bishop Egbe is also a strong advocate for
+              environmental justice in the oil-impacted Niger Delta,
+              consistently calling for policy reforms to protect local
+              communities from resource exploitation.
             </p>
           </div>
         </div>
