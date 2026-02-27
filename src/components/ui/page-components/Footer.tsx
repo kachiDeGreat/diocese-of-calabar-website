@@ -33,7 +33,9 @@ export default function Footer() {
                 </p>
                 <div className={styles.socialMedia}>
                   <a
-                    href="#"
+                    href="https://facebook.com"
+                    target="_blank"
+                    rel="noreferrer"
                     className={styles.socialLink}
                     aria-label="Facebook"
                   >
@@ -48,7 +50,9 @@ export default function Footer() {
                     </svg>
                   </a>
                   <a
-                    href="#"
+                    href="https://youtube.com"
+                    target="_blank"
+                    rel="noreferrer"
                     className={styles.socialLink}
                     aria-label="YouTube"
                   >

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "../styles/LineLoader.module.css";
 
@@ -10,7 +10,21 @@ export default function LineLoader() {
   const progressInterval = useRef<NodeJS.Timeout | null>(null);
   const completionTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const startLoading = () => {
+  const completeLoading = useCallback(() => {
+    if (progressInterval.current) clearInterval(progressInterval.current);
+    if (completionTimeout.current) clearTimeout(completionTimeout.current);
+
+    setProgress(100);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setTimeout(() => {
+        setIsComplete(true);
+      }, 100);
+    }, 200); // Faster completion
+  }, []);
+
+  const startLoading = useCallback(() => {
     setIsLoading(true);
     setIsComplete(false);
     setProgress(0);
@@ -36,21 +50,7 @@ export default function LineLoader() {
     completionTimeout.current = setTimeout(() => {
       completeLoading();
     }, 800); // Reduced from potentially longer times
-  };
-
-  const completeLoading = () => {
-    if (progressInterval.current) clearInterval(progressInterval.current);
-    if (completionTimeout.current) clearTimeout(completionTimeout.current);
-
-    setProgress(100);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setTimeout(() => {
-        setIsComplete(true);
-      }, 100);
-    }, 200); // Faster completion
-  };
+  }, [completeLoading]);
 
   // Handle route changes with React Router
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function LineLoader() {
     }, 600); // Faster default completion
 
     return () => clearTimeout(timer);
-  }, [location.pathname]); // Trigger on route change
+  }, [location.pathname, startLoading, completeLoading]); // Trigger on route change
 
   // Handle browser navigation and initial load
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function LineLoader() {
       if (progressInterval.current) clearInterval(progressInterval.current);
       if (completionTimeout.current) clearTimeout(completionTimeout.current);
     };
-  }, []);
+  }, [startLoading, completeLoading]);
 
   // Cleanup on unmount
   useEffect(() => {
