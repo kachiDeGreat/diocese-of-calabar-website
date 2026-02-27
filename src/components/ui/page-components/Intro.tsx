@@ -1,62 +1,52 @@
 import { motion, Variants } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/intro.module.css";
 import { Images } from "../../Assets/assets";
 import Button from "./button";
+import LazyImage from "./LazyImage";
 
-// Animation variants
-const containerVariants: Variants = {
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 10,
-    },
-  },
-};
-
-const imageVariants: Variants = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      delay: 0.2,
     },
   },
 };
 
 function Intro() {
+  const navigate = useNavigate();
   return (
     <div className={styles.introSection}>
       <div className={styles.container}>
-        <div className={styles.introContent}>
+        <motion.div
+          className={styles.introContent}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
           {/* Bishop Image */}
           <div className={styles.imageWrapper}>
-            <div className={styles.imageContainer}>
-              <img
+            <motion.div className={styles.imageContainer} variants={fadeInUp}>
+              <LazyImage
                 src={Images.bishopTwo || "/placeholder.svg"}
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
               />
-            </div>
+            </motion.div>
             {/* Name Card Below Image */}
-            <div className={styles.nameCard}>
+            <motion.div className={styles.nameCard} variants={fadeInUp}>
               <h3 className={styles.cardBishopName}>
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
               </h3>
@@ -65,55 +55,61 @@ function Intro() {
                 MIPEM, AMLNSEP
               </p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
-            </div>
+            </motion.div>
           </div>
 
           <div className={styles.textContent}>
-            <div className={styles.textWrapper}>
-              <span
+            <motion.div
+              className={styles.textWrapper}
+              variants={staggerContainer}
+            >
+              <motion.span
                 className="intro-subtitle"
                 style={{
                   fontSize: "0.9em",
                   fontWeight: "600",
                   textTransform: "uppercase",
                   color: "#c52810",
+                  display: "inline-block",
                 }}
+                variants={fadeInUp}
               >
                 About Us
-              </span>
+              </motion.span>
 
-              <h1 className={styles.mainTitle}>
+              <motion.h1 className={styles.mainTitle} variants={fadeInUp}>
                 Welcome to the Anglican Diocese of Calabar
                 <span className={styles.titleYear}> </span>
-              </h1>
+              </motion.h1>
 
-              <div className={styles.titleUnderline} />
-
-              <div className={styles.messageContent}>
+              <motion.div className={styles.messageContent} variants={fadeInUp}>
                 <p className={styles.welcomeText}>
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Atque vitae blanditiis nisi, facilis provident molestias
-                  harum? Unde, fugiat iste distinctio aut ratione quaerat illo
-                  officiis fuga nam cupiditate tempora, omnis cum maxime,
-                  architecto illum itaque."
+                  The Anglican Diocese of Calabar was established as a
+                  Missionary Diocese on 20 December 1990 by the Church of
+                  Nigeria (Anglican Communion), forming one of eight new
+                  dioceses created that year to accommodate the expanding
+                  Anglican community in southeastern Nigeria. This creation
+                  occurred amid the Church of Nigeria's broader
+                  late-20th-century diocesan proliferation, driven by the rapid
+                  post-colonial growth of Christianity in the Niger Delta
+                  region, where missionary activities had laid foundational
+                  roots since the mid-19th century. The diocese drew from
+                  earlier Anglican efforts, including the establishment of Holy
+                  Trinity Anglican Church in Calabar in 1911, which evolved from
+                  a multi-denominational congregation aligned with the Niger
+                  Delta Pastorate under the Church Missionary Society's
+                  influence.
                 </p>
-                <p className={styles.welcomeText}>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Ullam quis officiis odit voluptates optio dolor, tempore qui
-                  sunt minus? Iste dicta facilis modi, adipisci quos eaque! Et
-                  est esse eum. Lorem, ipsum dolor sit amet consectetur
-                  adipisicing elit. Animi, totam.
-                </p>
-              </div>
+              </motion.div>
 
-              <div>
-                <Button size="medium" onClick={() => console.log("Clicked!")}>
+              <motion.div variants={fadeInUp}>
+                <Button size="medium" onClick={() => navigate("/about-us")}>
                   about the diocese
                 </Button>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

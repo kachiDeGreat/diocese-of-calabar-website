@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function History() {
   return (
     <>
-      <div className="container">
+      <div className="container p-4">
         <div className="row">
           {/* <div className="col-12">
             <h1 className="fs-1 text-center fw-bold text-uppercase mt-4">

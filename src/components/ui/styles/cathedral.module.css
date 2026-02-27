@@ -1,0 +1,126 @@
+/* cathedral.module.css */
+
+.cathedralPage {
+  font-family: "Arial", sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 6rem 1.5rem;
+}
+
+.section {
+  margin-bottom: 8rem;
+  position: relative;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease;
+}
+
+.image:hover {
+  transform: scale(1.01);
+}
+
+.textWrapper {
+  position: relative;
+  z-index: 2;
+}
+
+.card {
+  background: #fff;
+  padding: 3rem;
+  border-radius: 8px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-top: 4px solid #c52810;
+}
+
+.card h2 {
+  color: #1a202c;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.card h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #c52810;
+  margin-top: 0.5rem;
+  border-radius: 2px;
+}
+
+.card p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: #4a5568;
+  text-align: justify;
+  line-height: 1.8;
+}
+
+/* Desktop Overlapping Layout */
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(12, 1fr);
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Standard Layout: Image Left, Text Right */
+  .section:not(.reverse) .imageWrapper {
+    grid-column: 1 / 8;
+    grid-row: 1;
+  }
+
+  .section:not(.reverse) .textWrapper {
+    grid-column: 7 / 13;
+    grid-row: 1;
+    padding: 3rem 0;
+  }
+
+  /* Reverse Layout: Text Left, Image Right */
+  .section.reverse .imageWrapper {
+    grid-column: 6 / 13;
+    grid-row: 1;
+  }
+
+  .section.reverse .textWrapper {
+    grid-column: 1 / 7;
+    grid-row: 1;
+    padding: 3rem 0;
+  }
+
+  .card {
+    padding: 4rem;
+  }
+}

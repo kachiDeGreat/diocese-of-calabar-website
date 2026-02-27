@@ -1,4 +1,3 @@
-import React from "react";
 import Banner from "../page-components/Banner";
 import OfficialsSection from "../page-components/OfficialsSection";
 import { officialsData } from "../../data/officialsData";

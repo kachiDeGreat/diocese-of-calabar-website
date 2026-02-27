@@ -1,7 +1,7 @@
 .banner {
   background: #05162b;
   width: 100%;
-  height: 270px;
+  height: 250px;
   position: relative;
   display: flex;
   flex-direction: column; /* stack h1 and iconWrapper */
@@ -16,7 +16,9 @@
   margin: 0;
   font-weight: bold;
   letter-spacing: 2px;
-  transition: transform 0.3s ease, letter-spacing 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    letter-spacing 0.3s ease;
 }
 
 .banner:hover h1 {
@@ -44,5 +46,10 @@
     font-size: 2rem;
     text-align: center;
   }
- 
+}
+
+@media (max-width: 480px) {
+  .banner {
+    height: 150px;
+  }
 }

@@ -6,6 +6,9 @@
   overflow: hidden;
 }
 
+.intro-subtitle {
+  margin-top: 30px !important;
+}
 .container {
   max-width: 1400px;
   margin: 0 auto;
@@ -16,7 +19,7 @@
 .introContent {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 10px;
   align-items: flex-start;
   min-height: 600px;
 }
@@ -41,7 +44,9 @@
   height: auto;
   /* border-radius: 8px; */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .bishopImage:hover {
@@ -128,10 +133,9 @@
 }
 
 .welcomeText {
-  font-size: 0.9rem;
-  line-height: 1.8;
+  font-size: 0.89rem;
+  line-height: 1.89;
   color: #9b9999;
-  text-align: justify;
   margin-bottom: 20px;
 }
 
@@ -181,10 +185,7 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
 }
-.text-text {
-  /* padding-top: -50px; */
-}
-/* Responsive Design */
+
 @media screen and (max-width: 1024px) {
   .introContent {
     gap: 60px;
@@ -306,39 +307,15 @@
   }
 
   .nameCard {
-    margin-top: -180px;
+    margin-top: -145px;
     padding: 12px;
   }
 
   .welcomeText {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     margin-bottom: 15px;
     text-align: left;
   }
-}
-
-/* Animation for content on scroll */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.textWrapper {
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.imageContainer {
-  animation: fadeInUp 0.8s ease-out 0.2s both;
-}
-
-.nameCard {
-  animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
 /* Accessibility */

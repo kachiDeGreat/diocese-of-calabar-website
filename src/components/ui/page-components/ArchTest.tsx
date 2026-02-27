@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
+import { motion, Variants } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import "./Archdeaconry.css";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -8,6 +9,25 @@ import styles from "../styles/event.module.css";
 import ArchdeaconryCard from "./ArchdeaconryCard";
 import type { Swiper as SwiperType } from "swiper";
 import { ArchdeaconryData } from "../../data/archdeaconries";
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
 
 interface ArchdeaconrySliderProps {
   data: ArchdeaconryData[];
@@ -42,86 +62,91 @@ export default function ArchdeaconrySlider({
         ...style,
       }}
     >
-      <div className={styles.container}>
+      <motion.div
+        className={styles.container}
+        style={{ position: "relative" }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={staggerContainer}
+      >
         <br />
 
-        <div className="arch-header">
+        <motion.div className="arch-header" variants={fadeInUp}>
           <div className="arch-header-text">
             <span className="arch-header-sub">{header}</span>
             <h1 className="arch-title">{title}</h1>
             <div className="archtitle-underline" />
           </div>
+        </motion.div>
 
-          {/* Navigation Arrows */}
-          <div className="display-none arch-controls">
-            <button
-              ref={navigationPrevRef}
-              onClick={() => swiper?.slidePrev()}
-              className="arch-nav-btn arch-nav-prev"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24">
-                <path
-                  d="M15 18L9 12L15 6"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+        <motion.div variants={fadeInUp}>
+          <Swiper
+            modules={[Navigation]}
+            navigation={{
+              prevEl: navigationPrevRef.current,
+              nextEl: navigationNextRef.current,
+            }}
+            loop={false}
+            onSwiper={setSwiper}
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={{
+              640: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            className={styles.swiper}
+          >
+            {data.map((item, index) => (
+              <SwiperSlide key={index}>
+                <ArchdeaconryCard
+                  image={item.image}
+                  title={item.title}
+                  description={item.description}
+                  link={item.link}
                 />
-              </svg>
-            </button>
-            <button
-              ref={navigationNextRef}
-              onClick={() => swiper?.slideNext()}
-              className="arch-nav-btn arch-nav-next"
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24">
-                <path
-                  d="M9 18L15 12L9 6"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </motion.div>
 
-        <Swiper
-          modules={[Navigation, Autoplay]}
-          navigation={{
-            prevEl: navigationPrevRef.current,
-            nextEl: navigationNextRef.current,
-          }}
-          loop={true}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          onSwiper={setSwiper}
-          spaceBetween={30}
-          slidesPerView={1}
-          breakpoints={{
-            640: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-          }}
-          className={styles.swiper}
-        >
-          {data.map((item, index) => (
-            <SwiperSlide key={index}>
-              <ArchdeaconryCard
-                image={item.image}
-                title={item.title}
-                description={item.description}
-                link={item.link}
+        {/* Navigation Arrows */}
+        <motion.div className="display-none arch-controls" variants={fadeInUp}>
+          <button
+            ref={navigationPrevRef}
+            onClick={() => swiper?.slidePrev()}
+            className="arch-nav-btn arch-nav-prev"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+            </svg>
+          </button>
+          <button
+            ref={navigationNextRef}
+            onClick={() => swiper?.slideNext()}
+            className="arch-nav-btn arch-nav-next"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path
+                d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

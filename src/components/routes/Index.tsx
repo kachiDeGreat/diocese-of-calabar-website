@@ -5,7 +5,9 @@ import About from "../ui/pages/About";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
 import LineLoader from "../ui/page-components/LineLoader";
 import Bishops from "../ui/pages/Bishops";
-import DiocesanOfficials from "../ui/pages/DiocesanOfficials";
+// import DiocesanOfficials from "../ui/pages/DiocesanOfficials";
+// import Cathedral from "../ui/pages/Cathedral";
+import Archdeaconry from "../ui/pages/Archdeaconry";
 
 function Index() {
   return (
@@ -16,7 +18,8 @@ function Index() {
         <Route path="/" element={<Home />} />
         <Route path="/about-us/" element={<About />} />
         <Route path="/bishop-of-calabar/" element={<Bishops />} />
-        <Route path="/diocesan-officials/" element={<DiocesanOfficials />} />
+        {/* <Route path="/cathedral/" element={<Cathedral />} /> */}
+        <Route path="/archdeaconries/" element={<Archdeaconry />} />
         {/* Add more routes as needed */}
       </Routes>
     </>

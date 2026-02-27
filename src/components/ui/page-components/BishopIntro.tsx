@@ -1,42 +1,22 @@
 import { motion, Variants } from "framer-motion";
 import styles from "../styles/intro.module.css";
 import { Images } from "../../Assets/assets";
-import Button from "./button";
 
-// Animation variants
-const containerVariants: Variants = {
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
       staggerChildren: 0.2,
-      delayChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 10,
-    },
-  },
-};
-
-const imageVariants: Variants = {
-  hidden: { scale: 0.9, opacity: 0 },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      delay: 0.2,
     },
   },
 };
@@ -45,29 +25,39 @@ function BishopIntro() {
   return (
     <div className={styles.introSection}>
       <div className={styles.container}>
-        <div style={{ minHeight: "auto" }} className={styles.introContent}>
+        <motion.div
+          style={{ minHeight: "auto" }}
+          className={styles.introContent}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
           <div className={styles.textContent}>
-            <div className={styles.textWrapper}>
-              <span
+            <motion.div
+              className={styles.textWrapper}
+              variants={staggerContainer}
+            >
+              <motion.span
                 className="intro-subtitle mt-4 mt-lg-0"
                 style={{
                   fontSize: "0.9em",
                   fontWeight: "600",
                   textTransform: "uppercase",
                   color: "#c52810",
+                  display: "inline-block",
                 }}
+                variants={fadeInUp}
               >
                 Meet Our Bishop
-              </span>
+              </motion.span>
 
-              <h1 className={styles.mainTitle}>
+              <motion.h1 className={styles.mainTitle} variants={fadeInUp}>
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
                 <span className={styles.titleYear}> </span>
-              </h1>
+              </motion.h1>
 
-              <div className={styles.titleUnderline} />
-
-              <div className={styles.messageContent}>
+              <motion.div className={styles.messageContent} variants={fadeInUp}>
                 <p className={styles.welcomeText}>
                   The Rt. Rev. Professor Nneoyi Onen Egbe is a multifaceted
                   individual whose life combines spiritual depth, academic
@@ -87,26 +77,22 @@ function BishopIntro() {
                   scientific training, he holds a Bachelor’s degree in Theology
                   from Trinity Theological College, Umuahia.
                 </p>
-              </div>
+              </motion.div>
 
-              <div>
-                {/* <Button size="medium" onClick={() => console.log("Clicked!")}>
-                  about the diocese
-                </Button> */}
-              </div>
-            </div>
+              <div />
+            </motion.div>
           </div>
           {/* Bishop Image */}
           <div className={styles.imageWrapper}>
-            <div className={styles.imageContainer}>
+            <motion.div className={styles.imageContainer} variants={fadeInUp}>
               <img
                 src={Images.bishopTwo || "/placeholder.svg"}
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
               />
-            </div>
+            </motion.div>
             {/* Name Card Below Image */}
-            <div className={styles.nameCard}>
+            <motion.div className={styles.nameCard} variants={fadeInUp}>
               <h3 className={styles.cardBishopName}>
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
               </h3>
@@ -115,11 +101,17 @@ function BishopIntro() {
                 MIPEM, AMLNSEP
               </p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
-            </div>
+            </motion.div>
           </div>
-        </div>
-        <div className="col-12 text-text p-0 p-lg-4">
-          <p className={styles.welcomeText}>
+        </motion.div>
+        <motion.div
+          className="col-12 text-text p-0 p-lg-4"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.p className={styles.welcomeText} variants={fadeInUp}>
             Bishop Egbe’s encounter with Jesus Christ at an early age marked the
             beginning of a vibrant Christian journey. He navigated the
             challenges of youth with the guidance of the Holy Spirit, nurtured
@@ -131,8 +123,8 @@ function BishopIntro() {
             extended into the Cathedral Church of the Holy Trinity, Calabar,
             where he served as a key leader, worship team chaplain, and integral
             member of the Anglican Praise Band.
-          </p>
-          <p className={styles.welcomeText}>
+          </motion.p>
+          <motion.p className={styles.welcomeText} variants={fadeInUp}>
             Answering a divine call to ministry, he pursued theological
             education at Trinity Theological College, Umuahia, and advanced
             through the ecclesiastical ranks: ordained as Deacon in 2002, Priest
@@ -151,8 +143,8 @@ function BishopIntro() {
             (2014–2016) and the pioneering Chairman of the Committee of Heads of
             Radiography Departments in Nigerian Universities until his elevation
             to the episcopacy.
-          </p>
-          <p className={styles.welcomeText}>
+          </motion.p>
+          <motion.p className={styles.welcomeText} variants={fadeInUp}>
             As a prolific academic, he has over 80 publications in reputable
             local and international journals. Yet, he is equally known for his
             commitment to mentorship, evangelism, counseling, and worship
@@ -164,8 +156,8 @@ function BishopIntro() {
             role—secular or sacred—is a divine assignment for the service of
             others. Bishop Nneoyi Egbe is married to Dr. Mrs. Ada Nneoyi-Egbe,
             and they are blessed with four children—two sons and two daughters.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </div>
     </div>
   );

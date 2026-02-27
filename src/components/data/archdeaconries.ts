@@ -47,54 +47,5 @@ export const archdeaconries: ArchdeaconryData[] = [
     description:
       "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.",
     link: "/archdeaconries/efut",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Ikom",
-    title: "Ikom Archdeaconry",
-    description:
-      "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
-    link: "/archdeaconries/ikom",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Obubra",
-    title: "Obubra Missionary Archdeaconry",
-    description:
-      "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.",
-    link: "/archdeaconries/obubra",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Obudu",
-    title: "Obudu Missionary Archdeaconry",
-    description:
-      "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum.",
-    link: "/archdeaconries/obudu",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Ogoja",
-    title: "Ogoja Archdeaconry",
-    description:
-      "Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi.",
-    link: "/archdeaconries/ogoja",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Yakurr",
-    title: "Yakurr Missionary Archdeaconry",
-    description:
-      "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates.",
-    link: "/archdeaconries/yakurr",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Yala-East",
-    title: "Yala-East Missionary Archdeaconry",
-    description:
-      "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias.",
-    link: "/archdeaconries/yala-east",
-  },
-  {
-    image: "https://placehold.co/600x400/png?text=Yala-West",
-    title: "Yala-West Missionary Archdeaconry",
-    description:
-      "Nulla pariatur. Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.",
-    link: "/archdeaconries/yala-west",
-  },
+  }
 ];

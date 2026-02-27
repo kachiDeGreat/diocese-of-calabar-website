@@ -163,11 +163,6 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/about#bishop" onClick={handleLinkClick}>
-                          Bishops of Calabar
-                        </Link>
-                      </li>
-                      <li>
                         <Link
                           to="/diocesan-officials/"
                           onClick={handleLinkClick}
@@ -186,11 +181,11 @@ function Navbar() {
                   <div className={styles.megaMenuColumn}>
                     <h4>CHURCHES</h4>
                     <ul>
-                      <li>
+                      {/* <li>
                         <Link to="/cathedral" onClick={handleLinkClick}>
                           The Cathedral
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link to="/archdeaconries" onClick={handleLinkClick}>
                           Our Archdeaconries / Deaneries

@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import "../styles/BishopMessage.css";
-import Button from "./button";
+// import Button from "./button";
 
 function BishopMessage() {
   const vimeoVideoId = "76979871"; // Replace with your bishop's message video ID
@@ -94,7 +94,7 @@ function BishopMessage() {
               <div className="BishopMessage-videoOverlay"></div>
             </motion.div>
 
-            <Button
+            {/* <Button
               size="medium"
               style={{ marginTop: "-45px" }}
               onClick={() => {
@@ -112,7 +112,7 @@ function BishopMessage() {
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
               </svg>
               Play Full Message
-            </Button>
+            </Button> */}
           </motion.div>
 
           <motion.div
@@ -122,7 +122,7 @@ function BishopMessage() {
             <motion.p className="BishopMessage-date" variants={itemVariants}>
               Posted on the 1st of every month
             </motion.p>
-            <motion.button
+            {/* <motion.button
               className="BishopMessage-ctaButton"
               variants={itemVariants}
               whileHover={{ x: 5 }}
@@ -137,7 +137,7 @@ function BishopMessage() {
               >
                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
               </svg>
-            </motion.button>
+            </motion.button> */}
           </motion.div>
         </motion.div>
       </div>

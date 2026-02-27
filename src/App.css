@@ -50,6 +50,7 @@ body {
   .intro-subtitle {
     text-align: right;
     display: flex;
+    margin-top: 25px;
   }
 
   .display-none {
@@ -64,10 +65,11 @@ body {
 }
 
 .h-p {
-  font-size: 15px;
-  color: #686767;
+  font-size: 0.89rem;
+  line-height: 1.89;
+  color: #9b9999;
   line-height: 1.5;
-  text-align: justify;
+  text-align: left;
 }
 
 .h-h3 {
@@ -79,4 +81,12 @@ body {
 .link_text {
   font-style: italic;
   font-weight: bold;
+}
+
+@media screen and (max-width: 480px) {
+  .h-p {
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    text-align: left;
+  }
 }

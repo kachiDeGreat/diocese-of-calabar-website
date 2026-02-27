@@ -5,6 +5,7 @@ import { Images } from "../../Assets/assets";
 import { ReactNode } from "react";
 import Button from "./button";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "./LazyImage";
 
 interface Slide {
   id: number;
@@ -60,7 +61,7 @@ function Carousel() {
 
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
@@ -96,16 +97,13 @@ function Carousel() {
             }`}
           >
             <div className={styles.imageContainer}>
-              <img
+              <LazyImage
                 src={slide.image || "/placeholder.svg"}
                 alt={
                   typeof slide.title === "string" ? slide.title : "Slide image"
                 }
-                className={`${styles.slideImage} ${
-                  index === currentSlide ? styles.activeImage : ""
-                }`}
+                className={styles.slideImage}
               />
-              <div className={styles.imageOverlay}></div>
             </div>
             <div className={styles.slideContent}>
               <div className={styles.contentWrapper}>

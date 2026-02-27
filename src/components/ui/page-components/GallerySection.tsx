@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import styles from "../styles/gallery.module.css";
 import Button from "./button";
+import LazyImage from "./LazyImage";
 
 interface GalleryItem {
   id: number;
@@ -34,53 +35,23 @@ const galleryItems: GalleryItem[] = [
   },
 ];
 
-const categories = [
-  { id: "all", name: "All" },
-  { id: "church", name: "Church" },
-  { id: "events", name: "Events" },
-  { id: "community", name: "Community" },
-];
-
 // Animation variants
-const headerVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.16, 1, 0.3, 1],
-      staggerChildren: 0.1,
-      when: "beforeChildren",
-    },
+    transition: { duration: 0.6, ease: "easeOut" },
   },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
     transition: {
-      duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.2,
     },
-  },
-};
-
-const galleryItemVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-  hover: {
-    scale: 1.02,
-    transition: { duration: 0.3 },
   },
 };
 
@@ -110,22 +81,7 @@ const lightboxContentVariants: Variants = {
 };
 
 export default function GallerySection() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
-  const [filteredItems, setFilteredItems] = useState(galleryItems);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      const filtered =
-        selectedCategory === "all"
-          ? galleryItems
-          : galleryItems.filter((item) => item.category === selectedCategory);
-      setFilteredItems(filtered);
-      setIsLoading(false);
-    }, 300);
-  }, [selectedCategory]);
 
   const openLightbox = (item: GalleryItem) => {
     setSelectedImage(item);
@@ -140,18 +96,18 @@ export default function GallerySection() {
   const navigateImage = (direction: "prev" | "next") => {
     if (!selectedImage) return;
 
-    const currentIndex = filteredItems.findIndex(
-      (item) => item.id === selectedImage.id
+    const currentIndex = galleryItems.findIndex(
+      (item) => item.id === selectedImage.id,
     );
     let newIndex;
 
     if (direction === "prev") {
-      newIndex = currentIndex > 0 ? currentIndex - 1 : filteredItems.length - 1;
+      newIndex = currentIndex > 0 ? currentIndex - 1 : galleryItems.length - 1;
     } else {
-      newIndex = currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0;
+      newIndex = currentIndex < galleryItems.length - 1 ? currentIndex + 1 : 0;
     }
 
-    setSelectedImage(filteredItems[newIndex]);
+    setSelectedImage(galleryItems[newIndex]);
   };
 
   useEffect(() => {
@@ -165,7 +121,7 @@ export default function GallerySection() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage, filteredItems]);
+  }, [selectedImage]);
 
   return (
     <section className={styles.gallerySection}>
@@ -181,165 +137,97 @@ export default function GallerySection() {
           className={styles.header}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={headerVariants}
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
         >
-          <motion.span className={styles.headerSub} variants={itemVariants}>
+          <motion.span className={styles.headerSub} variants={fadeInUp}>
             GALLERY
           </motion.span>
-          <motion.h1 className={styles.title} variants={itemVariants}>
+          <motion.h1 className={styles.title} variants={fadeInUp}>
             Our Gallery
           </motion.h1>
           <motion.div
             className={styles.titleUnderline}
-            variants={itemVariants}
+            variants={fadeInUp}
           />
         </motion.div>
 
-        <motion.div className={styles.galleryGrid}>
-          {isLoading ? (
-            // Loading skeleton with animation
-            Array.from({ length: 8 }).map((_, index) => (
-              <motion.div
-                key={index}
-                className={styles.skeletonCard}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
-                transition={{
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  duration: 1,
-                  delay: index * 0.1,
-                }}
-              >
-                <div className={styles.skeletonImage}></div>
-              </motion.div>
-            ))
-          ) : (
-            <AnimatePresence mode="wait">
-              {filteredItems.map((item, index) => (
+        <motion.div
+          className={styles.galleryGrid}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          {galleryItems.map((item) => (
+            <motion.div
+              key={item.id}
+              className={styles.galleryCard}
+              onClick={() => openLightbox(item)}
+              variants={fadeInUp}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className={styles.imageContainer}>
+                <LazyImage
+                  src={item.image || "/placeholder.svg"}
+                  alt="Gallery image"
+                  className={styles.galleryImage}
+                />
                 <motion.div
-                  key={item.id}
-                  className={styles.galleryCard}
-                  onClick={() => openLightbox(item)}
-                  variants={galleryItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                  exit="hidden"
-                  transition={{ delay: index * 0.05 }}
-                  layout
+                  className={styles.overlay}
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <div className={styles.imageContainer}>
-                    <motion.img
-                      src={item.image || "/placeholder.svg"}
-                      alt="Gallery image"
-                      className={styles.galleryImage}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                    <motion.div
-                      className={styles.overlay}
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      transition={{ duration: 0.3 }}
+                  <div className={styles.overlayContent}>
+                    <motion.svg
+                      className={styles.zoomIcon}
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ delay: 0.2 }}
                     >
-                      <div className={styles.overlayContent}>
-                        <motion.svg
-                          className={styles.zoomIcon}
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          initial={{ scale: 0 }}
-                          whileInView={{ scale: 1 }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          <circle
-                            cx="11"
-                            cy="11"
-                            r="8"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                          <path
-                            d="m21 21-4.35-4.35"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                          <path
-                            d="M11 8v6M8 11h6"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          />
-                        </motion.svg>
-                      </div>
-                    </motion.div>
+                      <circle
+                        cx="11"
+                        cy="11"
+                        r="8"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="m21 21-4.35-4.35"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M11 8v6M8 11h6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </motion.svg>
                   </div>
                 </motion.div>
-              ))}
-            </AnimatePresence>
-          )}
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
 
         <center>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
+            variants={fadeInUp}
           >
             <Button style={{ textAlign: "center" }} size="medium">
               See More
             </Button>
           </motion.div>
         </center>
-
-        {filteredItems.length === 0 && !isLoading && (
-          <motion.div
-            className={styles.emptyState}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.svg
-              width="80"
-              height="80"
-              viewBox="0 0 24 24"
-              fill="none"
-              className={styles.emptyIcon}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            >
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="2"
-                ry="2"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <circle
-                cx="8.5"
-                cy="8.5"
-                r="1.5"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-              <polyline
-                points="21,15 16,10 5,21"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-            </motion.svg>
-            <h3>No photos found</h3>
-            <p>Try selecting a different category</p>
-          </motion.div>
-        )}
       </div>
 
       {/* Lightbox Modal */}
