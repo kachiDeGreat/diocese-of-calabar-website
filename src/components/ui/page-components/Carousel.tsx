@@ -66,13 +66,6 @@ function Carousel() {
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false);
-    // Resume auto-play after 10 seconds
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
     setIsAutoPlaying(false);
@@ -109,9 +102,6 @@ function Carousel() {
               <div className={styles.contentWrapper}>
                 <h1 className={styles.slideTitle}>{slide.title}</h1>
                 <p className={styles.slideDescription}>{slide.description}</p>
-                {/* <a href={slide.buttonLink} className={styles.slideButton}>
-                  {slide.buttonText}
-                </a> */}
                 <Button
                   style={{ marginLeft: "-10px" }}
                   size="medium"
@@ -144,20 +134,6 @@ function Carousel() {
           <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
         </svg>
       </button>
-
-      {/* Dots Indicator */}
-      {/* <div className={styles.dotsContainer}>
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.dot} ${
-              index === currentSlide ? styles.activeDot : ""
-            }`}
-            onClick={() => goToSlide(index)}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
-      </div> */}
     </section>
   );
 }

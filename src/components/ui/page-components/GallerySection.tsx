@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import styles from "../styles/gallery.module.css";
 import Button from "./button";
@@ -88,27 +88,32 @@ export default function GallerySection() {
     document.body.style.overflow = "hidden";
   };
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setSelectedImage(null);
     document.body.style.overflow = "unset";
-  };
+  }, []);
 
-  const navigateImage = (direction: "prev" | "next") => {
-    if (!selectedImage) return;
+  const navigateImage = useCallback(
+    (direction: "prev" | "next") => {
+      if (!selectedImage) return;
 
-    const currentIndex = galleryItems.findIndex(
-      (item) => item.id === selectedImage.id,
-    );
-    let newIndex;
+      const currentIndex = galleryItems.findIndex(
+        (item) => item.id === selectedImage.id,
+      );
+      let newIndex;
 
-    if (direction === "prev") {
-      newIndex = currentIndex > 0 ? currentIndex - 1 : galleryItems.length - 1;
-    } else {
-      newIndex = currentIndex < galleryItems.length - 1 ? currentIndex + 1 : 0;
-    }
+      if (direction === "prev") {
+        newIndex =
+          currentIndex > 0 ? currentIndex - 1 : galleryItems.length - 1;
+      } else {
+        newIndex =
+          currentIndex < galleryItems.length - 1 ? currentIndex + 1 : 0;
+      }
 
-    setSelectedImage(galleryItems[newIndex]);
-  };
+      setSelectedImage(galleryItems[newIndex]);
+    },
+    [selectedImage],
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -121,7 +126,7 @@ export default function GallerySection() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [selectedImage]);
+  }, [selectedImage, closeLightbox, navigateImage]);
 
   return (
     <section className={styles.gallerySection}>
@@ -146,10 +151,7 @@ export default function GallerySection() {
           <motion.h1 className={styles.title} variants={fadeInUp}>
             Our Gallery
           </motion.h1>
-          <motion.div
-            className={styles.titleUnderline}
-            variants={fadeInUp}
-          />
+          <motion.div className={styles.titleUnderline} variants={fadeInUp} />
         </motion.div>
 
         <motion.div
