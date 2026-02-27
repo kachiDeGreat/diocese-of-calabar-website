@@ -1,8 +1,28 @@
 import type React from "react";
 import { CSSProperties } from "react";
+import { motion, Variants } from "framer-motion";
 import "./Archdeaconry.css";
 import ArchdeaconryCard from "./ArchdeaconryCard";
 import { ArchdeaconryData } from "../../data/archdeaconries";
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
+const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
 
 interface ArchdeaconryGridProps {
   data: ArchdeaconryData[];
@@ -11,12 +31,7 @@ interface ArchdeaconryGridProps {
   style?: CSSProperties;
 }
 
-const ArchdeaconryGrid: React.FC<ArchdeaconryGridProps> = ({
-  data,
-  header,
-  title,
-  style,
-}) => {
+const ArchdeaconryGrid: React.FC<ArchdeaconryGridProps> = ({ data, style }) => {
   return (
     <section
       className="arch-section"
@@ -26,25 +41,28 @@ const ArchdeaconryGrid: React.FC<ArchdeaconryGridProps> = ({
         ...style,
       }}
     >
-      {/* <div className="arch-header"> 
-        <div className="arch-header-text">
-          <span className="arch-header-sub">{header}</span>
-          <h1 className="arch-title">{title}</h1>
-        </div>
-      </div> */}
-
-      <div className="arch-grid">
+      <motion.div
+        className="arch-grid"
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         {data.map((item, index) => (
-          <div key={index} className="arch-grid-item">
+          <motion.div
+            key={index}
+            className="arch-grid-item"
+            variants={fadeInUp}
+          >
             <ArchdeaconryCard
               image={item.image}
               title={item.title}
               description={item.description}
               link={item.link}
             />
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import type React from "react";
 import { Link } from "react-router-dom";
 import "./BishopCard.css";
+import LazyImage from "./LazyImage";
 
 interface BishopCardProps {
   image: string;
@@ -18,7 +19,7 @@ const BishopCard: React.FC<BishopCardProps> = ({
   return (
     <div className="bishop-card">
       <div className="bishop-card-image-container">
-        <img
+        <LazyImage
           src={image || "/placeholder.svg"}
           alt={title}
           className="bishop-card-image"

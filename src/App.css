@@ -48,8 +48,8 @@ body {
 }
 @media (max-width: 768px) {
   .intro-subtitle {
-    text-align: right;
-    display: flex;
+    text-align: left !important;
+    width: 100%;
     margin-top: 25px;
   }
 

@@ -1,5 +1,6 @@
 import type React from "react";
 import { Link } from "react-router-dom";
+import LazyImage from "./LazyImage";
 
 interface ArchdeaconryCardProps {
   image: string;
@@ -17,7 +18,7 @@ const ArchdeaconryCard: React.FC<ArchdeaconryCardProps> = ({
   return (
     <div className="arch-card">
       <div className="arch-card-image-container">
-        <img
+        <LazyImage
           src={image || "/placeholder.svg"}
           alt={title}
           className="arch-card-image"
