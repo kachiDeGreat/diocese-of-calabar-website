@@ -5,6 +5,7 @@ import LazyImage from "../page-components/LazyImage";
 import Banner from "../page-components/Banner";
 import GenericSlider from "../page-components/GenericSlider";
 import { archdeaconryDetailsData } from "../../data/archdeaconryDetails";
+import SEO from "../page-components/SEO"; // <-- Import SEO
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 60 },
@@ -28,12 +29,12 @@ const staggerContainer: Variants = {
 export default function ArchdeaconryDetails() {
   const { slug } = useParams<{ slug: string }>();
 
-  // Find the data based on the URL slug
   const data = slug ? archdeaconryDetailsData[slug] : null;
 
   if (!data) {
     return (
       <div className={styles.notFound}>
+        <SEO title="Not Found" /> {/* Handle 404 title */}
         <h2>Archdeaconry not found.</h2>
         <Link to="/archdeaconries">Return to all Archdeaconries</Link>
       </div>
@@ -88,6 +89,9 @@ export default function ArchdeaconryDetails() {
 
   return (
     <div className={styles.pageContainer}>
+      {/* DYNAMIC SEO TAGS */}
+      <SEO title={data.name} description={data.history.paragraphs1[0]} />
+
       {/* Replaced custom hero with your Banner */}
       <Banner title={data.name} />
 
@@ -144,13 +148,13 @@ export default function ArchdeaconryDetails() {
         </div>
       </motion.section>
 
-     {/* Leadership Slider Section */}
+      {/* Leadership Slider Section */}
       <section className={styles.sliderSectionAlt}>
         <div className={styles.container}>
-          <GenericSlider 
-            title="Our Leadership" 
-            data={data.leaders} 
-            renderItem={renderLeaderCard} 
+          <GenericSlider
+            title="Our Leadership"
+            data={data.leaders}
+            renderItem={renderLeaderCard}
             // Lock to 1 slide on all screens
             breakpoints={{
               0: { slidesPerView: 1 },
@@ -164,14 +168,14 @@ export default function ArchdeaconryDetails() {
       {/* Churches Slider Section */}
       <section className={styles.sliderSection}>
         <div className={styles.container}>
-          <GenericSlider 
-            title="Parishes & Churches" 
-            data={data.churches} 
-            renderItem={renderChurchCard} 
+          <GenericSlider
+            title="Parishes & Churches"
+            data={data.churches}
+            renderItem={renderChurchCard}
             // Scale dynamically based on screen size
             breakpoints={{
-              0: { slidesPerView: 1 },       
-              768: { slidesPerView: 2 },    
+              0: { slidesPerView: 1 },
+              768: { slidesPerView: 2 },
               1024: { slidesPerView: Math.min(data.churches.length, 3) },
             }}
           />
