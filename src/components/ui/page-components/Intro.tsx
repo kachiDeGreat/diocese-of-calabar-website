@@ -1,7 +1,7 @@
 import { motion, Variants } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/intro.module.css";
-import { Images } from "../../Assets/assets";
+// import { Images } from "../../Assets/assets";
 import Button from "./button";
 import LazyImage from "./LazyImage";
 
@@ -40,7 +40,7 @@ function Intro() {
           <div className={styles.imageWrapper}>
             <motion.div className={styles.imageContainer} variants={fadeInUp}>
               <LazyImage
-                src={Images.bishopTwo || "/placeholder.svg"}
+                src="https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p"
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
               />

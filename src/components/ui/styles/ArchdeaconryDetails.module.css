@@ -1,0 +1,283 @@
+.pageContainer {
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.notFound {
+  text-align: center;
+  padding: 150px 20px;
+  min-height: 60vh;
+}
+
+.notFound h2 {
+  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.notFound a {
+  color: #c52810;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* --- Global Section Headers --- */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sectionHeader h2 {
+  font-size: 2.2rem;
+  color: #2d3748;
+}
+
+.underline {
+  width: 60px;
+  height: 3px;
+  background-color: #c52810;
+  margin: 10px auto;
+  border-radius: 2px;
+}
+
+/* --- History Section --- */
+.historySection {
+  background-color: white;
+  padding: 80px 20px;
+}
+
+.historyGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.historyText h3 {
+  font-size: 1.5rem;
+  color: #2d3748;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.historyText h3:first-child {
+  margin-top: 0;
+}
+
+.historyText p {
+  color: #4a5568;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+
+.historyQuote {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: #c52810;
+  border-left: 4px solid #c52810;
+  padding-left: 20px;
+  margin: 40px 0;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.historyImageWrapper {
+  position: sticky;
+  top: 100px;
+}
+
+.historyImg {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  object-fit: cover;
+}
+
+/* --- Slider Sections --- */
+.sliderSection {
+  padding: 80px 20px;
+  background-color: white;
+}
+
+.sliderSectionAlt {
+  padding: 80px 20px;
+  background-color: #f4f4f4;
+}
+
+/* --- Leader Card --- */
+.leaderCard {
+  display: flex;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  margin: 10px;
+  border: 1px solid #eaeaea;
+}
+
+.leaderImg {
+  width: 200px;
+  object-fit: cover;
+  min-height: 250px;
+}
+
+.leaderInfo {
+  padding: 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.leaderRole {
+  color: #c52810;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.leaderName {
+  font-size: 1.6rem;
+  color: #2d3748;
+  margin: 5px 0 15px;
+}
+
+.leaderBio {
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* --- Church Card --- */
+.churchCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #eaeaea;
+  margin: 10px;
+}
+
+.churchImgContainer {
+  height: 220px;
+  overflow: hidden;
+}
+
+.churchImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.churchCard:hover .churchImg {
+  transform: scale(1.05);
+}
+
+.churchInfo {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.churchName {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin-bottom: 10px;
+}
+
+.churchAddress {
+  color: #718096;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+.churchBtn {
+  background-color: white;
+  color: #c52810;
+  border: 2px solid #c52810;
+  text-align: center;
+  padding: 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.churchBtn:hover {
+  background-color: #c52810;
+  color: white;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+
+@media (max-width: 992px) {
+  .historyGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .historyImageWrapper {
+    position: static;
+    order: -1; /* Puts the image above the text on mobile */
+  }
+
+  .historyImg {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .historySection, .sliderSection, .sliderSectionAlt {
+    padding: 60px 15px;
+  }
+
+  .leaderCard {
+    flex-direction: column;
+  }
+  
+  .leaderImg {
+    width: 100%;
+    height: 300px;
+  }
+
+  .leaderInfo {
+    padding: 20px;
+  }
+
+  .historyQuote {
+    font-size: 1.2rem;
+    padding-left: 15px;
+    margin: 30px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionHeader h2 {
+    font-size: 1.8rem;
+  }
+
+  .churchImgContainer {
+    height: 180px;
+  }
+
+  .churchInfo {
+    padding: 20px;
+  }
+}
