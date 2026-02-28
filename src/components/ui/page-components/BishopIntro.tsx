@@ -1,6 +1,6 @@
 import { motion, Variants } from "framer-motion";
 import styles from "../styles/intro.module.css";
-import { Images } from "../../Assets/assets";
+import LazyImage from "./LazyImage";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 60 },
@@ -83,14 +83,25 @@ function BishopIntro() {
             </motion.div>
           </div>
           {/* Bishop Image */}
-          <div className={styles.imageWrapper}>
-            <motion.div className={styles.imageContainer} variants={fadeInUp}>
-              <img
-                src={Images.bishopTwo || "/placeholder.svg"}
+          <div className={styles.imageWrapper} style={{ marginBottom: "30px" }}>
+            <motion.div
+              className={styles.imageContainer}
+              variants={fadeInUp}
+              style={{
+                width: "100%",
+                maxWidth: "400px",
+                aspectRatio: "3/4",
+                margin: "0 auto",
+              }}
+            >
+              <LazyImage
+                src="https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p"
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
+                placeholderColor="#f4f4f4"
               />
             </motion.div>
+
             {/* Name Card Below Image */}
             <motion.div className={styles.nameCard} variants={fadeInUp}>
               <h3 className={styles.cardBishopName}>
@@ -104,6 +115,7 @@ function BishopIntro() {
             </motion.div>
           </div>
         </motion.div>
+
         <motion.div
           className="col-12 text-text p-0 p-lg-4"
           initial="hidden"

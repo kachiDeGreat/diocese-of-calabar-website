@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/carousel.module.css";
-import { Images } from "../../Assets/assets";
 
 import { ReactNode } from "react";
 import Button from "./button";
@@ -19,7 +18,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: Images.carouselImgOne,
+    image: "https://dropimg.onyekachi.dev/hpfnhz8bd605x50szxot",
     title: (
       <>
         Diocese of Calabar
@@ -46,7 +45,7 @@ const slides: Slide[] = [
 function Carousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  
+
   // Track which slides have finished loading their images
   const [loadedSlides, setLoadedSlides] = useState<Record<number, boolean>>({});
 
@@ -95,18 +94,18 @@ function Carousel() {
                 }
                 className={styles.slideImage}
                 placeholderColor="#000000" // Black background during load
-                spinnerBoxColor="#ffffff"  // White box around spinner
+                spinnerBoxColor="#ffffff" // White box around spinner
                 onLoadChange={() => handleImageLoaded(index)}
               />
             </div>
-            
+
             {/* Smoothly hide content until the image is fully loaded */}
-            <div 
+            <div
               className={styles.slideContent}
               style={{
                 opacity: loadedSlides[index] ? 1 : 0,
                 visibility: loadedSlides[index] ? "visible" : "hidden",
-                transition: "opacity 0.6s ease, visibility 0.6s ease"
+                transition: "opacity 0.6s ease, visibility 0.6s ease",
               }}
             >
               <div className={styles.contentWrapper}>
