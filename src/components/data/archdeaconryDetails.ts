@@ -186,7 +186,7 @@ export const archdeaconryDetailsData: Record<string, ArchdeaconryDetail> = {
         role: "Archdeacon of Calabar",
         bio: "An experienced administrator and pastor, dedicated to strengthening the urban parishes of Calabar.",
         image:
-          "https://placehold.co/400x400/eeeeee/999999?text=Calabar+Archdeacon",
+          "https://placehold.co/1000x1500/eeeeee/999999?text=Calabar+Archdeacon",
       },
     ],
     churches: [

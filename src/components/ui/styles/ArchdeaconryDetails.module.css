@@ -124,13 +124,14 @@
 }
 
 .leaderImg {
-  width: 200px;
+  width: 350px; /* Increased from 200px */
+  min-height: 400px; /* Increased from 250px */
   object-fit: cover;
-  min-height: 250px;
+  flex-shrink: 0; /* THIS IS THE MAGIC FIX: Prevents the text from squishing the image */
 }
 
 .leaderInfo {
-  padding: 30px;
+  padding: 40px; /* Increased padding to balance the bigger image */
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -139,22 +140,38 @@
 
 .leaderRole {
   color: #c52810;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 1px;
 }
 
 .leaderName {
-  font-size: 1.6rem;
+  font-size: 2rem; /* Made the name a bit bigger to match the new image size */
   color: #2d3748;
-  margin: 5px 0 15px;
+  margin: 8px 0 15px;
 }
 
 .leaderBio {
   color: #4a5568;
-  line-height: 1.6;
-  font-size: 0.95rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Make sure it still stacks nicely on mobile */
+@media (max-width: 768px) {
+  .leaderCard {
+    flex-direction: column;
+  }
+  
+  .leaderImg {
+    width: 100%;
+    min-height: 350px;
+  }
+
+  .leaderInfo {
+    padding: 25px;
+  }
 }
 
 /* --- Church Card --- */
@@ -246,19 +263,6 @@
 @media (max-width: 768px) {
   .historySection, .sliderSection, .sliderSectionAlt {
     padding: 60px 15px;
-  }
-
-  .leaderCard {
-    flex-direction: column;
-  }
-  
-  .leaderImg {
-    width: 100%;
-    height: 300px;
-  }
-
-  .leaderInfo {
-    padding: 20px;
   }
 
   .historyQuote {
