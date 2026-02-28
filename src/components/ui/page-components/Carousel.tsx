@@ -19,15 +19,6 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: Images.carouselImgTwo,
-    title: "Join Our Sunday Service",
-    description:
-      "Experience heartfelt worship and inspiring messages every Sunday. All are welcome to join our church family.",
-    buttonText: "Service Times",
-    buttonLink: "/worship",
-  },
-  {
-    id: 2,
     image: Images.carouselImgOne,
     title: (
       <>
@@ -37,24 +28,27 @@ const slides: Slide[] = [
       </>
     ),
     description:
-      "The Anglican Diocese of Calabar is one of ten within the Anglican Province of the Niger Delta...",
-    buttonText: "Learn More",
-    buttonLink: "/about",
+      "The Anglican Diocese of Calabar is one of 18 dioceses within the Anglican Province of the Niger Delta...",
+    buttonText: "About Us",
+    buttonLink: "/about-us/",
   },
   {
-    id: 3,
+    id: 2,
     image: "https://i.postimg.cc/Dzqr7x6F/Untitled-design.png",
     title: <>See upcoming events</>,
     description:
       "Stay connected with our diocese through various events and activities. Check out our calendar for details.",
     buttonText: "See Events",
-    buttonLink: "/about",
+    buttonLink: "/about-us/",
   },
 ];
 
 function Carousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  
+  // Track which slides have finished loading their images
+  const [loadedSlides, setLoadedSlides] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -65,6 +59,10 @@ function Carousel() {
 
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
+
+  const handleImageLoaded = (index: number) => {
+    setLoadedSlides((prev) => ({ ...prev, [index]: true }));
+  };
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -96,9 +94,21 @@ function Carousel() {
                   typeof slide.title === "string" ? slide.title : "Slide image"
                 }
                 className={styles.slideImage}
+                placeholderColor="#000000" // Black background during load
+                spinnerBoxColor="#ffffff"  // White box around spinner
+                onLoadChange={() => handleImageLoaded(index)}
               />
             </div>
-            <div className={styles.slideContent}>
+            
+            {/* Smoothly hide content until the image is fully loaded */}
+            <div 
+              className={styles.slideContent}
+              style={{
+                opacity: loadedSlides[index] ? 1 : 0,
+                visibility: loadedSlides[index] ? "visible" : "hidden",
+                transition: "opacity 0.6s ease, visibility 0.6s ease"
+              }}
+            >
               <div className={styles.contentWrapper}>
                 <h1 className={styles.slideTitle}>{slide.title}</h1>
                 <p className={styles.slideDescription}>{slide.description}</p>

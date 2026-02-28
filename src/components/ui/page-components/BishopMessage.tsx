@@ -4,8 +4,6 @@ import "../styles/BishopMessage.css";
 // import Button from "./button";
 
 function BishopMessage() {
-  const vimeoVideoId = "76979871"; // Replace with your bishop's message video ID
-
   // Animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -82,14 +80,23 @@ function BishopMessage() {
             <motion.div
               className="BishopMessage-videoWrapper"
               variants={videoVariants}
+              // Applied the vertical aspect ratio styling from Vimeo
+              style={{ padding: "177.78% 0 0 0", position: "relative" }}
             >
               <iframe
-                src={`https://player.vimeo.com/video/${vimeoVideoId}?autoplay=0&title=0&byline=0&portrait=0`}
+                src="https://player.vimeo.com/video/1169142384?badge=0&autopause=0&player_id=0&app_id=58479"
                 className="BishopMessage-video"
                 frameBorder="0"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                title="Bishop's New Month Message"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
+                title="bishop_feb_vide"
               />
               <div className="BishopMessage-videoOverlay"></div>
             </motion.div>
