@@ -289,16 +289,7 @@ function Navbar() {
                           Podcast
                         </Link>
                       </li>
-                      <li>
-                        <Link to="/lagoon-radio" onClick={handleLinkClick}>
-                          Radio
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="/lagoon-tv" onClick={handleLinkClick}>
-                          LagoonTV
-                        </Link>
-                      </li>
+                     
                     </ul>
                   </div>
 
