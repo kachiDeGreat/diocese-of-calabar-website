@@ -170,7 +170,7 @@ export default function Footer() {
                         />
                       </svg>
                     </div>
-                    <p>info@dioceseofCalabar.org</p>
+                    <p>info@anglicandioceseofcalabar.org</p>
                   </div>
                 </div>
 
