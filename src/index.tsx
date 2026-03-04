@@ -1,14 +1,13 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-root.render(
+const rootElement = document.getElementById("root") as HTMLElement;
+
+const app = (
   <React.StrictMode>
     <BrowserRouter>
       <App />
@@ -16,7 +15,12 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// If react-snap has already built the HTML, hydrate it!
+if (rootElement.hasChildNodes()) {
+  hydrateRoot(rootElement, app);
+} else {
+  // Otherwise, render normally (like when you are testing on localhost)
+  const root = createRoot(rootElement);
+  root.render(app);
+}
 reportWebVitals();
