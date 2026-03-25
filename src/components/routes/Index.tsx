@@ -1,26 +1,51 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useState, useEffect, ReactNode } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Home from "../ui/pages/Home";
 import About from "../ui/pages/About";
 import LineLoader from "../ui/page-components/LineLoader";
-import Bishops from "../ui/pages/Bishops";
+import BishopOfCalabar from "../ui/pages/Bishop_of_calabar";
+import TheMostRevTundeAdeleye from "../ui/pages/The_Most_Rev_Tunde_Adeleye";
 import Archdeaconry from "../ui/pages/Archdeaconry";
 import ArchdeaconryDetails from "../ui/pages/ArchdeaconryDetails";
 import NotFound from "../ui/pages/NotFound";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
+import SynodReg from "../ui/pages/SynodReg";
+import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
+import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
+
+const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
+  const isAuthenticated = sessionStorage.getItem("synodAdminAuth") === "true";
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <Navigate to="/synod-admin" replace />
+  );
+};
 
 function Index() {
+  const location = useLocation();
+  const [initialPath] = useState(location.pathname);
+  const [showLineLoader, setShowLineLoader] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname !== initialPath) {
+      setShowLineLoader(true);
+    }
+  }, [location.pathname, initialPath]);
+
   return (
     <HelmetProvider>
       <ScrollToTop />
-      <LineLoader />
+      {showLineLoader && <LineLoader />}
       <Routes>
         {/* LIVE PAGES (Already Built) */}
         <Route path="/" element={<Home />} />
         <Route path="/about-us/" element={<About />} />
-        <Route path="/bishop-of-calabar/" element={<Bishops />} />
+        <Route path="/bishop-of-calabar/" element={<BishopOfCalabar />} />
+        <Route path="/the-most_rev-tunde-adeleye-(rtd)/" element={<TheMostRevTundeAdeleye />} />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
+        <Route path="/synod/" element={<SynodReg />} />
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
 
         <Route
@@ -297,6 +322,17 @@ function Index() {
               title="Coming Soon"
               message="Our Events calendar is being prepared."
             />
+          }
+        />
+
+        {/* admin routes */}
+        <Route path="/synod-admin" element={<SynodAdminLogin />} />
+        <Route
+          path="/synod-admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <SynodAdminDashboard />
+            </ProtectedAdminRoute>
           }
         />
 

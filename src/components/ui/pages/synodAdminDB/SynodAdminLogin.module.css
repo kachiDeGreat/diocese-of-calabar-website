@@ -1,0 +1,212 @@
+.pageWrapper {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================================
+   MOBILE WARNING SCREEN
+   ========================================= */
+.mobileWarning {
+  display: none; /* Hidden on desktop */
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  margin: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-top: 6px solid #c52810;
+}
+
+.warningIcon {
+  width: 80px;
+  height: 80px;
+  background-color: #fdf2f0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.mobileWarning h2 {
+  color: #1a1a1a;
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+}
+
+.mobileWarning p {
+  color: #4b5563;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem 0;
+}
+
+.subText {
+  font-size: 0.9rem !important;
+  color: #9ca3af !important;
+  margin-top: 1rem !important;
+}
+
+/* =========================================
+   DESKTOP LOGIN SCREEN
+   ========================================= */
+.desktopContainer {
+  width: 100%;
+  max-width: 680px;
+  padding: 2rem;
+}
+
+.loginCard {
+  background: white;
+  border-radius: 24px;
+  padding: 3.5rem 3rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.brandSection {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logoBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fdf2f0;
+  color: #c52810;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  background-color: #c52810;
+  border-radius: 50%;
+}
+
+.brandSection h2 {
+  color: #1a1a1a;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+.brandSection p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 1rem;
+  color: #9ca3af;
+}
+
+.inputWrapper input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #1a1a1a;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.inputWrapper input:focus {
+  outline: none;
+  border-color: #c52810;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(197, 40, 16, 0.1);
+}
+
+.loginBtn {
+  margin-top: 1rem;
+  background-color: #c52810;
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loginBtn:hover:not(:disabled) {
+  background-color: #a0200c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(197, 40, 16, 0.2);
+}
+
+.loginBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.footerText {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* =========================================
+   MEDIA QUERIES (The Mobile Blocker)
+   ========================================= */
+@media (max-width: 992px) {
+  /* Hide the login form entirely on tablets and phones */
+  .desktopContainer {
+    display: none;
+  }
+
+  /* Show the warning box */
+  .mobileWarning {
+    display: block;
+  }
+}

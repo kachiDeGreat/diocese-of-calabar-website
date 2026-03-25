@@ -2,7 +2,7 @@ import Banner from "../page-components/Banner";
 import BishopIntro from "../page-components/BishopIntro";
 import SEO from "../page-components/SEO"; // <-- Import SEO
 
-function Bishops() {
+function Bishop_of_calabar() {
   return (
     <>
       <SEO
@@ -17,4 +17,4 @@ function Bishops() {
   );
 }
 
-export default Bishops;
+export default Bishop_of_calabar;

@@ -1,0 +1,803 @@
+import React, { useState, useRef, useEffect } from "react";
+import { PaystackButton } from "react-paystack";
+import toast, { Toaster } from "react-hot-toast";
+import { motion } from "framer-motion";
+import styles from "../styles/SynodReg.module.css";
+import SEO from "../page-components/SEO";
+import LazyImage from "../page-components/LazyImage";
+
+// Firebase imports (NO STORAGE)
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+
+export default function SynodReg() {
+  const formRef = useRef<HTMLDivElement>(null);
+
+  // States: 1=Details, 2=Photo, 3=Payment, 4=Success, 5=Failed
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem("synodRegFormData");
+    return savedData
+      ? JSON.parse(savedData)
+      : {
+          title: "",
+          fullName: "",
+          email: "",
+          phone: "", // Included phone number
+          archdeaconry: "",
+          church: "",
+          designation: "",
+        };
+  });
+
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoUrl, setPhotoUrl] = useState<string>("");
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [delegateId, setDelegateId] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const uploadAbortControllerRef = useRef<AbortController | null>(null);
+
+  const [startedAt] = useState(() => {
+    const saved = localStorage.getItem("synodRegStartedAt");
+    if (saved) return saved;
+    const now = new Date().toISOString();
+    localStorage.setItem("synodRegStartedAt", now);
+    return now;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("synodRegFormData", JSON.stringify(formData));
+  }, [formData]);
+
+  const scrollToFormTop = () => {
+    setTimeout(() => {
+      const yOffset = -20;
+      const element = formRef.current;
+      if (element) {
+        const y =
+          element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    }, 50);
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const maxSize = 1.5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast.error("File is too large! Maximum size is 1.5MB.");
+      return;
+    }
+
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
+      toast.error("Only JPG or PNG images are allowed.");
+      return;
+    }
+
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+
+    // Upload immediately in the background
+    setIsUploadingPhoto(true);
+    const toastId = toast.loading("Uploading photo...");
+
+    if (uploadAbortControllerRef.current) {
+      uploadAbortControllerRef.current.abort();
+    }
+    uploadAbortControllerRef.current = new AbortController();
+
+    try {
+      const imageFormData = new FormData();
+      imageFormData.append("file", file);
+      imageFormData.append("upload_preset", "synod_preset");
+
+      const cloudName = "dt2gk3gcn";
+
+      const uploadResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: "POST",
+          body: imageFormData,
+          signal: uploadAbortControllerRef.current.signal,
+        },
+      );
+
+      const uploadedImageData = await uploadResponse.json();
+      setPhotoUrl(uploadedImageData.secure_url);
+
+      toast.success("Photo uploaded successfully!", { id: toastId });
+    } catch (error: any) {
+      if (error.name === "AbortError") {
+        console.log("Photo upload aborted by user.");
+        toast.dismiss(toastId);
+        return;
+      }
+      console.error("Photo upload error:", error);
+      toast.error("Failed to upload photo. Please try again.", { id: toastId });
+      removePhoto();
+    } finally {
+      setIsUploadingPhoto(false);
+      uploadAbortControllerRef.current = null;
+    }
+  };
+
+  const removePhoto = () => {
+    if (uploadAbortControllerRef.current) {
+      uploadAbortControllerRef.current.abort();
+      uploadAbortControllerRef.current = null;
+    }
+    setPhoto(null);
+    setPhotoPreview(null);
+    setPhotoUrl("");
+  };
+
+  const generateCustomId = () => {
+    const namePart =
+      formData.fullName.substring(0, 3).charAt(0).toUpperCase() +
+      formData.fullName.substring(1, 3).toLowerCase();
+    const archPart =
+      formData.archdeaconry.substring(0, 3).charAt(0).toUpperCase() +
+      formData.archdeaconry.substring(1, 3).toLowerCase();
+    const randomNum = Math.floor(Math.random() * 900) + 100;
+    return `${namePart}-${archPart}-${randomNum}`;
+  };
+
+  const nextStep = () => {
+    if (step === 1) {
+      if (
+        !formData.title ||
+        !formData.fullName ||
+        !formData.email ||
+        !formData.phone || // Validate phone is not empty
+        !formData.archdeaconry ||
+        !formData.church ||
+        !formData.designation
+      ) {
+        toast.error("Please fill in all personal details to proceed.");
+        return;
+      }
+      setStep(2);
+      scrollToFormTop();
+    } else if (step === 2) {
+      if (!photo) {
+        toast.error("Please upload a profile photo to proceed.");
+        return;
+      }
+      if (isUploadingPhoto) {
+        toast.error("Please wait for your photo to finish uploading.");
+        return;
+      }
+      if (!photoUrl) {
+        toast.error("Photo upload failed. Please remove and try again.");
+        return;
+      }
+      setStep(3);
+      scrollToFormTop();
+    }
+  };
+
+  const prevStep = () => {
+    if (step === 5) {
+      setStep(3);
+    } else {
+      setStep(step - 1);
+    }
+    scrollToFormTop();
+  };
+
+  const amount = 10000;
+
+  const paystackConfig = {
+    reference: new Date().getTime().toString(),
+    email: formData.email,
+    amount: amount * 100,
+    publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY as string,
+  };
+
+  const handlePaystackSuccessAction = async (reference: any) => {
+    try {
+      setIsSubmitting(true);
+      const newDelegateId = generateCustomId();
+
+      // Save Registration to Firestore
+      await addDoc(collection(db, "synod_registrations"), {
+        ...formData,
+        delegateId: newDelegateId,
+        photoUrl,
+        paymentReference: reference.reference,
+        amountPaid: amount,
+        startedAt,
+        completedAt: new Date().toISOString(),
+      });
+
+      setDelegateId(newDelegateId);
+      setStep(4);
+      scrollToFormTop();
+
+      // Clear local storage
+      localStorage.removeItem("synodRegFormData");
+      localStorage.removeItem("synodRegStartedAt");
+      toast.success("Payment successful! Registration complete.");
+    } catch (error) {
+      console.error("Error saving registration details: ", error);
+      toast.error(
+        "Payment was successful but we failed to save some details. Please contact support.",
+      );
+      setStep(5);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handlePaystackCloseAction = () => {
+    setStep(5);
+    scrollToFormTop();
+    toast.error("Payment was not completed.");
+  };
+
+  const componentProps = {
+    ...paystackConfig,
+    text: "Pay & Register Now",
+    onSuccess: (reference: any) => handlePaystackSuccessAction(reference),
+    onClose: handlePaystackCloseAction,
+  };
+
+  const progressPercentage =
+    step === 1 ? 25 : step === 2 ? 50 : step === 3 || step === 5 ? 75 : 100;
+
+  return (
+    <div className={styles.pageWrapper}>
+      <SEO
+        title="Synod Registration"
+        description="Register for the 3rd Session of the 12th Synod."
+      />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: { fontWeight: 600 },
+          success: {
+            style: { background: "#22c55e", color: "#fff" },
+            iconTheme: { primary: "#fff", secondary: "#22c55e" },
+          },
+          error: {
+            style: { background: "#c52810", color: "#fff" },
+            iconTheme: { primary: "#fff", secondary: "#c52810" },
+          },
+        }}
+      />
+
+      {/* PREMIUM HERO SECTION */}
+      <section className={styles.heroWrapper}>
+        <div className={styles.hero}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.badgeDot}></span>
+              CHURCH OF NIGERIA (ANGLICAN COMMUNION)
+            </div>
+
+            <div className={styles.heroEdition}> Diocese of Calabar</div>
+
+            <h1 className={styles.heroTitle}>
+              3rd Session of <br />
+              <span className={styles.titleHighlight}>The 12th Synod</span>
+            </h1>
+
+            <p className={styles.heroDesc}>
+              A gathering of clergy and lay delegates empowering the diocese to
+              live boldly for Christ and transform our communities through
+              faith, purpose, and divine calling.
+            </p>
+
+            <div className={styles.infoGrid}>
+              <div className={styles.themeCard}>
+                <div className={styles.themeIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                </div>
+                <div className={styles.themeText}>
+                  <span className={styles.cardLabel}>THEME</span>
+                  <h4>"Let Your Light Shine Before Men"</h4>
+                  <p>Matthew 5:16</p>
+                </div>
+              </div>
+
+              <div className={styles.dateVenueRow}>
+                <div className={styles.smallCard}>
+                  <div className={styles.cardHeader}>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth="2"
+                    >
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="18"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>DATES</span>
+                  </div>
+                  <strong>15th - 18th May, 2026</strong>
+                </div>
+
+                <div className={styles.smallCard}>
+                  <div className={styles.cardHeader}>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth="2"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span>VENUE</span>
+                  </div>
+                  <strong>
+                    Cathedral Church of Holy Trinity, 81 Calabar Rd
+                    <br />
+                    Calabar, Cross River State
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            <button onClick={scrollToFormTop} className={styles.beginBtn}>
+              Begin Registration →
+            </button>
+          </div>
+
+          <div className={styles.heroImageCol}>
+            <div className={styles.imageCard}>
+              <LazyImage
+                src="https://dropimg.onyekachi.dev/ht6wzjquxxibzidswokz"
+                alt="Bishop image"
+                className={styles.personImage}
+              />
+              <div className={styles.imageOverlay}>
+                <span className={styles.imageRole}>DIOCESAN BISHOP</span>
+                <h3 className={styles.imageName}>Rt. Revd Prof. Nneoyi Egbe</h3>
+                <p className={styles.imageTitle}>Bishop of Calabar</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Form Section */}
+      <section ref={formRef} className={styles.formSection}>
+        <div className={styles.formContainer}>
+          <div className={styles.progressHeader}>
+            <div className={styles.progressTitleRow}>
+              <h2>Registration</h2>
+              <span className={styles.progressPercentage}>
+                {progressPercentage}%
+              </span>
+            </div>
+
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
+
+            <div className={styles.stepIndicators}>
+              <div
+                className={`${styles.stepIndicator} ${step === 1 ? styles.active : step > 1 ? styles.completed : ""}`}
+              >
+                <div className={styles.stepNum}>1</div>
+                <span className={styles.stepText}>Personal</span>
+              </div>
+              <div
+                className={`${styles.stepIndicator} ${step === 2 ? styles.active : step > 2 ? styles.completed : ""}`}
+              >
+                <div className={styles.stepNum}>2</div>
+                <span className={styles.stepText}>Photo</span>
+              </div>
+              <div
+                className={`${styles.stepIndicator} ${step === 3 ? styles.active : step === 5 ? styles.completed : step > 3 ? styles.completed : ""}`}
+              >
+                <div className={styles.stepNum}>3</div>
+                <span className={styles.stepText}>Payment</span>
+              </div>
+              <div
+                className={`${styles.stepIndicator} ${step === 4 ? styles.active : ""}`}
+              >
+                <div className={styles.stepNum}>4</div>
+                <span className={styles.stepText}>Done</span>
+              </div>
+            </div>
+          </div>
+
+          {/* STEP 1 */}
+          {step === 1 && (
+            <div className={styles.stepContent}>
+              <div className={styles.formHeader}>
+                <h3>Delegate Information</h3>
+                <p>Provide accurate details for your tag.</p>
+              </div>
+
+              <div className={styles.formGrid}>
+                <div className={styles.inputGroup}>
+                  <label>Title *</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Rev, Ven, Chief, Mr."
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Full Name *</label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    placeholder="e.g. John Doe"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Email Address *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="For your receipt"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Phone Number *</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone || ""} // Fixed the controlled input warning
+                    onChange={handleInputChange}
+                    placeholder="e.g. 08012345678"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Archdeaconry *</label>
+                  <select
+                    name="archdeaconry"
+                    value={formData.archdeaconry}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Archdeaconry</option>
+                    <option value="Akampka Archdeaconry">
+                      Akampka Archdeaconry
+                    </option>
+                    <option value="Ascension Deanery">Ascension Deanery</option>
+                    <option value="Cathedral Archdeaconry">
+                      Cathedral Archdeaconry
+                    </option>
+                    <option value="Christ-church Deanery">
+                      Christ-church Deanery
+                    </option>
+                    <option value="Efut Deanery">Efut Deanery</option>
+                  </select>
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Church / Parish Name *</label>
+                  <input
+                    type="text"
+                    name="church"
+                    value={formData.church}
+                    onChange={handleInputChange}
+                    placeholder="e.g. Holy Trinity"
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Designation *</label>
+                  <select
+                    name="designation"
+                    value={formData.designation}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select your role</option>
+                    <option value="Clergy">Clergy</option>
+                    <option value="Lay Synod Delegate">
+                      Lay Synod Delegate
+                    </option>
+                    <option value="Bishop's Nominee">Bishop's Nominee</option>
+                    <option value="Diocesan Official">Diocesan Official</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.buttonContainer}>
+                <span className={styles.requiredNote}>
+                  * All fields required
+                </span>
+                <button className={styles.nextBtn} onClick={nextStep}>
+                  Next Step →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2 */}
+          {step === 2 && (
+            <div className={styles.stepContent}>
+              <div className={styles.uploadBox}>
+                {photoPreview ? (
+                  <div className={styles.previewContainer}>
+                    <img
+                      src={photoPreview}
+                      alt="Preview"
+                      className={styles.previewImageLarge}
+                    />
+                    <p className={styles.previewText}>
+                      This image will be used on your Synod Tag.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={removePhoto}
+                      className={styles.removeBtn}
+                    >
+                      Remove & Replace Photo
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className={styles.uploadIcon}>
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#c52810"
+                        strokeWidth="2"
+                      >
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                      </svg>
+                    </div>
+                    <h4>Upload Profile Photo</h4>
+                    <p className={styles.uploadSubText}>
+                      Drag and drop your image here or click to browse.
+                    </p>
+                    <p className={styles.reqText}>
+                      <span>Requirement:</span> Upload a clear, forward-facing
+                      photo for your delegate badge.
+                    </p>
+
+                    <input
+                      type="file"
+                      id="photoUpload"
+                      accept="image/jpeg, image/png"
+                      onChange={handlePhotoUpload}
+                      style={{ display: "none" }}
+                    />
+                    <label
+                      htmlFor="photoUpload"
+                      className={styles.uploadBtnLabel}
+                    >
+                      Select Photo
+                    </label>
+                    <p className={styles.fileHint}>JPG, PNG UP TO 1.5MB</p>
+                  </>
+                )}
+              </div>
+
+              <div className={styles.buttonContainer}>
+                <button className={styles.backBtn} onClick={prevStep}>
+                  Back
+                </button>
+                <button
+                  className={styles.nextBtn}
+                  onClick={nextStep}
+                  disabled={isUploadingPhoto}
+                  style={{ opacity: isUploadingPhoto ? 0.7 : 1 }}
+                >
+                  {isUploadingPhoto ? "Uploading..." : "Next Step →"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3 */}
+          {step === 3 && (
+            <div className={styles.stepContent}>
+              <div className={styles.paymentSummary}>
+                <h4>Registration Fee</h4>
+                <h3>Synod 2026 Delegate Access</h3>
+
+                <div className={styles.paymentRow}>
+                  <span>Role</span>
+                  <span style={{ textAlign: "right", fontWeight: "600" }}>
+                    {formData.designation}
+                  </span>
+                </div>
+
+                <div
+                  className={styles.paymentRow}
+                  style={{ borderBottom: "none" }}
+                >
+                  <span>Total Due</span>
+                  <strong>₦{amount.toLocaleString()}</strong>
+                </div>
+              </div>
+
+              <div className={styles.buttonContainer}>
+                <button className={styles.backBtn} onClick={prevStep}>
+                  Back
+                </button>
+                {isSubmitting ? (
+                  <button
+                    className={styles.payBtn}
+                    disabled
+                    style={{ opacity: 0.7 }}
+                  >
+                    Saving details...
+                  </button>
+                ) : (
+                  <PaystackButton
+                    className={styles.payBtn}
+                    {...componentProps}
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: Success Complete (Drawing Checkmark) */}
+          {step === 4 && (
+            <div className={styles.successContainer}>
+              <motion.div
+                className={styles.successIcon}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              >
+                <motion.svg
+                  width="45"
+                  height="45"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <motion.polyline
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+                    points="20 6 9 17 4 12"
+                  />
+                </motion.svg>
+              </motion.div>
+              <h2>Registration Successful!</h2>
+              <p>
+                Your payment was successful. Details have been sent to your
+                email.
+              </p>
+
+              <div className={styles.receiptDetails}>
+                <div className={styles.receiptRow}>
+                  <span>Unique ID:</span>
+                  <strong style={{ color: "#c52810" }}>{delegateId}</strong>
+                </div>
+                <div className={styles.receiptRow}>
+                  <span>Name:</span>
+                  <strong>
+                    {formData.title} {formData.fullName}
+                  </strong>
+                </div>
+              </div>
+
+              <div className={styles.successActions}>
+                <a href="/synod" className={styles.homeBtn}>
+                  Return Home
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 5: Payment Failed (Drawing X Icon) */}
+          {step === 5 && (
+            <div
+              className={`${styles.successContainer} ${styles.failedContainer}`}
+            >
+              <motion.div
+                className={`${styles.successIcon} ${styles.failedIcon}`}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              >
+                <motion.svg
+                  width="45"
+                  height="45"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <motion.line
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+                    x1="18"
+                    y1="6"
+                    x2="6"
+                    y2="18"
+                  />
+                  <motion.line
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.3, ease: "easeOut", delay: 0.4 }}
+                    x1="6"
+                    y1="6"
+                    x2="18"
+                    y2="18"
+                  />
+                </motion.svg>
+              </motion.div>
+              <h2>Payment Failed</h2>
+              <p>
+                We could not complete your transaction. Please check your card
+                details and try again, or use a different payment method.
+              </p>
+
+              <div
+                className={styles.buttonContainer}
+                style={{ justifyContent: "center", border: "none" }}
+              >
+                <button
+                  className={styles.backBtn}
+                  onClick={prevStep}
+                  style={{ width: "100%", maxWidth: "300px" }}
+                >
+                  Back to Payment Options
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}

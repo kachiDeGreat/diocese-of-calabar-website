@@ -1,0 +1,358 @@
+.adminWrapper {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f3f4f6;
+  min-height: 100vh;
+}
+
+/* Header */
+.adminHeader {
+  background-color: #1f0805;
+  color: white;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.headerLeft h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.logoBox {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffb800;
+  margin-bottom: 0.3rem;
+}
+
+.logoutBtn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.logoutBtn:hover { background: rgba(255,255,255,0.2); }
+
+/* Main Layout */
+.mainContent {
+  padding: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.loadingState {
+  text-align: center;
+  padding: 5rem;
+  font-size: 1.2rem;
+  color: #6b7280;
+}
+
+/* Metrics */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.metricCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+  border: 1px solid #e5e7eb;
+}
+
+.metricCard h3 {
+  margin: 0 0 1rem 0;
+  color: #6b7280;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.revenueText {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #c52810;
+  margin: 0;
+}
+
+.countText {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.breakdownList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.breakdownList li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.95rem;
+}
+.breakdownList li:last-child { border: none; }
+
+/* Table */
+.tableSection {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+  border: 1px solid #e5e7eb;
+  padding: 2rem;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.tableHeader h2 { margin: 0; color: #1a1a1a; }
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.refreshBtn {
+  background: white;
+  color: #1a1a1a;
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+.refreshBtn:hover { background: #f3f4f6; }
+
+.deleteAllBtn {
+  background: #fdf2f0;
+  color: #c52810;
+  border: 1px solid #fecaca;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.deleteAllBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dataTable th {
+  text-align: left;
+  padding: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dataTable td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.tableAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f3f4f6;
+}
+
+.tagId {
+  background: #f3f4f6;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.subEmail {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.viewBtn {
+  background: #1a1a1a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #c52810;
+  border: 1px solid #c52810;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+}
+
+.closeModal {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: none; border: none;
+  font-size: 1.5rem; cursor: pointer;
+  color: #6b7280;
+}
+
+/* The ID Card Design */
+.idCardWrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  background: white;
+}
+
+.idCardHeader {
+  background: #c52810;
+  color: white;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.idCardHeader small {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.3rem;
+}
+.idCardHeader h3 { margin: 0; font-size: 1.4rem; letter-spacing: 1px;}
+
+.idCardBody {
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.idPhotoContainer img {
+  width: 120px; height: 120px;
+  border-radius: 50%; object-fit: cover;
+  border: 4px solid #fdf2f0;
+  margin-top: -4rem; /* overlaps into header */
+  background: white;
+  margin-bottom: 1rem;
+}
+
+.idDetails h2 { margin: 0 0 0.2rem 0; color: #1a1a1a; font-size: 1.3rem;}
+.idDesignation { color: #c52810; font-weight: 700; margin: 0 0 1.5rem 0; font-size: 0.9rem;}
+
+.idGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  text-align: left;
+  background: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.idItem span { display: block; font-size: 0.7rem; color: #6b7280; text-transform: uppercase; margin-bottom: 0.2rem;}
+.idItem strong { font-size: 0.85rem; color: #1a1a1a;}
+.idHighlight { color: #c52810 !important; font-family: monospace; font-size: 1rem !important;}
+
+.idCardFooter {
+  background: #1a1a1a;
+  color: white;
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 0.75rem;
+}
+
+.modalActions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.printBtn {
+  background: #1a1a1a; color: white;
+  border: none; padding: 0.8rem 2rem;
+  border-radius: 8px; font-weight: 600;
+  display: flex; align-items: center; gap: 0.5rem;
+  cursor: pointer; width: 100%; justify-content: center;
+}
+
+/* =========================================
+   MAGIC PRINT CSS (Hides everything except the ID Card)
+   ========================================= */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #printable-id-card, #printable-id-card * {
+    visibility: visible;
+  }
+  #printable-id-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px; /* Perfect badge size */
+    box-shadow: none;
+    border: 2px solid #000;
+  }
+}
