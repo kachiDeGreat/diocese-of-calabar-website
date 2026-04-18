@@ -6,47 +6,9 @@ import "swiper/css/pagination";
 import styles from "../styles/event.module.css";
 import { Link } from "react-router-dom";
 import LazyImage from "./LazyImage";
+import { eventsData } from "../../data/eventsData";
 
-const events = [
-  {
-    id: 1,
-    date: "APRIL 20, 2025",
-    title:
-      "Easter: A Celebration of Victory, Freedom, and Reconciliation in Christ",
-    image: "https://i.postimg.cc/c1RRvZMR/placeholder.png",
-    readMoreLink: "#",
-  },
-  {
-    id: 2,
-    date: "APRIL 13, 2025",
-    title: "2025 Bishop's Palm Sunday Message",
-    image: "https://i.postimg.cc/c1RRvZMR/placeholder.png",
-    readMoreLink: "#",
-  },
-  {
-    id: 3,
-    date: "MARCH 30, 2025",
-    title: "Celebrating the Grace and Strength of Motherhood – 2025",
-    image: "https://i.postimg.cc/c1RRvZMR/placeholder.png",
-    readMoreLink: "#",
-  },
-  {
-    id: 4,
-    date: "MARCH 15, 2025",
-    title: "Youth Empowerment and Leadership Conference",
-    image: "https://i.postimg.cc/c1RRvZMR/placeholder.png",
-    readMoreLink: "#",
-  },
-  {
-    id: 5,
-    date: "FEBRUARY 28, 2025",
-    title: "Community Outreach and Social Justice Initiative",
-    image: "https://i.postimg.cc/c1RRvZMR/placeholder.png",
-    readMoreLink: "#",
-  },
-];
 
-// Animation variants
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 60 },
   visible: {
@@ -88,10 +50,7 @@ export default function EventSection() {
           >
             latest news
           </motion.h1>
-          <motion.div
-            className="eventtitle-underline"
-            variants={fadeInUp}
-          />
+          <motion.div className="eventtitle-underline" variants={fadeInUp} />
         </motion.div>
         <br />
         <motion.div
@@ -120,14 +79,14 @@ export default function EventSection() {
             }}
             className={styles.swiper}
           >
-            {events.map((event) => (
+            {eventsData.map((event) => (
               <SwiperSlide key={event.id}>
                 <div className={styles.eventCard}>
                   <div className={styles.imageContainer}>
                     <LazyImage
-                    src={event.image || "/placeholder.svg"}
-                    alt={event.title}
-                    className={styles.eventImage}
+                      src={event.image || "/placeholder.svg"}
+                      alt={event.title}
+                      className={styles.eventImage}
                     />
                     <div className={styles.dateTag}>
                       <span className={styles.dateText}>{event.date}</span>
@@ -135,8 +94,10 @@ export default function EventSection() {
                   </div>
                   <div className={styles.eventContent}>
                     <h3 className={styles.eventTitle}>{event.title}</h3>
+
+                    {/* Updated to use dynamic routing via slug */}
                     <Link
-                      to={event.readMoreLink}
+                      to={`/news/${event.slug}`}
                       className={styles.readMoreBtn}
                     >
                       Read More

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Home from "../ui/pages/Home";
@@ -13,6 +13,8 @@ import ScrollToTop from "../ui/page-components/ScrollToTop ";
 import SynodReg from "../ui/pages/SynodReg";
 import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
 import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
+import EventDetails from "../ui/pages/EventDetails";
+import News from "../ui/pages/News";
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = sessionStorage.getItem("synodAdminAuth") === "true";
@@ -43,10 +45,15 @@ function Index() {
         <Route path="/" element={<Home />} />
         <Route path="/about-us/" element={<About />} />
         <Route path="/bishop-of-calabar/" element={<BishopOfCalabar />} />
-        <Route path="/the-most_rev-tunde-adeleye-(rtd)/" element={<TheMostRevTundeAdeleye />} />
+        <Route
+          path="/the-most_rev-tunde-adeleye-(rtd)/"
+          element={<TheMostRevTundeAdeleye />}
+        />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
         <Route path="/synod/" element={<SynodReg />} />
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/news/:slug" element={<EventDetails />} />
 
         <Route
           path="/give"
@@ -304,16 +311,6 @@ function Index() {
           }
         />
 
-        <Route
-          path="/news"
-          element={
-            <NotFound
-              is404={false}
-              title="Coming Soon"
-              message="We are currently working on the News section. Check back soon for updates from the Diocese!"
-            />
-          }
-        />
         <Route
           path="/events"
           element={
