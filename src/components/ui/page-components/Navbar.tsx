@@ -24,7 +24,6 @@ function Navbar() {
     setActiveMegaMenu(null);
   };
 
-  // New function to handle link clicks and immediately close menus
   const handleLinkClick = (): void => {
     closeAllMenus();
   };
@@ -372,7 +371,11 @@ function Navbar() {
             </li>
 
             <li className={`${styles.navItem}`}>
-              <Link to="/news_and_events" className={styles.navLink}>
+              <Link
+                to="/news_and_events"
+                onClick={handleLinkClick}
+                className={styles.navLink}
+              >
                 NEWS & EVENTS
               </Link>
             </li>
