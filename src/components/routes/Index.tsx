@@ -52,8 +52,8 @@ function Index() {
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
         <Route path="/synod/" element={<SynodReg />} />
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/news/:slug" element={<EventDetails />} />
+        <Route path="/news_and_events" element={<News />} />
+        <Route path="/news_and_events/:slug" element={<EventDetails />} />
 
         <Route
           path="/give"

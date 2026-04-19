@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import LazyImage from "./LazyImage";
 import { eventsData } from "../../data/eventsData";
 
-
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 60 },
   visible: {
@@ -97,7 +96,7 @@ export default function EventSection() {
 
                     {/* Updated to use dynamic routing via slug */}
                     <Link
-                      to={`/news/${event.slug}`}
+                      to={`/news_and_events/${event.slug}`}
                       className={styles.readMoreBtn}
                     >
                       Read More

@@ -43,6 +43,31 @@ export const eventsData: EventData[] = [
   },
   {
     id: 2,
+    slug: "foundation-laying-women-retreat-centre",
+    date: "APRIL 20, 2026", // Date the news is "published"
+    title:
+      "Upcoming: Foundation Laying Service for the Diocesan Women Retreat Centre",
+    image: "https://dropimg.onyekachi.dev/qtfltwjrr3pdr3fvcfqv",
+    category: "Upcoming Event",
+    content: [
+      "The Anglican Diocese of Calabar cordially invites all clergy, lay delegates, parishioners, and well-wishers to a highly anticipated and historic occasion: the Foundation Laying Service of the brand new Diocesan Women Retreat Centre.",
+
+      "This landmark event is scheduled to take place on Saturday, 25th April, 2026, starting promptly at 2:00 PM. The service will be held at the project site, located at Bacoco Village (just after Nassarawa).",
+
+      "A VISION FOR SPIRITUAL RENEWAL",
+      "The Diocesan Women Retreat Centre is a visionary project spearheaded by the Diocesan Women's Ministry (Mothers' Union and Women's Guild). Once completed, this center will serve as a dedicated sanctuary for spiritual renewal, prayer fasting, empowerment programs, and fellowship for women across the Diocese and beyond. It stands as a testament to the unwavering faith and dedication of our mothers in building the church.",
+
+      "OFFICIATED BY THE BISHOP",
+      "The foundation laying ceremony will be officially performed by our Diocesan Bishop, The Rt. Rev'd. Prof. Nneoyi Onen Egbe. Under his dynamic spiritual leadership, the Diocese continues to expand its physical and spiritual footprint, ensuring that well-equipped spaces are available to nurture the faith of every group within the Anglican communion.",
+
+      "CALL FOR SUPPORT AND ATTENDANCE",
+      "We are calling on all members of the Diocesan family to come out in their numbers to witness, celebrate, and support this great work. Let us gather together at Bacoco to commit this building project into the hands of the Almighty God, praying for divine provision, safety for the workers, and a speedy, successful completion.",
+
+      "Mark your calendars, spread the word, and make plans to be there!",
+    ],
+  },
+  {
+    id: 3,
     slug: "easter-celebration-victory",
     date: "APRIL 20, 2025",
     title:
@@ -56,7 +81,7 @@ export const eventsData: EventData[] = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     slug: "2025-bishops-palm-sunday",
     date: "APRIL 13, 2025",
     title: "2025 Bishop's Palm Sunday Message",
@@ -69,7 +94,7 @@ export const eventsData: EventData[] = [
     ],
   },
   {
-    id: 4,
+    id: 5,
     slug: "celebrating-motherhood",
     date: "MARCH 30, 2025",
     title: "Celebrating the Grace and Strength of Motherhood – 2025",
@@ -82,7 +107,7 @@ export const eventsData: EventData[] = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     slug: "youth-empowerment-leadership",
     date: "MARCH 15, 2025",
     title: "Youth Empowerment and Leadership Conference",
@@ -95,7 +120,7 @@ export const eventsData: EventData[] = [
     ],
   },
   {
-    id: 6,
+    id: 7,
     slug: "community-outreach-justice",
     date: "FEBRUARY 28, 2025",
     title: "Community Outreach and Social Justice Initiative",

@@ -371,51 +371,10 @@ function Navbar() {
               </div>
             </li>
 
-            <li className={`${styles.navItem} ${styles.dropdown}`}>
-              <Link
-                to="#"
-                className={styles.navLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleMegaMenuToggle("news");
-                }}
-              >
+            <li className={`${styles.navItem}`}>
+              <Link to="/news_and_events" className={styles.navLink}>
                 NEWS & EVENTS
-                <svg
-                  className={`${styles.dropdownIcon} ${
-                    activeMegaMenu === "news" ? styles.rotated : ""
-                  }`}
-                  width="12"
-                  height="8"
-                  viewBox="0 0 12 8"
-                  fill="currentColor"
-                >
-                  <path
-                    d="M1 1.5L6 6.5L11 1.5"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
               </Link>
-              <div
-                className={`${styles.simpleDropdown} ${
-                  activeMegaMenu === "news" ? styles.show : ""
-                }`}
-              >
-                <ul>
-                  <li>
-                    <Link to="/news" onClick={handleLinkClick}>
-                      News
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/events" onClick={handleLinkClick}>
-                      Events
-                    </Link>
-                  </li>
-                </ul>
-              </div>
             </li>
           </ul>
 

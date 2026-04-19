@@ -17,7 +17,7 @@ export default function News() {
       <SEO
         title="News & Events | Diocese of Calabar"
         description="Stay updated with the latest news, events, and announcements from the Anglican Diocese of Calabar."
-        url="/news"
+        url="/news_and_events"
       />
       <Banner title="News & Events" />
 
@@ -42,7 +42,9 @@ export default function News() {
                   </div>
 
                   <h3 className={styles.newsTitle}>
-                    <Link to={`/news/${event.slug}`}>{event.title}</Link>
+                    <Link to={`/news_and_events/${event.slug}`}>
+                      {event.title}
+                    </Link>
                   </h3>
 
                   <p className={styles.newsExcerpt}>
@@ -50,7 +52,7 @@ export default function News() {
                   </p>
 
                   <Link
-                    to={`/news/${event.slug}`}
+                    to={`/news_and_events/${event.slug}`}
                     className={styles.readMoreBtn}
                   >
                     Read Article <i className="fas fa-arrow-right"></i>
