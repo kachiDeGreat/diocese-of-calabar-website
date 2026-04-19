@@ -62,6 +62,7 @@ export default function EventSection() {
             modules={[Pagination]}
             spaceBetween={30}
             loop={true}
+            autoplay={true}
             slidesPerView={1}
             pagination={{
               clickable: true,
