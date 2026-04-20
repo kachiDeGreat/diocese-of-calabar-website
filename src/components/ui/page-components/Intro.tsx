@@ -63,8 +63,7 @@ function Intro() {
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
               </h3>
               <p className={styles.cardCredentials}>
-                B.Sc(Calabar), M.Sc(Ibadan), Ph.D(Aberdeen), MARN, FASL, GMSRP,
-                MIPEM, AMLNSEP
+                B.Th, B.Sc, M.Sc, Ph.D
               </p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
             </motion.div>

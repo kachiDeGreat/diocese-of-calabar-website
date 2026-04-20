@@ -10,7 +10,7 @@ import Archdeaconry from "../ui/pages/Archdeaconry";
 import ArchdeaconryDetails from "../ui/pages/ArchdeaconryDetails";
 import NotFound from "../ui/pages/NotFound";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
-import SynodReg from "../ui/pages/SynodReg";
+// import SynodReg from "../ui/pages/SynodReg";
 import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
 import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
 import EventDetails from "../ui/pages/EventDetails";
@@ -50,7 +50,17 @@ function Index() {
           element={<TheMostRevTundeAdeleye />}
         />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
-        <Route path="/synod/" element={<SynodReg />} />
+        {/* <Route path="/synod/" element={<SynodReg />} /> */}
+        <Route
+          path="/synod/"
+          element={
+            <NotFound
+              is404={false}
+              title="Synod registration"
+              message="Synod registration is starting soon."
+            />
+          }
+        />
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
         <Route path="/news_and_events" element={<News />} />
         <Route path="/news_and_events/:slug" element={<EventDetails />} />

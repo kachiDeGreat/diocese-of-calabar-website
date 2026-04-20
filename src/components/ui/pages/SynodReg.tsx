@@ -6,14 +6,12 @@ import styles from "../styles/SynodReg.module.css";
 import SEO from "../page-components/SEO";
 import LazyImage from "../page-components/LazyImage";
 
-// Firebase imports (NO STORAGE)
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export default function SynodReg() {
   const formRef = useRef<HTMLDivElement>(null);
 
-  // States: 1=Details, 2=Photo, 3=Payment, 4=Success, 5=Failed
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState(() => {
     const savedData = localStorage.getItem("synodRegFormData");
@@ -23,7 +21,7 @@ export default function SynodReg() {
           title: "",
           fullName: "",
           email: "",
-          phone: "", // Included phone number
+          phone: "",
           archdeaconry: "",
           church: "",
           designation: "",
@@ -37,6 +35,8 @@ export default function SynodReg() {
   const [delegateId, setDelegateId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const uploadAbortControllerRef = useRef<AbortController | null>(null);
+  const [isBishopTaken, setIsBishopTaken] = useState(false);
+  const [isMamaCalabarTaken, setIsMamaCalabarTaken] = useState(false);
 
   const [startedAt] = useState(() => {
     const saved = localStorage.getItem("synodRegStartedAt");
@@ -49,6 +49,41 @@ export default function SynodReg() {
   useEffect(() => {
     localStorage.setItem("synodRegFormData", JSON.stringify(formData));
   }, [formData]);
+
+  useEffect(() => {
+    const checkUniqueDesignations = async () => {
+      try {
+        const qBishop = query(
+          collection(db, "synod_registrations"),
+          where("designation", "==", "Bishop"),
+        );
+        const bishopSnapshot = await getDocs(qBishop);
+        const bishopTaken = !bishopSnapshot.empty;
+        setIsBishopTaken(bishopTaken);
+
+        const qMama = query(
+          collection(db, "synod_registrations"),
+          where("designation", "==", "Mama Calabar"),
+        );
+        const mamaSnapshot = await getDocs(qMama);
+        const mamaTaken = !mamaSnapshot.empty;
+        setIsMamaCalabarTaken(mamaTaken);
+
+        setFormData((prev: any) => {
+          let updated = { ...prev };
+          if (bishopTaken && updated.designation === "Bishop")
+            updated.designation = "";
+          if (mamaTaken && updated.designation === "Mama Calabar")
+            updated.designation = "";
+          return updated;
+        });
+      } catch (error) {
+        console.error("Error checking unique designations:", error);
+      }
+    };
+
+    checkUniqueDesignations();
+  }, []);
 
   const scrollToFormTop = () => {
     setTimeout(() => {
@@ -86,7 +121,6 @@ export default function SynodReg() {
     setPhoto(file);
     setPhotoPreview(URL.createObjectURL(file));
 
-    // Upload immediately in the background
     setIsUploadingPhoto(true);
     const toastId = toast.loading("Uploading photo...");
 
@@ -157,7 +191,7 @@ export default function SynodReg() {
         !formData.title ||
         !formData.fullName ||
         !formData.email ||
-        !formData.phone || // Validate phone is not empty
+        !formData.phone ||
         !formData.archdeaconry ||
         !formData.church ||
         !formData.designation
@@ -194,7 +228,7 @@ export default function SynodReg() {
     scrollToFormTop();
   };
 
-  const amount = 10000;
+  const amount = 10200;
 
   const paystackConfig = {
     reference: new Date().getTime().toString(),
@@ -261,7 +295,7 @@ export default function SynodReg() {
         description="Register for the 3rd Session of the 12th Synod."
       />
       <Toaster
-        position="top-right"
+        position="bottom-center"
         toastOptions={{
           duration: 4000,
           style: { fontWeight: 600 },
@@ -457,7 +491,7 @@ export default function SynodReg() {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    placeholder="e.g. Rev, Ven, Chief, Mr."
+                    placeholder="e.g. Rev, Rev. Can, Ven, Chief, Mr."
                   />
                 </div>
 
@@ -539,8 +573,12 @@ export default function SynodReg() {
                     <option value="Lay Synod Delegate">
                       Lay Synod Delegate
                     </option>
-                    <option value="Bishop's Nominee">Bishop's Nominee</option>
                     <option value="Diocesan Official">Diocesan Official</option>
+                    <option value="Bishop's Nominee">Bishop's Nominee</option>
+                    {!isMamaCalabarTaken && (
+                      <option value="Mama Calabar">Mama Calabar</option>
+                    )}
+                    {!isBishopTaken && <option value="Bishop">Bishop</option>}
                   </select>
                 </div>
               </div>
