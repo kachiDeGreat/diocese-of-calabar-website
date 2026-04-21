@@ -3,6 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
+import os # Added this to access environment variables
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -12,9 +13,9 @@ class handler(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data)
 
-            # 2. Your Gmail Credentials
-            sender_email = "mail.ricx@gmail.com"
-            sender_password = "hsjoalpspmneykzn" 
+            # 2. Get Credentials from Environment Variables
+            sender_email = os.environ.get("GMAIL_USER")
+            sender_password = os.environ.get("GMAIL_APP_PASSWORD")
             receiver_email = data.get('email')
 
             # 3. Build the Email

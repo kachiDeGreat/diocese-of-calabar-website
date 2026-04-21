@@ -15,6 +15,7 @@ import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
 import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
 import EventDetails from "../ui/pages/EventDetails";
 import News from "../ui/pages/News";
+import SynodReg from "../ui/pages/SynodReg";
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = sessionStorage.getItem("synodAdminAuth") === "true";
@@ -50,8 +51,8 @@ function Index() {
           element={<TheMostRevTundeAdeleye />}
         />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
-        {/* <Route path="/synod/" element={<SynodReg />} /> */}
-        <Route
+        <Route path="/synod/" element={<SynodReg />} />
+        {/* <Route
           path="/synod/"
           element={
             <NotFound
@@ -60,7 +61,7 @@ function Index() {
               message="Synod registration is starting soon."
             />
           }
-        />
+        /> */}
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
         <Route path="/news_and_events" element={<News />} />
         <Route path="/news_and_events/:slug" element={<EventDetails />} />
