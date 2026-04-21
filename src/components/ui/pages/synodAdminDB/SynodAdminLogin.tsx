@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import styles from "./SynodAdminLogin.module.css";
-import SEO from "../../page-components/SEO";
+// import SEO from "../../page-components/SEO";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../../firebase";
 
@@ -36,7 +36,7 @@ const handleLogin = async (e: React.FormEvent) => {
       {/* <SEO
         title="Synod Admin Portal | Synod 2026"
         description="Secure login for the Diocese of Calabar Synod Admin Portal."
-      />
+      />*/}
       <Toaster
         position="top-right"
         toastOptions={{
@@ -53,7 +53,7 @@ const handleLogin = async (e: React.FormEvent) => {
             },
           },
         }}
-      /> */}
+      />
 
       {/* MOBILE WARNING (Only shows on phones) */}
       <div className={styles.mobileWarning}>
