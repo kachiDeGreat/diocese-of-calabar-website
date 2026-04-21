@@ -242,7 +242,7 @@ export default function SynodReg() {
       setIsSubmitting(true);
       const newDelegateId = generateCustomId();
 
-      // Save Registration to Firestore
+      // 1. Save Registration to Firestore
       await addDoc(collection(db, "synod_registrations"), {
         ...formData,
         delegateId: newDelegateId,
@@ -253,6 +253,28 @@ export default function SynodReg() {
         completedAt: new Date().toISOString(),
       });
 
+      // 2. TRIGGER THE PYTHON EMAIL SCRIPT (Silently in the background)
+      const emailPayload = {
+        fullName: formData.fullName,
+        email: formData.email,
+        delegateId: newDelegateId,
+        archdeaconry: formData.archdeaconry,
+        designation: formData.designation,
+        amountPaid: amount.toLocaleString(),
+      };
+
+      fetch("/api/send_email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailPayload),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log("Email API Response:", data))
+        .catch((err) => console.error("Email API Failed:", err));
+
+      // 3. Complete the UI flow
       setDelegateId(newDelegateId);
       setStep(4);
       scrollToFormTop();
