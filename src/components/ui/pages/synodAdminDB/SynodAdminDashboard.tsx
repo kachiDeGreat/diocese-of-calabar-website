@@ -124,7 +124,7 @@ export default function SynodAdminDashboard() {
       await signOut(auth);
 
       sessionStorage.removeItem("synodAdminAuth");
-      navigate("/synod-admin");
+      navigate("/synod-2026-admin");
     } catch (error) {
       toast.error("Error logging out.");
     }

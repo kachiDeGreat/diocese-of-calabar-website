@@ -22,7 +22,7 @@ const handleLogin = async (e: React.FormEvent) => {
     sessionStorage.setItem("synodAdminAuth", "true");
 
     toast.success("Login Successful!");
-    navigate("/synod-admin/dashboard");
+    navigate("/synod-2026-admin/dashboard");
   } catch (error: any) {
     console.error(error);
     toast.error("Invalid admin email or password.");
@@ -33,7 +33,7 @@ const handleLogin = async (e: React.FormEvent) => {
 
   return (
     <div className={styles.pageWrapper}>
-      <SEO
+      {/* <SEO
         title="Synod Admin Portal | Synod 2026"
         description="Secure login for the Diocese of Calabar Synod Admin Portal."
       />
@@ -53,7 +53,7 @@ const handleLogin = async (e: React.FormEvent) => {
             },
           },
         }}
-      />
+      /> */}
 
       {/* MOBILE WARNING (Only shows on phones) */}
       <div className={styles.mobileWarning}>

@@ -16,7 +16,7 @@ function App() {
   const location = useLocation();
 
   // 3. Create a boolean checking if we are on any admin page
-  const isAdminRoute = location.pathname.startsWith("/synod-admin");
+  const isAdminRoute = location.pathname.startsWith("/synod-2026-admin");
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -29,7 +29,7 @@ function App() {
           clearInterval(interval);
           return 100;
         }
-        return prev + Math.random() * 10 + 2; 
+        return prev + Math.random() * 10 + 2;
       });
     }, 150);
 

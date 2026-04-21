@@ -242,7 +242,6 @@ export default function SynodReg() {
       setIsSubmitting(true);
       const newDelegateId = generateCustomId();
 
-      // 1. Save Registration to Firestore
       await addDoc(collection(db, "synod_registrations"), {
         ...formData,
         delegateId: newDelegateId,
@@ -253,7 +252,6 @@ export default function SynodReg() {
         completedAt: new Date().toISOString(),
       });
 
-      // 2. TRIGGER THE PYTHON EMAIL SCRIPT (Silently in the background)
       const emailPayload = {
         fullName: formData.fullName,
         email: formData.email,
@@ -279,7 +277,6 @@ export default function SynodReg() {
       setStep(4);
       scrollToFormTop();
 
-      // Clear local storage
       localStorage.removeItem("synodRegFormData");
       localStorage.removeItem("synodRegStartedAt");
       toast.success("Payment successful! Registration complete.");
@@ -349,9 +346,10 @@ export default function SynodReg() {
             </h1>
 
             <p className={styles.heroDesc}>
-              A gathering of clergy and lay delegates empowering the diocese to
-              live boldly for Christ and transform our communities through
-              faith, purpose, and divine calling.
+              A gathering of clergy and lay delegates united under the theme
+              <strong> "Not Offended In Me" (Matthew 11:6)</strong> to live
+              boldly for Christ and transform our communities through faith and
+              divine calling.
             </p>
 
             <div className={styles.infoGrid}>
@@ -372,8 +370,8 @@ export default function SynodReg() {
                 </div>
                 <div className={styles.themeText}>
                   <span className={styles.cardLabel}>THEME</span>
-                  <h4>"Let Your Light Shine Before Men"</h4>
-                  <p>Matthew 5:16</p>
+                  <h4>"Not Offended In Me"</h4>
+                  <p>Matthew 11:6</p>
                 </div>
               </div>
 
@@ -402,7 +400,7 @@ export default function SynodReg() {
                     </svg>
                     <span>DATES</span>
                   </div>
-                  <strong>15th - 18th May, 2026</strong>
+                  <strong>8th - 12th July, 2026</strong>
                 </div>
 
                 <div className={styles.smallCard}>
@@ -788,7 +786,7 @@ export default function SynodReg() {
               </div>
 
               <div className={styles.successActions}>
-                <a href="/synod" className={styles.homeBtn}>
+                <a href="/synod-2026" className={styles.homeBtn}>
                   Return Home
                 </a>
               </div>

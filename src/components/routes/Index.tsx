@@ -22,7 +22,7 @@ const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
   return isAuthenticated ? (
     <>{children}</>
   ) : (
-    <Navigate to="/synod-admin" replace />
+    <Navigate to="/synod-2026-admin" replace />
   );
 };
 
@@ -51,9 +51,9 @@ function Index() {
           element={<TheMostRevTundeAdeleye />}
         />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
-        <Route path="/synod/" element={<SynodReg />} />
+        <Route path="/synod-2026/" element={<SynodReg />} />
         {/* <Route
-          path="/synod/"
+          path="/synod-2026/"
           element={
             <NotFound
               is404={false}
@@ -334,9 +334,9 @@ function Index() {
         />
 
         {/* admin routes */}
-        <Route path="/synod-admin" element={<SynodAdminLogin />} />
+        <Route path="/synod-2026-admin" element={<SynodAdminLogin />} />
         <Route
-          path="/synod-admin/dashboard"
+          path="/synod-2026-admin/dashboard"
           element={
             <ProtectedAdminRoute>
               <SynodAdminDashboard />

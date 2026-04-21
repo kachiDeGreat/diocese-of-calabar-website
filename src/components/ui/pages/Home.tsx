@@ -1,12 +1,13 @@
 import React from "react";
 import Carousel from "../page-components/Carousel";
 import Intro from "../page-components/Intro";
-import BishopMessage from "../page-components/BishopMessage";
+// import BishopMessage from "../page-components/BishopMessage";
 import EventSection from "../page-components/EventSection";
 import ArchTest from "../page-components/ArchTest";
 import GallerySection from "../page-components/GallerySection";
 import { archdeaconries } from "../../data/archdeaconries";
 import SEO from "../page-components/SEO"; 
+import UpcomingEvent from "../page-components/UpcomingEvent";
 
 function Home() {
   return (
@@ -17,7 +18,8 @@ function Home() {
       />
       <Carousel />
       <Intro />
-      <BishopMessage />
+      {/* <BishopMessage /> */}
+      <UpcomingEvent />
       <ArchTest
         data={archdeaconries}
         header="ARCHDEACONRIES"

@@ -1,0 +1,150 @@
+.eventBanner {
+  position: relative;
+  /* Balanced deep background instead of pure black/red gradient */
+  background: linear-gradient(135deg, #0f0f0f, #1a1c20); 
+  padding: 60px 5%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  color: white;
+}
+
+.eventContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row; /* Desktop side-by-side */
+  gap: 60px;
+  align-items: center;
+}
+
+/* Timer Styling - Modern and Balanced */
+.eventTimerCol {
+  flex: 1;
+}
+
+.timerGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.timerItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03); /* Sublte glass effect */
+  padding: 15px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.timerNum {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff; /* White for numbers to reduce red fatigue */
+  line-height: 1;
+}
+
+.timerLabel {
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  color: #c52810; /* Red used as an accent label instead */
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* Content Styling */
+.eventContentCol {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventBadge {
+  color: rgba(255, 255, 255, 0.6); /* Gray badge for balance */
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  display: block;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.eventTitle {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  margin-bottom: 20px;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.eventInfoRow {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.infoItem svg {
+  color: #c52810; /* Red icons only */
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 992px) {
+  .eventContainer {
+    flex-direction: column; /* Stack on tablet/mobile */
+    text-align: center;
+    gap: 40px;
+  }
+
+  .eventInfoRow {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .eventBanner {
+    padding: 40px 20px;
+  }
+
+  .timerGrid {
+    gap: 10px;
+  }
+
+  .timerItem {
+    min-width: 70px;
+    padding: 10px 5px;
+  }
+
+  .timerNum {
+    font-size: 1.8rem; /* Smaller numbers for mobile fit */
+  }
+
+  .eventTitle {
+    font-size: 1.6rem;
+  }
+
+  .eventInfoRow {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Make button full width on mobile for better UX */
+  .eventContentCol button {
+    width: 100% !important;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

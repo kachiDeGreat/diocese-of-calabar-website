@@ -156,7 +156,7 @@ function Navbar() {
                         </Link>
                       </li>
                       <li>
-                        <Link to="/synod-office" onClick={handleLinkClick}>
+                        <Link to="/synod-2026-office" onClick={handleLinkClick}>
                           Synod Office
                         </Link>
                       </li>

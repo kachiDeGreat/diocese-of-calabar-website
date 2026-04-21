@@ -38,7 +38,7 @@ const slides: Slide[] = [
     description:
       "Stay connected with our diocese through various events and activities. Check out our calendar for details.",
     buttonText: "See Events",
-    buttonLink: "/about-us/",
+    buttonLink: "/news_and_events/",
   },
 ];
 
