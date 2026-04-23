@@ -799,3 +799,96 @@
     margin-bottom: 1rem;
   }
 }
+
+
+/* =========================================
+   IMAGE UPLOAD SPINNER & DONE STATE
+   ========================================= */
+.spinner {
+  border: 4px solid rgba(197, 40, 16, 0.15);
+  border-left-color: #c52810;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.doneBadge {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* =========================================
+   PAYMENT BREAKDOWN & TRUST BANNER
+   ========================================= */
+.feeBreakdown {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.6); /* Blends slightly into pink card */
+  border: 1px solid rgba(197, 40, 16, 0.15);
+  border-radius: 8px;
+}
+
+.feeBreakdown li {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.feeBreakdown li:first-child {
+  border-bottom: 1px solid rgba(197, 40, 16, 0.1);
+}
+
+.feeBreakdown li span:last-child {
+  color: #1a1a1a;
+}
+
+.trustBanner {
+  display: flex;
+  gap: 1rem;
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 1.2rem;
+  border-radius: 8px;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+}
+
+.trustIcon {
+  margin-top: 2px;
+}
+
+.trustText strong {
+  display: block;
+  color: #0369a1;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+}
+
+.trustText p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #0c4a6e;
+  line-height: 1.5;
+}
+
+.trustText a {
+  color: #0284c7;
+  font-weight: 600;
+  text-decoration: underline;
+}

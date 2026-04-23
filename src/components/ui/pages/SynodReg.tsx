@@ -6,7 +6,7 @@ import styles from "../styles/SynodReg.module.css";
 import SEO from "../page-components/SEO";
 import LazyImage from "../page-components/LazyImage";
 
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export default function SynodReg() {
@@ -25,18 +25,14 @@ export default function SynodReg() {
           archdeaconry: "",
           church: "",
           designation: "",
+          photoUrl: "",
         };
   });
 
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const [photoUrl, setPhotoUrl] = useState<string>("");
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [delegateId, setDelegateId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const uploadAbortControllerRef = useRef<AbortController | null>(null);
-  const [isBishopTaken, setIsBishopTaken] = useState(false);
-  const [isMamaCalabarTaken, setIsMamaCalabarTaken] = useState(false);
 
   const [startedAt] = useState(() => {
     const saved = localStorage.getItem("synodRegStartedAt");
@@ -49,41 +45,6 @@ export default function SynodReg() {
   useEffect(() => {
     localStorage.setItem("synodRegFormData", JSON.stringify(formData));
   }, [formData]);
-
-  useEffect(() => {
-    const checkUniqueDesignations = async () => {
-      try {
-        const qBishop = query(
-          collection(db, "synod_registrations"),
-          where("designation", "==", "Bishop"),
-        );
-        const bishopSnapshot = await getDocs(qBishop);
-        const bishopTaken = !bishopSnapshot.empty;
-        setIsBishopTaken(bishopTaken);
-
-        const qMama = query(
-          collection(db, "synod_registrations"),
-          where("designation", "==", "Mama Calabar"),
-        );
-        const mamaSnapshot = await getDocs(qMama);
-        const mamaTaken = !mamaSnapshot.empty;
-        setIsMamaCalabarTaken(mamaTaken);
-
-        setFormData((prev: any) => {
-          let updated = { ...prev };
-          if (bishopTaken && updated.designation === "Bishop")
-            updated.designation = "";
-          if (mamaTaken && updated.designation === "Mama Calabar")
-            updated.designation = "";
-          return updated;
-        });
-      } catch (error) {
-        console.error("Error checking unique designations:", error);
-      }
-    };
-
-    checkUniqueDesignations();
-  }, []);
 
   const scrollToFormTop = () => {
     setTimeout(() => {
@@ -118,11 +79,7 @@ export default function SynodReg() {
       return;
     }
 
-    setPhoto(file);
-    setPhotoPreview(URL.createObjectURL(file));
-
     setIsUploadingPhoto(true);
-    const toastId = toast.loading("Uploading photo...");
 
     if (uploadAbortControllerRef.current) {
       uploadAbortControllerRef.current.abort();
@@ -146,18 +103,20 @@ export default function SynodReg() {
       );
 
       const uploadedImageData = await uploadResponse.json();
-      setPhotoUrl(uploadedImageData.secure_url);
 
-      toast.success("Photo uploaded successfully!", { id: toastId });
+      setFormData((prev: any) => ({
+        ...prev,
+        photoUrl: uploadedImageData.secure_url,
+      }));
+
+      toast.success("Photo uploaded successfully!");
     } catch (error: any) {
       if (error.name === "AbortError") {
         console.log("Photo upload aborted by user.");
-        toast.dismiss(toastId);
         return;
       }
       console.error("Photo upload error:", error);
-      toast.error("Failed to upload photo. Please try again.", { id: toastId });
-      removePhoto();
+      toast.error("Failed to upload photo. Please try again.");
     } finally {
       setIsUploadingPhoto(false);
       uploadAbortControllerRef.current = null;
@@ -169,9 +128,7 @@ export default function SynodReg() {
       uploadAbortControllerRef.current.abort();
       uploadAbortControllerRef.current = null;
     }
-    setPhoto(null);
-    setPhotoPreview(null);
-    setPhotoUrl("");
+    setFormData((prev: any) => ({ ...prev, photoUrl: "" }));
   };
 
   const generateCustomId = () => {
@@ -202,16 +159,12 @@ export default function SynodReg() {
       setStep(2);
       scrollToFormTop();
     } else if (step === 2) {
-      if (!photo) {
-        toast.error("Please upload a profile photo to proceed.");
-        return;
-      }
       if (isUploadingPhoto) {
         toast.error("Please wait for your photo to finish uploading.");
         return;
       }
-      if (!photoUrl) {
-        toast.error("Photo upload failed. Please remove and try again.");
+      if (!formData.photoUrl) {
+        toast.error("Please upload a profile photo to proceed.");
         return;
       }
       setStep(3);
@@ -245,7 +198,6 @@ export default function SynodReg() {
       await addDoc(collection(db, "synod_registrations"), {
         ...formData,
         delegateId: newDelegateId,
-        photoUrl,
         paymentReference: reference.reference,
         amountPaid: amount,
         startedAt,
@@ -272,7 +224,6 @@ export default function SynodReg() {
         .then((data) => console.log("Email API Response:", data))
         .catch((err) => console.error("Email API Failed:", err));
 
-      // 3. Complete the UI flow
       setDelegateId(newDelegateId);
       setStep(4);
       scrollToFormTop();
@@ -292,14 +243,12 @@ export default function SynodReg() {
   };
 
   const handlePaystackCloseAction = () => {
-    setStep(5);
-    scrollToFormTop();
     toast.error("Payment was not completed.");
   };
 
   const componentProps = {
     ...paystackConfig,
-    text: "Pay & Register Now",
+    text: "Proceed to Payment →",
     onSuccess: (reference: any) => handlePaystackSuccessAction(reference),
     onClose: handlePaystackCloseAction,
   };
@@ -329,7 +278,6 @@ export default function SynodReg() {
         }}
       />
 
-      {/* PREMIUM HERO SECTION */}
       <section className={styles.heroWrapper}>
         <div className={styles.hero}>
           <div className={styles.heroContent}>
@@ -514,7 +462,6 @@ export default function SynodReg() {
                     placeholder="e.g. Rev, Rev. Can, Ven, Chief, Mr."
                   />
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Full Name *</label>
                   <input
@@ -525,7 +472,6 @@ export default function SynodReg() {
                     placeholder="e.g. John Doe"
                   />
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Email Address *</label>
                   <input
@@ -536,18 +482,16 @@ export default function SynodReg() {
                     placeholder="For your receipt"
                   />
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Phone Number *</label>
                   <input
                     type="tel"
                     name="phone"
-                    value={formData.phone || ""} // Fixed the controlled input warning
+                    value={formData.phone || ""}
                     onChange={handleInputChange}
                     placeholder="e.g. 08012345678"
                   />
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Archdeaconry *</label>
                   <select
@@ -567,9 +511,9 @@ export default function SynodReg() {
                       Christ-church Deanery
                     </option>
                     <option value="Efut Deanery">Efut Deanery</option>
+                    <option value="Diocese">Diocese</option>
                   </select>
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Church / Parish Name *</label>
                   <input
@@ -580,7 +524,6 @@ export default function SynodReg() {
                     placeholder="e.g. Holy Trinity"
                   />
                 </div>
-
                 <div className={styles.inputGroup}>
                   <label>Designation *</label>
                   <select
@@ -595,10 +538,8 @@ export default function SynodReg() {
                     </option>
                     <option value="Diocesan Official">Diocesan Official</option>
                     <option value="Bishop's Nominee">Bishop's Nominee</option>
-                    {!isMamaCalabarTaken && (
-                      <option value="Mama Calabar">Mama Calabar</option>
-                    )}
-                    {!isBishopTaken && <option value="Bishop">Bishop</option>}
+                    <option value="Guest Speaker">Guest Speaker</option>
+                    <option value="Mama Calabar">Mama Calabar</option>
                   </select>
                 </div>
               </div>
@@ -618,15 +559,24 @@ export default function SynodReg() {
           {step === 2 && (
             <div className={styles.stepContent}>
               <div className={styles.uploadBox}>
-                {photoPreview ? (
+                {isUploadingPhoto ? (
                   <div className={styles.previewContainer}>
+                    <div className={styles.spinner}></div>
+                    <h4>Uploading to secure storage...</h4>
+                    <p className={styles.uploadSubText}>
+                      Please wait while we process your image.
+                    </p>
+                  </div>
+                ) : formData.photoUrl ? (
+                  <div className={styles.previewContainer}>
+                    <span className={styles.doneBadge}>✓ Upload Complete</span>
                     <img
-                      src={photoPreview}
-                      alt="Preview"
+                      src={formData.photoUrl}
+                      alt="Delegate Cloudinary Upload"
                       className={styles.previewImageLarge}
                     />
                     <p className={styles.previewText}>
-                      This image will be used on your Synod Tag.
+                      Image secured successfully to database.
                     </p>
                     <button
                       type="button"
@@ -653,7 +603,8 @@ export default function SynodReg() {
                     </div>
                     <h4>Upload Profile Photo</h4>
                     <p className={styles.uploadSubText}>
-                      Drag and drop your image here or click to browse.
+                      Select your image. It will be securely uploaded
+                      immediately.
                     </p>
                     <p className={styles.reqText}>
                       <span>Requirement:</span> Upload a clear, forward-facing
@@ -694,7 +645,7 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 3 */}
+          {/* STEP 3 - Payment Details Now Inline */}
           {step === 3 && (
             <div className={styles.stepContent}>
               <div className={styles.paymentSummary}>
@@ -708,12 +659,55 @@ export default function SynodReg() {
                   </span>
                 </div>
 
+                {/* Inline Fee Breakdown added here */}
+                <ul className={styles.feeBreakdown}>
+                  <li>
+                    <span>Synod Registration:</span> <span>₦10,000</span>
+                  </li>
+                  <li>
+                    <span>Processing Fee:</span> <span>₦200</span>
+                  </li>
+                </ul>
+
                 <div
                   className={styles.paymentRow}
-                  style={{ borderBottom: "none" }}
+                  style={{ borderBottom: "none", paddingTop: "0" }}
                 >
                   <span>Total Due</span>
-                  <strong>₦{amount.toLocaleString()}</strong>
+                  <strong style={{ color: "#c52810", fontSize: "2rem" }}>
+                    ₦{amount.toLocaleString()}
+                  </strong>
+                </div>
+              </div>
+
+              {/* Trust Banner moved here */}
+              <div className={styles.trustBanner}>
+                <div className={styles.trustIcon}>
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#0ba4db"
+                    strokeWidth="2"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div className={styles.trustText}>
+                  <strong>Secured by Paystack</strong>
+                  <p>
+                    Paystack is a secure, multi-million dollar payment gateway
+                    trusted by thousands of businesses across Africa.{" "}
+                    <a
+                      href="https://paystack.com/what-is-paystack"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Learn more
+                    </a>
+                    .
+                  </p>
                 </div>
               </div>
 
@@ -730,6 +724,7 @@ export default function SynodReg() {
                     Saving details...
                   </button>
                 ) : (
+                  // Paystack triggers straight from here now
                   <PaystackButton
                     className={styles.payBtn}
                     {...componentProps}
@@ -739,7 +734,7 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 4: Success Complete (Drawing Checkmark) */}
+          {/* STEP 4: Success Complete */}
           {step === 4 && (
             <div className={styles.successContainer}>
               <motion.div
@@ -793,7 +788,7 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 5: Payment Failed (Drawing X Icon) */}
+          {/* STEP 5: Payment Failed */}
           {step === 5 && (
             <div
               className={`${styles.successContainer} ${styles.failedContainer}`}
