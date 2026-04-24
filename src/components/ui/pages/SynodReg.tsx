@@ -181,7 +181,7 @@ export default function SynodReg() {
     scrollToFormTop();
   };
 
-  const amount = 10200;
+  const amount = 10350;
 
   const paystackConfig = {
     reference: new Date().getTime().toString(),
@@ -665,7 +665,7 @@ export default function SynodReg() {
                     <span>Synod Registration:</span> <span>₦10,000</span>
                   </li>
                   <li>
-                    <span>Processing Fee:</span> <span>₦200</span>
+                    <span>Processing Fee:</span> <span>₦350</span>
                   </li>
                 </ul>
 
