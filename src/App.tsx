@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; // <-- 1. Import useLocation
+import { useLocation } from "react-router-dom";
 import "./App.css";
 import Index from "./components/routes/Index";
 import Navbar from "./components/ui/page-components/Navbar";
@@ -15,7 +15,6 @@ function App() {
 
   const location = useLocation();
 
-  // 3. Create a boolean checking if we are on any admin page
   const isAdminRoute = location.pathname.startsWith("/synod-2026-admin");
 
   const handleLoadingComplete = () => {

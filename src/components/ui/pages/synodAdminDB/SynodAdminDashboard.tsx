@@ -1,20 +1,34 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 import styles from "./SynodAdminDashboard.module.css";
 import { db } from "../../../../firebase";
 import SEO from "../../page-components/SEO";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
 
-// Define the shape of our data
 interface Delegate {
-  id: string; // Firestore document ID
+  id: string;
   title: string;
   fullName: string;
   email: string;
-  phone?: string; // Phone number included
+  phone?: string;
   archdeaconry: string;
   church: string;
   designation: string;
@@ -31,9 +45,13 @@ export default function SynodAdminDashboard() {
     null,
   );
 
+  const [chartMetric, setChartMetric] = useState<"revenue" | "delegates">(
+    "revenue",
+  );
+  const [timeFilter, setTimeFilter] = useState<number>(30);
+
   const navigate = useNavigate();
 
-  // Fetch data from Firestore
   const fetchDelegates = async () => {
     setIsLoading(true);
     try {
@@ -44,14 +62,12 @@ export default function SynodAdminDashboard() {
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() } as Delegate);
       });
-      // Sort by newest first
       data.sort(
         (a, b) =>
           new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
       );
       setDelegates(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
       toast.error("Failed to load dashboard data.");
     } finally {
       setIsLoading(false);
@@ -62,23 +78,6 @@ export default function SynodAdminDashboard() {
     fetchDelegates();
   }, []);
 
-  // Calculate Metrics
-  const totalRevenue = delegates.reduce(
-    (sum, del) => sum + (del.amountPaid || 0),
-    0,
-  );
-  const totalDelegates = delegates.length;
-
-  // Archdeaconry Breakdown
-  const archBreakdown = delegates.reduce(
-    (acc, del) => {
-      acc[del.archdeaconry] = (acc[del.archdeaconry] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
-
-  // Delete Single Delegate
   const handleDelete = async (id: string, name: string) => {
     if (
       window.confirm(
@@ -95,7 +94,6 @@ export default function SynodAdminDashboard() {
     }
   };
 
-  // Delete All (Wipe Database)
   const handleDeleteAll = async () => {
     const confirmText = prompt(
       "Type 'DELETE ALL' to confirm wiping the entire registration database.",
@@ -103,7 +101,6 @@ export default function SynodAdminDashboard() {
     if (confirmText === "DELETE ALL") {
       try {
         setIsLoading(true);
-        // Delete each document one by one
         for (const delegate of delegates) {
           await deleteDoc(doc(db, "synod_registrations", delegate.id));
         }
@@ -122,7 +119,6 @@ export default function SynodAdminDashboard() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-
       sessionStorage.removeItem("synodAdminAuth");
       navigate("/synod-2026-admin");
     } catch (error) {
@@ -130,28 +126,133 @@ export default function SynodAdminDashboard() {
     }
   };
 
+  const downloadIDCard = async () => {
+    const cardElement = document.getElementById("delegate-id-card");
+    if (!cardElement || !selectedDelegate) return;
+
+    const toastId = toast.loading("Generating CR80 ID Card...");
+
+    try {
+      const canvas = await html2canvas(cardElement, {
+        scale: 4,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        scrollY: -window.scrollY,
+        onclone: (clonedDoc) => {
+          const el = clonedDoc.getElementById("delegate-id-card");
+          if (el) {
+            el.style.transform = "none";
+            el.style.margin = "0";
+          }
+        },
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "in",
+        format: [2.125, 3.375],
+      });
+
+      pdf.addImage(imgData, "JPEG", 0, 0, 2.125, 3.375);
+      pdf.save(`Synod_2026_ID_${selectedDelegate.delegateId}.pdf`);
+
+      toast.success("ID Card downloaded successfully!", { id: toastId });
+    } catch (error) {
+      toast.error("Failed to generate PDF. Please try again.", { id: toastId });
+    }
+  };
+
+  const generateChartData = () => {
+    const daysArray: {
+      fullDate: string;
+      displayDate: string;
+      revenue: number;
+      delegates: number;
+    }[] = [];
+    const now = new Date();
+
+    for (let i = timeFilter - 1; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split("T")[0];
+      const displayStr = d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      });
+      daysArray.push({
+        fullDate: dateStr,
+        displayDate: displayStr,
+        revenue: 0,
+        delegates: 0,
+      });
+    }
+
+    delegates.forEach((del) => {
+      if (!del.completedAt) return;
+      const delDate = new Date(del.completedAt).toISOString().split("T")[0];
+      const dayIndex = daysArray.findIndex((d) => d.fullDate === delDate);
+      if (dayIndex !== -1) {
+        daysArray[dayIndex].revenue += del.amountPaid || 0;
+        daysArray[dayIndex].delegates += 1;
+      }
+    });
+
+    return daysArray;
+  };
+
+  const chartData = generateChartData();
+
+  const currentChartTotal = chartData.reduce(
+    (sum, day) =>
+      sum + (chartMetric === "revenue" ? day.revenue : day.delegates),
+    0,
+  );
+
+  const archBreakdown = delegates.reduce(
+    (acc, del) => {
+      acc[del.archdeaconry] = (acc[del.archdeaconry] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const pieData = Object.entries(archBreakdown).map(([name, value]) => ({
+    name: name || "Unknown",
+    value,
+  }));
+
+  const PIE_COLORS = [
+    "#c52810",
+    "#f59e0b",
+    "#1f0805",
+    "#3b82f6",
+    "#10b981",
+    "#8b5cf6",
+  ];
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className={styles.customTooltip}>
+          <p className={styles.tooltipLabel}>{label}</p>
+          <p className={styles.tooltipData}>
+            {chartMetric === "revenue" ? "₦" : ""}
+            {payload[0].value.toLocaleString()}{" "}
+            {chartMetric === "revenue" ? "" : "Delegates"}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={styles.adminWrapper}>
       <SEO title="Dashboard | Synod Admin" description="Admin Dashboard" />
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          success: {
-            style: {
-              background: "#0e9f6e",
-              color: "#fff",
-            },
-          },
-          error: {
-            style: {
-              background: "#c52810",
-              color: "#fff",
-            },
-          },
-        }}
-      />
+      <Toaster position="top-right" />
 
-      {/* Top Navigation */}
       <header className={styles.adminHeader}>
         <div className={styles.headerLeft}>
           <div className={styles.logoBox}>Diocese of Calabar</div>
@@ -166,35 +267,134 @@ export default function SynodAdminDashboard() {
         <div className={styles.loadingState}>Loading encrypted data...</div>
       ) : (
         <main className={styles.mainContent}>
-          {/* METRICS GRID */}
-          <div className={styles.metricsGrid}>
-            <div className={styles.metricCard}>
-              <h3>Total Revenue</h3>
-              <p className={styles.revenueText}>
-                ₦{totalRevenue.toLocaleString()}
-              </p>
+          {/* ANALYTICS CHARTS SECTION */}
+          <div className={styles.dashboardGrid}>
+            {/* Left: Interactive Bar Chart */}
+            <div className={styles.chartCard}>
+              <div className={styles.chartControlsRow}>
+                <select
+                  value={timeFilter}
+                  onChange={(e) => setTimeFilter(Number(e.target.value))}
+                  className={styles.chartSelect}
+                >
+                  <option value={7}>Last 7 days</option>
+                  <option value={30}>Last 30 days</option>
+                  <option value={90}>Last 90 days</option>
+                </select>
+
+                <select
+                  value={chartMetric}
+                  onChange={(e) =>
+                    setChartMetric(e.target.value as "revenue" | "delegates")
+                  }
+                  className={styles.chartSelectBold}
+                >
+                  <option value="revenue">Revenue NGN</option>
+                  <option value="delegates">Registered Delegates</option>
+                </select>
+              </div>
+
+              <div className={styles.chartTotalDisplay}>
+                {chartMetric === "revenue" ? "₦" : ""}
+                {currentChartTotal.toLocaleString()}
+              </div>
+
+              <div className={styles.barChartWrapper}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={chartData}
+                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                  >
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      vertical={false}
+                      stroke="#f0f0f0"
+                    />
+                    <XAxis
+                      dataKey="displayDate"
+                      tick={{ fontSize: 12, fill: "#888" }}
+                      axisLine={false}
+                      tickLine={false}
+                      dy={10}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 12, fill: "#888" }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) =>
+                        chartMetric === "revenue" && value >= 1000
+                          ? `${value / 1000}k`
+                          : value
+                      }
+                    />
+                    <Tooltip
+                      content={<CustomTooltip />}
+                      cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                    />
+                    <Bar
+                      dataKey={chartMetric}
+                      fill={chartMetric === "revenue" ? "#dcfce7" : "#dbeafe"}
+                      stroke={chartMetric === "revenue" ? "#22c55e" : "#3b82f6"}
+                      strokeWidth={1}
+                      radius={[4, 4, 0, 0]}
+                      barSize={timeFilter === 7 ? 40 : 15}
+                      animationDuration={1000}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-            <div className={styles.metricCard}>
-              <h3>Registered Delegates</h3>
-              <p className={styles.countText}>{totalDelegates}</p>
-            </div>
-            <div className={`${styles.metricCard} ${styles.breakdownCard}`}>
-              <h3>Archdeaconry Breakdown</h3>
-              <ul className={styles.breakdownList}>
-                {Object.entries(archBreakdown).map(([arch, count]) => (
-                  <li key={arch}>
-                    <span>{arch || "Unknown"}</span>
-                    <strong>{count}</strong>
-                  </li>
-                ))}
-                {Object.keys(archBreakdown).length === 0 && (
-                  <li>No data yet</li>
-                )}
-              </ul>
+
+            <div className={styles.pieCard}>
+              <h3 className={styles.pieTitle}>Archdeaconry Breakdown</h3>
+
+              {pieData.length > 0 ? (
+                <div className={styles.pieChartWrapper}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="45%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={PIE_COLORS[index % PIE_COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(value: any) => [
+                          `${value || 0} Delegates`,
+                          "Registrations",
+                        ]}
+                        contentStyle={{
+                          borderRadius: "8px",
+                          border: "none",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                        }}
+                      />
+                      <Legend
+                        verticalAlign="bottom"
+                        height={36}
+                        iconType="circle"
+                        wrapperStyle={{ fontSize: "12px" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <div className={styles.emptyPie}>No data available yet.</div>
+              )}
             </div>
           </div>
 
-          {/* DATA TABLE SECTION */}
+          {/* TABLE SECTION */}
           <div className={styles.tableSection}>
             <div className={styles.tableHeader}>
               <h2>Recent Registrations</h2>
@@ -219,7 +419,7 @@ export default function SynodAdminDashboard() {
                 <button
                   onClick={handleDeleteAll}
                   className={styles.deleteAllBtn}
-                  disabled={totalDelegates === 0}
+                  disabled={delegates.length === 0}
                 >
                   Danger: Delete All
                 </button>
@@ -267,7 +467,6 @@ export default function SynodAdminDashboard() {
                           <br />
                           <span className={styles.subEmail}>{del.email}</span>
                           <br />
-                          {/* Display Phone Number in Table */}
                           <span className={styles.subEmail}>
                             {del.phone || "No phone provided"}
                           </span>
@@ -300,7 +499,6 @@ export default function SynodAdminDashboard() {
         </main>
       )}
 
-      {/* ID CARD MODAL */}
       {selectedDelegate && (
         <div
           className={styles.modalOverlay}
@@ -317,57 +515,112 @@ export default function SynodAdminDashboard() {
               ✕
             </button>
 
-            {/* The Printable ID Card */}
-            <div className={styles.idCardWrapper} id="printable-id-card">
-              <div className={styles.idCardHeader}>
-                <small>DIOCESE OF CALABAR</small>
-                <h3>SYNOD 2026</h3>
-              </div>
-              <div className={styles.idCardBody}>
-                <div className={styles.idPhotoContainer}>
-                  <img src={selectedDelegate.photoUrl} alt="Delegate" />
+            <div className={styles.idCardPreviewContainer}>
+              <div className={styles.idCard} id="delegate-id-card">
+                <div className={styles.watermarkLogo}></div>
+
+                <div className={styles.idCardHeader}>
+                  <span className={styles.idCardDiocese}>
+                    DIOCESE OF CALABAR
+                  </span>
+                  <span className={styles.idCardCommunion}>
+                    (ANGLICAN COMMUNION)
+                  </span>
+                  <h3 className={styles.idCardTitle}>SYNOD 2026</h3>
                 </div>
-                <div className={styles.idDetails}>
-                  <h2>
+
+                <div className={styles.idCardProfileWrapper}>
+                  <img
+                    crossOrigin="anonymous"
+                    src={
+                      selectedDelegate.photoUrl ||
+                      "https://via.placeholder.com/150"
+                    }
+                    alt="Delegate"
+                    className={styles.idCardPhoto}
+                  />
+                </div>
+
+                <div className={styles.idCardBody}>
+                  <h2 className={styles.idCardName}>
                     {selectedDelegate.title} {selectedDelegate.fullName}
                   </h2>
-                  <p className={styles.idDesignation}>
+                  <p className={styles.idCardRole}>
                     {selectedDelegate.designation}
                   </p>
 
-                  <div className={styles.idGrid}>
-                    <div className={styles.idItem}>
-                      <span>Archdeaconry</span>
-                      <strong>{selectedDelegate.archdeaconry}</strong>
+                  <div className={styles.idThemeCard}>
+                    <div className={styles.idThemeTop}>
+                      <span className={styles.idLabel}>THEME</span>
+                      <div className={styles.idUnderlineCenter}></div>
+                      <strong className={styles.idThemeTitle}>
+                        "Not Offended In Me"
+                      </strong>
+                      <span className={styles.idThemeSub}>Matthew 11:6</span>
                     </div>
-                    <div className={styles.idItem}>
-                      <span>Church/Parish</span>
-                      <strong>{selectedDelegate.church}</strong>
+                    <div className={styles.idThemeBottom}>
+                      <div className={styles.idThemeBottomLeft}>
+                        <span className={styles.idLabel}>DATES</span>
+                        <div className={styles.idUnderlineLeft}></div>
+                        <strong className={styles.idValue}>
+                          8th - 12th
+                          <br />
+                          July, 2026
+                        </strong>
+                      </div>
+                      <div className={styles.idThemeBottomRight}>
+                        <span className={styles.idLabel}>VENUE</span>
+                        <div className={styles.idUnderlineLeft}></div>
+                        <strong className={styles.idValue}>
+                          Cathedral Church of Holy Trinity,
+                          <br />
+                          Calabar, CRS.
+                        </strong>
+                      </div>
                     </div>
-                    {/* Added Phone Number to ID Card */}
-                    <div className={styles.idItem}>
-                      <span>Phone Number</span>
-                      <strong>{selectedDelegate.phone || "N/A"}</strong>
+                  </div>
+
+                  <div className={styles.idDetailsGrid}>
+                    <div className={styles.idDetailBox}>
+                      <span className={styles.idDetailLabel}>ARCHDEACONRY</span>
+                      <strong className={styles.idDetailValue}>
+                        {selectedDelegate.archdeaconry}
+                      </strong>
                     </div>
-                    <div className={styles.idItem}>
-                      <span>Unique ID</span>
-                      <strong className={styles.idHighlight}>
+                    <div className={styles.idDetailBox}>
+                      <span className={styles.idDetailLabel}>
+                        CHURCH/PARISH
+                      </span>
+                      <strong className={styles.idDetailValue}>
+                        {selectedDelegate.church}
+                      </strong>
+                    </div>
+                    <div className={styles.idDetailBox}>
+                      <span className={styles.idDetailLabel}>PHONE NUMBER</span>
+                      <strong className={styles.idDetailValue}>
+                        {selectedDelegate.phone || "N/A"}
+                      </strong>
+                    </div>
+                    <div className={styles.idDetailBox}>
+                      <span className={styles.idDetailLabel}>UNIQUE ID</span>
+                      <strong
+                        className={`${styles.idDetailValue} ${styles.idDetailHighlight}`}
+                      >
                         {selectedDelegate.delegateId}
                       </strong>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className={styles.idCardFooter}>
-                {selectedDelegate.archdeaconry} * {selectedDelegate.delegateId}
+
+                {/* <div className={styles.idCardFooter}>
+                  {selectedDelegate.archdeaconry} •{" "}
+                  {selectedDelegate.delegateId}
+                </div> */}
               </div>
             </div>
 
             <div className={styles.modalActions}>
-              <button
-                className={styles.printBtn}
-                onClick={() => window.print()}
-              >
+              <button className={styles.printBtn} onClick={downloadIDCard}>
                 <svg
                   width="18"
                   height="18"
@@ -380,7 +633,7 @@ export default function SynodAdminDashboard() {
                   <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                   <rect x="6" y="14" width="12" height="8"></rect>
                 </svg>
-                Print / Save as PDF
+                Print / Save CR80 ID Card
               </button>
             </div>
           </div>
