@@ -14,10 +14,11 @@ export const archdeaconries: ArchdeaconryData[] = [
     link: "/archdeaconries/akampka",
   },
   {
-    image: "https://placehold.co/600x400/png?text=Ascension",
-    title: "Ascension Deanery",
+    image:
+      "https://i.postimg.cc/tJQJFJ7g/Gemini-Generated-Image-l2snitl2snitl2sn.png",
+    title: "Ascension Archdeaconry",
     description:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "The Anglican Church of Ascension is a Church with a long history covering over 36years since inception from 1990. It was birthed by Rev. W. G. Ekprikpo. Who later became the Pioneer Bishop of Cala...",
     link: "/archdeaconries/ascension",
   },
   {
@@ -47,5 +48,5 @@ export const archdeaconries: ArchdeaconryData[] = [
     description:
       "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.",
     link: "/archdeaconries/efut",
-  }
+  },
 ];

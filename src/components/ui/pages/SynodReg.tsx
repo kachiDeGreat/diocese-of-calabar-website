@@ -503,7 +503,9 @@ export default function SynodReg() {
                     <option value="Akampka Archdeaconry">
                       Akampka Archdeaconry
                     </option>
-                    <option value="Ascension Deanery">Ascension Deanery</option>
+                    <option value="Ascension Archdeaconry">
+                      Ascension Archdeaconry
+                    </option>
                     <option value="Cathedral Archdeaconry">
                       Cathedral Archdeaconry
                     </option>

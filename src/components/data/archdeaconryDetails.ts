@@ -82,34 +82,53 @@ export const archdeaconryDetailsData: Record<string, ArchdeaconryDetail> = {
 
   ascension: {
     slug: "ascension",
-    name: "Ascension Deanery",
+    name: "Ascension Archdeaconry",
     history: {
       paragraphs1: [
-        "The Ascension Deanery was carved out to better serve the growing Anglican population in its designated district.",
-        "It takes its name from the Feast of the Ascension, reminding the congregants of Christ's exalted place and our call to heavenly realities.",
+        "BRIEF HISTORY OF ANGLICAN CHURCH OF ASCENSION IKOT OMIN 8 MILES CALABAR ON THE OCCASION OF CHURCH RE-DEDICATION AND VICARAGE DEDICATION THIS THURSDAY 14TH MAY, 2026 AT ANGLICAN CHURCH OF ASCENSION 8 MILES CALABAR.",
+        "The Anglican Church of Ascension is a Church with a long history covering over 36years since inception from 1990. It was birthed by Rev. W. G. Ekprikpo. Who later became the Pioneer Bishop of Calabar Diocese. The RT. Rev. W.G. Ekprikpo. (JP). This Church had her first name as St Mark's Anglican Church Ikot-Enobong when it started as a mustard seed under the leadership of L/R Thompson Chijioke Onuoha who later became Rev. Thompson Chijioke Onuoha and the first vicar of the church.",
+        "The then congregation used Ikot Eneobong community hall as a place of worship. The church later had two plots of land at Ikot Eneobong but lost the land back to the community on the ground they needed a school not a church. It later relocated to Government Primary School at Ikot Effanga Mkpa in 1993. The school had served as a place of worship till 2002. When the Cross River State Government made a law that no more should Government schools be used for religious worship centers. The congregation relocated under a Mango tree in front of the Pioneer Pastor's residence at Ikot Effangha Mkpa.",
+        "In 2003, the Priest in charge Rev. Thompson Onuoha was transferred to the Holy Trinity Anglican Cathedral. He was then replaced by Rev. Prince Christian Anyim. Who is presently Rt. Rev. Prof. Prince Christian Chukwudi Enyinnaya Anyim (JP, GDJ). (Bishop of Isuikwuato-Umunneochi Diocese). Then Rev. Prince Anyim was later replaced that same year 2003 with then Rev. Can. Bar. Lawrence Ngozi Umar who is now Ven. Bar. Dr. Lawrence Ngozi Umar (JP.) in 2004.",
+        "The church under the new leadership and his team of workers Rev Cyprain Chukwujekwu(Late), Mr. Anajemba Madueke who is presently (Rev. Anajemba Madueke) and John Dakowa from Siera-Leon who also is presently into ordained ministry. This team of ministers acquired the land being used today on 3rd July, 2004. At the cost of Seven Hundred Thousand Naira only. The first church hall was completed in 2008 after lots of struggles. The church was renamed to ANGLICAN CHURCH OF ASCENSION in 2010, by then RT. Rev. Tunde Adeleye JP (RTD) the 2nd Bishop of Calabar Diocese.",
+        "The church had her first worship building dedicated in 2011 by Rt. Rev. Tunde Adeleye Rtd. The church started another one-story building with hall down and parsonage up and as today we are dedicating it to the Glory of God. The hall was completed and was fully fitted with Air conditional for church before the present magnificent building today. It is the first church in the diocese with a building fully equipped with standing split unit air conditioner in the Diocese of Calabar, Under the then Vicar Ven. Bar. Dr. Lawrence Ngozi Umar. The present Church Hall and Vicarage was built, though the parsonage not fully completed.",
+        "It was after that the thought of expansion and decision was taken by the then Parochial Church Council (PCC) to demolish the first building/hall and asked that a bigger one be built. While on this the Vicar. Ven Dr. Umar was transferred in December 2016 to ST. Jude's Anglican Church as Vicar and Archdeacon of Calabar Archdeaconry. Meanwhile the Ven. Prof. Chibueze Haggai Njoku was posted as an assisting priest in 2014 who became the Vicar after Ven. Bar. Lawrence was posted out in 2016 to the glory of God and for the advancement of the kingdom of God/church growth.",
+        "He also worked tirelessly with his team of workers while some were transferred out. Ord. Charles Esien Eyo who was both made deacon and priest in Ascension Church as Rev. Charles Esien Eyo, Rev Chijioke Osigwe who is today (Rev. Canon Chijioke Osigwe in Ogoja Missionary Diocese) and Rev Isaac Nwafor and later in 2021 Rev. Joel Sunday Emerionwu who was preferred Rev. Canon Sunday Joel Emerionwu working today in (Missionary Diocese of Ikom) and Postulant Kingsley Okechukwu.",
+        "In 2017, the old Church building which was a bungalow was reinforced in preparation for this present structure. Some parts of the old Church were pulled down for a better and bigger church with gallery was started and soon was completed in November, 2019. The congregation parked back to the new church building and today it is celebrated to the glory of God and His faithfulness.",
+        "Ascension Deanery was birthed by Calabar Archdeaconry whose Pioneer Vicar Ven. John Ezirim who later became Rt. Rev. John Ezirim (late).",
       ],
-      quote: "Lifting our eyes, our hearts, and our community to Christ.",
+      quote:
+        "Like the mustard seed, the church we dedicate today started from grass to grace having faced many challenges. Times and periods of rejection, back and forth but was never crushed.",
       paragraphs2: [
-        "The deanery has seen rapid structural development over the last twenty years, birthing several new parishes.",
-        "Currently, Ascension Deanery is pioneering youth-led worship initiatives and urban ministry programs.",
+        "The present Vicar Ven. Prof. Chibueze Haggai Njoku didn't relent but keyed into the Vision and ensured that the current church building today became a reality by God's Grace with other priests and Mission Workers working with him. Donatus Chikendu though served for only four months and presently our able Ven. Ogbuji Justin still with us today as assisting priest.",
+        "The Church started with about four families in 1990, who were Lay Reader Inspector Franklin Nwachukwu, Lay Reader Ahuchaogu a police officer who also was the choir master presently Okeso and has retired home but the wife and children are still fully active as Evangelist Mrs Theresa Okeso. We also had few others like Mr. Larry, Mr. Enoch and Mr. Ejiofor among the first worshippers.",
+        "In 2003, 5 more families joined which included L/R Ezedinobi and family, L/R Chris Emenogu and family, Sir Nnoli and family, L/R Luis Amaefula and family, Mrs. Chizoma Asomonye Mrs. Chika Nwosu and family, etc. The church numerical strengths from 2006 till 2016 was about 45 families. But as at date the church could boast of over 55 families. The church is growing spiritually as well as materially to the glory of God.",
+        "On the 15th December, 2020 inauguration of Ascension Deanery was done by His Grace, The Most Rev. Tunde Adeleye. The Archbishop of Ecclesiastical province of Niger Delta and Bishop Diocese of Calabar. Some who were with us years past has gone to be with the Lord their maker. Some priests too to glory and may their souls receive eternal repose from God of all flesh. Yet, there are many lands to conquer, many souls to be worn and many crowns to wear. May we not be weary in the work of the Lord for in it, we shall be remembered.",
+        "On Ascension Day, the 14th of May, 2026, during the re-dedication of the church building and vicarage, the Diocesan Bishop, Rt. Rev. Prof. Nneoyi Onen Egbe, pronounced Ascension a full-fledged Archdeaconry. Source: Ascension Re-dedication Service 2026 Programme.",
       ],
       image:
-        "https://placehold.co/600x800/eeeeee/999999?text=Ascension+History",
+        "https://i.postimg.cc/tJQJFJ7g/Gemini-Generated-Image-l2snitl2snitl2sn.png",
     },
     leaders: [
       {
         id: "1",
-        name: "Rev. Canon [Name]",
-        role: "Dean of Ascension",
-        bio: "A dynamic leader passionate about urban ministry and equipping the next generation of believers.",
-        image: "https://placehold.co/400x400/eeeeee/999999?text=Ascension+Dean",
+        name: "Ven. Prof. Chibueze Haggai Njoku",
+        role: "Archdeacon / Vicar",
+        bio: "A visionary leader who guided the church's structural and spiritual expansion from a Deanery into a newly inaugurated Archdeaconry.",
+        image: "https://placehold.co/400x400/eeeeee/999999?text=Ven+Njoku",
+      },
+      {
+        id: "2",
+        name: "Ven. Ogbuji Justin",
+        role: "Assisting Priest",
+        bio: "Faithfully serving the Ascension congregation alongside the Archdeacon.",
+        image: "https://placehold.co/400x400/eeeeee/999999?text=Ven+Ogbuji",
       },
     ],
     churches: [
       {
         id: "1",
-        name: "Church of the Ascension",
-        address: "Ascension Drive, Calabar",
+        name: "Anglican Church of Ascension",
+        address: "8 Miles, Ikot Omin, Calabar",
         image:
           "https://placehold.co/600x400/eeeeee/999999?text=Church+of+Ascension",
         link: "#",

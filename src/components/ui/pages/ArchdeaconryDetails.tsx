@@ -109,29 +109,19 @@ export default function ArchdeaconryDetails() {
         </motion.div>
 
         <div className={styles.historyGrid}>
-          <motion.div
-            className={styles.historyText}
-            variants={staggerContainer}
-          >
-            <motion.h3 variants={fadeInUp}>Founding Years</motion.h3>
+          <motion.div className={styles.historyText} variants={fadeInUp}>
+            <h3>Founding Years</h3>
             {data.history.paragraphs1.map((p, idx) => (
-              <motion.p key={idx} variants={fadeInUp}>
-                {p}
-              </motion.p>
+              <p key={idx}>{p}</p>
             ))}
 
-            <motion.blockquote
-              className={styles.historyQuote}
-              variants={fadeInUp}
-            >
+            <blockquote className={styles.historyQuote}>
               "{data.history.quote}"
-            </motion.blockquote>
+            </blockquote>
 
-            <motion.h3 variants={fadeInUp}>A Century of Growth</motion.h3>
+            <h3>Continued Growth</h3>
             {data.history.paragraphs2.map((p, idx) => (
-              <motion.p key={idx} variants={fadeInUp}>
-                {p}
-              </motion.p>
+              <p key={idx}>{p}</p>
             ))}
           </motion.div>
 

@@ -10,7 +10,7 @@ function Archdeaconry() {
         title="Our Archdeaconries"
         description="Explore the various Archdeaconries and Deaneries that make up the Anglican Diocese of Calabar."
       />
-      <Banner title="Archdeaconry" />
+      <Banner title="Archdeaconries" />
       <div className="container">
         <ArchdeaconryGrid data={archdeaconries} />
       </div>

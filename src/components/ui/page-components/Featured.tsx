@@ -17,20 +17,20 @@ function Featured() {
       id: 1,
       name: "Onyekachi, Godswill Richard",
       role: "Featured Priest of the Month",
-      church: "Anglican Church of Ascension | Ascension Deanery",
+      church: "Anglican Church of Ascension | Ascension Archdeaconry",
       imageUrl: Images.kachi,
     },
     {
       id: 2,
       name: "Onyekachi, Godswill Richard",
       role: "Featured Laity of the Month",
-      church: "Anglican Church of Ascension | Ascension Deanery",
+      church: "Anglican Church of Ascension | Ascension Archdeaconry",
       imageUrl: Images.kachi,
     },
   ];
 
   const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
   ) => {
     const target = e.target as HTMLImageElement;
     target.onerror = null;
