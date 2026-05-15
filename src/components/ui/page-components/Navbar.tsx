@@ -371,13 +371,15 @@ function Navbar() {
             </li>
 
             <li className={`${styles.navItem}`}>
-              <Link
-                to="/news_and_events"
+              <a
+                href="https://blog.anglicandioceseofcalabar.org"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={handleLinkClick}
                 className={styles.navLink}
               >
                 NEWS & EVENTS
-              </Link>
+              </a>
             </li>
           </ul>
 

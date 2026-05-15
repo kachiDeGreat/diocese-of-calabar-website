@@ -38,7 +38,7 @@ const slides: Slide[] = [
     description:
       "Stay connected with our diocese through various events and activities. Check out our calendar for details.",
     buttonText: "See Events",
-    buttonLink: "/news_and_events/",
+    buttonLink: "https://blog.anglicandioceseofcalabar.org",
   },
 ];
 
@@ -114,7 +114,17 @@ function Carousel() {
                 <Button
                   style={{ marginLeft: "-10px" }}
                   size="medium"
-                  onClick={() => navigate(slide.buttonLink)}
+                  onClick={() => {
+                    if (slide.buttonLink.startsWith("http")) {
+                      window.open(
+                        slide.buttonLink,
+                        "_blank",
+                        "noopener,noreferrer",
+                      );
+                    } else {
+                      navigate(slide.buttonLink);
+                    }
+                  }}
                 >
                   {slide.buttonText}
                 </Button>

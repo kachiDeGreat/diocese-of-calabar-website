@@ -90,7 +90,13 @@ export default function Footer() {
                     <Link to="/ministries">Ministries</Link>
                   </li>
                   <li>
-                    <Link to="/events">Events</Link>
+                    <a
+                      href="https://blog.anglicandioceseofcalabar.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Events
+                    </a>
                   </li>
                   <li>
                     <Link to="/gallery">Gallery</Link>
