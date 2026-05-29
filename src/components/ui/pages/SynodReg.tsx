@@ -513,7 +513,6 @@ export default function SynodReg() {
                       Christ-church Deanery
                     </option>
                     <option value="Efut Deanery">Efut Deanery</option>
-                    <option value="Diocese">Diocese</option>
                   </select>
                 </div>
                 <div className={styles.inputGroup}>
