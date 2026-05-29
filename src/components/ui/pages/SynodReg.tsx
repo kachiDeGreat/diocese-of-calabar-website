@@ -541,7 +541,6 @@ export default function SynodReg() {
                     <option value="Diocesan Official">Diocesan Official</option>
                     <option value="Bishop's Nominee">Bishop's Nominee</option>
                     <option value="Guest Speaker">Guest Speaker</option>
-                    <option value="Mama Calabar">Mama Calabar</option>
                   </select>
                 </div>
               </div>
