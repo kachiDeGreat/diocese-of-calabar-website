@@ -989,7 +989,7 @@ export default function SynodReg() {
                     type="text"
                     value={manualReference}
                     onChange={(e) => setManualReference(e.target.value)}
-                    placeholder="e.g. T26354890..."
+                    placeholder="e.g. 17......"
                     className={styles.verifyInput}
                   />
                 </div>
