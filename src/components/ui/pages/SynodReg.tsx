@@ -38,6 +38,12 @@ export default function SynodReg() {
   const [manualReference, setManualReference] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [verifiedReference, setVerifiedReference] = useState("");
+  const [verificationDetails, setVerificationDetails] = useState<{
+    reference: string;
+    channel?: string;
+    email?: string;
+    amount?: number;
+  } | null>(null);
 
   const [startedAt] = useState(() => {
     const saved = localStorage.getItem("synodRegStartedAt");
@@ -262,7 +268,7 @@ export default function SynodReg() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          reference: manualReference.trim()
+          reference: manualReference.trim(),
         }),
       });
 
@@ -285,11 +291,12 @@ export default function SynodReg() {
         );
       }
 
-      setIsVerifyModalOpen(false);
-      setVerifiedReference(data.reference);
-      toast.success(
-        "Payment verified! Please click 'Complete Registration' to finish.",
-      );
+      setVerificationDetails({
+        reference: data.reference,
+        channel: data.channel,
+        email: data.email,
+        amount: data.amount ? data.amount / 100 : undefined,
+      });
     } catch (error: any) {
       toast.error(error.message || "Could not verify this transaction.");
     } finally {
@@ -915,38 +922,99 @@ export default function SynodReg() {
       {isVerifyModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.verifyModalContent}>
-            <h3>Verify Manual Payment</h3>
-            <p>
-              Enter the Paystack Reference ID from your email receipt to
-              complete registration.
-            </p>
+            {verificationDetails ? (
+              <>
+                <h3>Transaction Found</h3>
+                <p>Please confirm the details below before proceeding.</p>
 
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                value={manualReference}
-                onChange={(e) => setManualReference(e.target.value)}
-                placeholder="e.g. T26354890..."
-                className={styles.verifyInput}
-              />
-            </div>
+                <div
+                  className={styles.receiptDetails}
+                  style={{ margin: "20px 0" }}
+                >
+                  <div className={styles.receiptRow}>
+                    <span>Email:</span>
+                    <strong>{verificationDetails.email || "N/A"}</strong>
+                  </div>
+                  <div className={styles.receiptRow}>
+                    <span>Channel:</span>
+                    <strong style={{ textTransform: "capitalize" }}>
+                      {verificationDetails.channel || "N/A"}
+                    </strong>
+                  </div>
+                  <div className={styles.receiptRow}>
+                    <span>Amount:</span>
+                    <strong>
+                      {verificationDetails.amount
+                        ? `₦${verificationDetails.amount.toLocaleString()}`
+                        : "N/A"}
+                    </strong>
+                  </div>
+                </div>
 
-            <div className={styles.modalActionsGrid}>
-              <button
-                onClick={() => setIsVerifyModalOpen(false)}
-                className={styles.backBtn}
-                disabled={isVerifying}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleManualVerification}
-                className={styles.payBtn}
-                disabled={isVerifying}
-              >
-                {isVerifying ? "Verifying..." : "Verify Receipt"}
-              </button>
-            </div>
+                <div className={styles.modalActionsGrid}>
+                  <button
+                    onClick={() => {
+                      setVerificationDetails(null);
+                      setManualReference("");
+                    }}
+                    className={styles.backBtn}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      setVerifiedReference(verificationDetails.reference);
+                      setIsVerifyModalOpen(false);
+                      setVerificationDetails(null);
+                      toast.success(
+                        "Payment verified! Please click 'Complete Registration' to finish.",
+                      );
+                    }}
+                    className={styles.payBtn}
+                  >
+                    Proceed
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3>Verify Manual Payment</h3>
+                <p>
+                  Enter the Paystack Reference ID from your email receipt to
+                  complete registration.
+                </p>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    value={manualReference}
+                    onChange={(e) => setManualReference(e.target.value)}
+                    placeholder="e.g. T26354890..."
+                    className={styles.verifyInput}
+                  />
+                </div>
+
+                <div className={styles.modalActionsGrid}>
+                  <button
+                    onClick={() => {
+                      setIsVerifyModalOpen(false);
+                      setManualReference("");
+                    }}
+                    className={styles.backBtn}
+                    disabled={isVerifying}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleManualVerification}
+                    className={styles.payBtn}
+                    disabled={isVerifying}
+                  >
+                    {isVerifying ? "Verifying..." : "Verify Receipt"}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

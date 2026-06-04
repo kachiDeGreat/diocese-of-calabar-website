@@ -39,7 +39,8 @@ class handler(BaseHTTPRequestHandler):
                 self._send_error(500, f"Network error: {url_err.reason}")
                 return
 
-            if not res_data.get('status') or res_data.get('data', {}).get('status') != 'success':
+            data_obj = res_data.get('data', {})
+            if not res_data.get('status') or data_obj.get('status') != 'success':
                 self._send_error(400, "This transaction is invalid, failed, or abandoned.")
                 return
 
@@ -48,7 +49,10 @@ class handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps({
                 "verified": True,
-                "reference": reference
+                "reference": reference,
+                "channel": data_obj.get('channel'),
+                "email": data_obj.get('customer', {}).get('email'),
+                "amount": data_obj.get('amount')
             }).encode())
 
         except Exception as e:
