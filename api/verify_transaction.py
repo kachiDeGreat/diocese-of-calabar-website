@@ -26,12 +26,14 @@ class handler(BaseHTTPRequestHandler):
             req = urllib.request.Request(url)
             req.add_header('Authorization', f'Bearer {paystack_secret}')
             req.add_header('Content-Type', 'application/json')
+            req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
 
             try:
                 with urllib.request.urlopen(req) as response:
                     res_data = json.loads(response.read().decode())
             except urllib.error.HTTPError as http_err:
-                self._send_error(400, f"Paystack communication error: {http_err.reason}")
+                error_body = http_err.read().decode('utf-8', errors='ignore')
+                self._send_error(400, f"Paystack error ({http_err.code}): {error_body or http_err.reason}")
                 return
             except urllib.error.URLError as url_err:
                 self._send_error(500, f"Network error: {url_err.reason}")
