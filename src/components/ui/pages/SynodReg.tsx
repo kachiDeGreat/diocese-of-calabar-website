@@ -978,7 +978,7 @@ export default function SynodReg() {
               </>
             ) : (
               <>
-                <h3>Verify Manual Payment</h3>
+                <h3>Verify Payment</h3>
                 <p>
                   Enter the Paystack Reference ID from your email receipt to
                   complete registration.
