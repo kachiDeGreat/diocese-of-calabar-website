@@ -262,8 +262,7 @@ export default function SynodReg() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          reference: manualReference.trim(),
-          amountExpected: amount,
+          reference: manualReference.trim()
         }),
       });
 

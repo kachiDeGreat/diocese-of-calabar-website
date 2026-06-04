@@ -12,10 +12,9 @@ class handler(BaseHTTPRequestHandler):
             data = json.loads(post_data)
 
             reference = data.get('reference')
-            amount_expected = data.get('amountExpected')
 
-            if not reference or not amount_expected:
-                self._send_error(400, "Missing reference or expected amount.")
+            if not reference:
+                self._send_error(400, "Missing reference.")
                 return
 
             paystack_secret = os.environ.get("PAYSTACK_SECRET_KEY")
@@ -40,11 +39,6 @@ class handler(BaseHTTPRequestHandler):
 
             if not res_data.get('status') or res_data.get('data', {}).get('status') != 'success':
                 self._send_error(400, "This transaction is invalid, failed, or abandoned.")
-                return
-
-            actual_amount = res_data['data'].get('amount')
-            if actual_amount != (amount_expected * 100):
-                self._send_error(400, "This receipt is not for the correct registration amount.")
                 return
 
             self.send_response(200)
