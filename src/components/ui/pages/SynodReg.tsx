@@ -6,7 +6,7 @@ import styles from "../styles/SynodReg.module.css";
 import SEO from "../page-components/SEO";
 import LazyImage from "../page-components/LazyImage";
 
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export default function SynodReg() {
@@ -33,6 +33,11 @@ export default function SynodReg() {
   const [delegateId, setDelegateId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const uploadAbortControllerRef = useRef<AbortController | null>(null);
+
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+  const [manualReference, setManualReference] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verifiedReference, setVerifiedReference] = useState("");
 
   const [startedAt] = useState(() => {
     const saved = localStorage.getItem("synodRegStartedAt");
@@ -112,10 +117,8 @@ export default function SynodReg() {
       toast.success("Photo uploaded successfully!");
     } catch (error: any) {
       if (error.name === "AbortError") {
-        console.log("Photo upload aborted by user.");
         return;
       }
-      console.error("Photo upload error:", error);
       toast.error("Failed to upload photo. Please try again.");
     } finally {
       setIsUploadingPhoto(false);
@@ -190,7 +193,7 @@ export default function SynodReg() {
     publicKey: process.env.REACT_APP_PAYSTACK_PUBLIC_KEY as string,
   };
 
-  const handlePaystackSuccessAction = async (reference: any) => {
+  const finalizeRegistration = async (referenceString: string) => {
     try {
       setIsSubmitting(true);
       const newDelegateId = generateCustomId();
@@ -198,7 +201,7 @@ export default function SynodReg() {
       await addDoc(collection(db, "synod_registrations"), {
         ...formData,
         delegateId: newDelegateId,
-        paymentReference: reference.reference,
+        paymentReference: referenceString,
         amountPaid: amount,
         startedAt,
         completedAt: new Date().toISOString(),
@@ -219,10 +222,7 @@ export default function SynodReg() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(emailPayload),
-      })
-        .then((res) => res.json())
-        .then((data) => console.log("Email API Response:", data))
-        .catch((err) => console.error("Email API Failed:", err));
+      }).catch(() => {});
 
       setDelegateId(newDelegateId);
       setStep(4);
@@ -232,7 +232,6 @@ export default function SynodReg() {
       localStorage.removeItem("synodRegStartedAt");
       toast.success("Payment successful! Registration complete.");
     } catch (error) {
-      console.error("Error saving registration details: ", error);
       toast.error(
         "Payment was successful but we failed to save some details. Please contact support.",
       );
@@ -242,8 +241,61 @@ export default function SynodReg() {
     }
   };
 
+  const handlePaystackSuccessAction = (reference: any) => {
+    finalizeRegistration(reference.reference);
+  };
+
   const handlePaystackCloseAction = () => {
     toast.error("Payment was not completed.");
+  };
+
+  const handleManualVerification = async () => {
+    if (!manualReference.trim()) {
+      toast.error("Please enter a valid reference.");
+      return;
+    }
+
+    setIsVerifying(true);
+
+    try {
+      const response = await fetch("/api/verify_transaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reference: manualReference.trim(),
+          amountExpected: amount,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Verification failed");
+      }
+
+      const q = query(
+        collection(db, "synod_registrations"),
+        where("paymentReference", "==", data.reference),
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        throw new Error(
+          "This receipt has already been claimed by another delegate.",
+        );
+      }
+
+      setIsVerifyModalOpen(false);
+      setVerifiedReference(data.reference);
+      toast.success(
+        "Payment verified! Please click 'Complete Registration' to finish.",
+      );
+    } catch (error: any) {
+      toast.error(error.message || "Could not verify this transaction.");
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
   const componentProps = {
@@ -397,7 +449,6 @@ export default function SynodReg() {
         </div>
       </section>
 
-      {/* Form Section */}
       <section ref={formRef} className={styles.formSection}>
         <div className={styles.formContainer}>
           <div className={styles.progressHeader}>
@@ -443,7 +494,6 @@ export default function SynodReg() {
             </div>
           </div>
 
-          {/* STEP 1 */}
           {step === 1 && (
             <div className={styles.stepContent}>
               <div className={styles.formHeader}>
@@ -555,7 +605,6 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 2 */}
           {step === 2 && (
             <div className={styles.stepContent}>
               <div className={styles.uploadBox}>
@@ -645,7 +694,6 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 3 - Payment Details Now Inline */}
           {step === 3 && (
             <div className={styles.stepContent}>
               <div className={styles.paymentSummary}>
@@ -659,7 +707,6 @@ export default function SynodReg() {
                   </span>
                 </div>
 
-                {/* Inline Fee Breakdown added here */}
                 <ul className={styles.feeBreakdown}>
                   <li>
                     <span>Synod Registration:</span> <span>₦10,000</span>
@@ -680,7 +727,6 @@ export default function SynodReg() {
                 </div>
               </div>
 
-              {/* Trust Banner moved here */}
               <div className={styles.trustBanner}>
                 <div className={styles.trustIcon}>
                   <svg
@@ -711,30 +757,46 @@ export default function SynodReg() {
                 </div>
               </div>
 
-              <div className={styles.buttonContainer}>
-                <button className={styles.backBtn} onClick={prevStep}>
-                  Back
-                </button>
-                {isSubmitting ? (
-                  <button
-                    className={styles.payBtn}
-                    disabled
-                    style={{ opacity: 0.7 }}
-                  >
-                    Saving details...
+              <div className={styles.actionColumnWrapper}>
+                <div className={styles.buttonContainer}>
+                  <button className={styles.backBtn} onClick={prevStep}>
+                    Back
                   </button>
-                ) : (
-                  // Paystack triggers straight from here now
-                  <PaystackButton
-                    className={styles.payBtn}
-                    {...componentProps}
-                  />
+                  {isSubmitting ? (
+                    <button
+                      className={styles.payBtn}
+                      disabled
+                      style={{ opacity: 0.7 }}
+                    >
+                      Saving details...
+                    </button>
+                  ) : verifiedReference ? (
+                    <button
+                      className={styles.payBtn}
+                      onClick={() => finalizeRegistration(verifiedReference)}
+                    >
+                      Complete Registration
+                    </button>
+                  ) : (
+                    <PaystackButton
+                      className={styles.payBtn}
+                      {...componentProps}
+                    />
+                  )}
+                </div>
+
+                {!verifiedReference && (
+                  <button
+                    className={styles.textLinkBtn}
+                    onClick={() => setIsVerifyModalOpen(true)}
+                  >
+                    Already paid but tab closed? Verify Receipt
+                  </button>
                 )}
               </div>
             </div>
           )}
 
-          {/* STEP 4: Success Complete */}
           {step === 4 && (
             <div className={styles.successContainer}>
               <motion.div
@@ -788,7 +850,6 @@ export default function SynodReg() {
             </div>
           )}
 
-          {/* STEP 5: Payment Failed */}
           {step === 5 && (
             <div
               className={`${styles.successContainer} ${styles.failedContainer}`}
@@ -851,6 +912,45 @@ export default function SynodReg() {
           )}
         </div>
       </section>
+
+      {isVerifyModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.verifyModalContent}>
+            <h3>Verify Manual Payment</h3>
+            <p>
+              Enter the Paystack Reference ID from your email receipt to
+              complete registration.
+            </p>
+
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                value={manualReference}
+                onChange={(e) => setManualReference(e.target.value)}
+                placeholder="e.g. T26354890..."
+                className={styles.verifyInput}
+              />
+            </div>
+
+            <div className={styles.modalActionsGrid}>
+              <button
+                onClick={() => setIsVerifyModalOpen(false)}
+                className={styles.backBtn}
+                disabled={isVerifying}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleManualVerification}
+                className={styles.payBtn}
+                disabled={isVerifying}
+              >
+                {isVerifying ? "Verifying..." : "Verify Receipt"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
