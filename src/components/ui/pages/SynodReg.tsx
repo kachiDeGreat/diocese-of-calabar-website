@@ -562,6 +562,9 @@ export default function SynodReg() {
                     <option value="Ascension Archdeaconry">
                       Ascension Archdeaconry
                     </option>
+                    <option value="Calabar Archdeaconry">
+                      Calabar Archdeaconry
+                    </option>
                     <option value="Cathedral Archdeaconry">
                       Cathedral Archdeaconry
                     </option>
