@@ -321,7 +321,7 @@ export default function SynodReg() {
         description="Register for the 3rd Session of the 12th Synod."
       />
       <Toaster
-        position="bottom-center"
+        position="top-center"
         toastOptions={{
           duration: 4000,
           style: { fontWeight: 600 },

@@ -251,7 +251,23 @@ export default function SynodAdminDashboard() {
   return (
     <div className={styles.adminWrapper}>
       <SEO title="Dashboard | Synod Admin" description="Admin Dashboard" />
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#0e9f6e",
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              background: "#c52810",
+              color: "#fff",
+            },
+          },
+        }}
+      />
 
       <header className={styles.adminHeader}>
         <div className={styles.headerLeft}>
