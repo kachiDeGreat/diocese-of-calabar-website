@@ -11,7 +11,7 @@ export interface EventData {
 export const eventsData: EventData[] = [
   {
     id: 1,
-    slug: "2026-diocesan-prayer-convocation",
+    slug: "https://blog.anglicandioceseofcalabar.org/news/2026-diocesan-prayer-convocation",
     date: "APRIL 19, 2026",
     title: "2026 Diocesan Prayer Convocation: Enriched By Him In Everything",
     image: "https://dropimg.onyekachi.dev/uzqgclibqdvtgusovg1b",
@@ -37,7 +37,7 @@ export const eventsData: EventData[] = [
   },
   {
     id: 2,
-    slug: "foundation-laying-women-retreat-centre",
+    slug: "https://blog.anglicandioceseofcalabar.org/news/foundation-laying-women-retreat-centre",
     date: "APRIL 20, 2026",
     title:
       "Upcoming: Foundation Laying Service for the Diocesan Women Retreat Centre",
