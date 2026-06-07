@@ -97,7 +97,8 @@ export default function EventSection() {
 
                     {/* Updated to use dynamic routing via slug */}
                     <Link
-                      to={`/news_and_events/${event.slug}`}
+                      target="_blank"
+                      to={`${event.slug}`}
                       className={styles.readMoreBtn}
                     >
                       Read More

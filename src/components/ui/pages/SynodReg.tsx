@@ -591,7 +591,7 @@ export default function SynodReg() {
                     value={formData.designation}
                     onChange={handleInputChange}
                   >
-                    <option value="">Select your role</option>
+                    <option value="">Select your Designation</option>
                     <option value="Clergy">Clergy</option>
                     <option value="Lay Synod Delegate">
                       Lay Synod Delegate
@@ -710,7 +710,7 @@ export default function SynodReg() {
                 <h3>Synod 2026 Delegate Access</h3>
 
                 <div className={styles.paymentRow}>
-                  <span>Role</span>
+                  <span>Designation</span>
                   <span style={{ textAlign: "right", fontWeight: "600" }}>
                     {formData.designation}
                   </span>
@@ -799,7 +799,7 @@ export default function SynodReg() {
                     className={styles.textLinkBtn}
                     onClick={() => setIsVerifyModalOpen(true)}
                   >
-                    Already paid but tab closed? Verify Receipt
+                    Already paid? Verify Receipt
                   </button>
                 )}
               </div>

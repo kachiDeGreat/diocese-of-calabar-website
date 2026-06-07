@@ -38,6 +38,54 @@ interface Delegate {
   completedAt: string;
 }
 
+const ImageWithSpinner = ({ src, alt, className, crossOrigin }: any) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <div
+      className={className}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f3f4f6",
+        flexShrink: 0,
+      }}
+    >
+      {isLoading && (
+        <div style={{ position: "absolute", zIndex: 1 }}>
+          <div
+            style={{
+              width: "20px",
+              height: "20px",
+              border: "2px solid #cbd5e1",
+              borderTopColor: "#c52810",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        crossOrigin={crossOrigin}
+        onLoad={() => setIsLoading(false)}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          opacity: isLoading ? 0 : 1,
+          transition: "opacity 0.3s ease-in-out",
+        }}
+      />
+    </div>
+  );
+};
+
 export default function SynodAdminDashboard() {
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -49,6 +97,10 @@ export default function SynodAdminDashboard() {
     "revenue",
   );
   const [timeFilter, setTimeFilter] = useState<number>(30);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const navigate = useNavigate();
 
@@ -133,29 +185,50 @@ export default function SynodAdminDashboard() {
     const toastId = toast.loading("Generating CR80 ID Card...");
 
     try {
+      // 1. Grab the exact on-screen pixel dimensions before doing anything
+      const { width, height } = cardElement.getBoundingClientRect();
+
       const canvas = await html2canvas(cardElement, {
-        scale: 4,
+        scale: 4, // High resolution
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
+        // 2. Force the canvas to respect these exact dimensions
+        width: width,
+        height: height,
+        windowWidth: document.documentElement.offsetWidth,
+        windowHeight: document.documentElement.offsetHeight,
         scrollY: -window.scrollY,
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById("delegate-id-card");
           if (el) {
             el.style.transform = "none";
             el.style.margin = "0";
+            // 3. Lock the cloned DOM node so flexbox/grid cannot compress it
+            el.style.width = `${width}px`;
+            el.style.height = `${height}px`;
+            el.style.maxWidth = `${width}px`;
+            el.style.maxHeight = `${height}px`;
           }
         },
       });
 
-      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+      // Calculate final PDF dimensions to match the locked aspect ratio
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+
+      const pdfWidth = 2.125; // Standard CR80 ID width in inches
+      const pdfHeight = (canvasHeight * pdfWidth) / canvasWidth;
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "in",
-        format: [2.125, 3.375],
+        format: [pdfWidth, pdfHeight],
       });
 
-      pdf.addImage(imgData, "JPEG", 0, 0, 2.125, 3.375);
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
       pdf.save(`Synod_2026_ID_${selectedDelegate.delegateId}.pdf`);
 
       toast.success("ID Card downloaded successfully!", { id: toastId });
@@ -203,6 +276,22 @@ export default function SynodAdminDashboard() {
   };
 
   const chartData = generateChartData();
+
+  const totalPages = Math.ceil(delegates.length / itemsPerPage);
+
+  useEffect(() => {
+    if (delegates.length === 0) {
+      setCurrentPage(1);
+    } else if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [delegates.length, totalPages, currentPage]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentDelegates = delegates.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   const currentChartTotal = chartData.reduce(
     (sum, day) =>
@@ -455,17 +544,17 @@ export default function SynodAdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {delegates.length === 0 ? (
+                  {currentDelegates.length === 0 ? (
                     <tr>
                       <td colSpan={6} className={styles.emptyState}>
                         No delegates registered yet.
                       </td>
                     </tr>
                   ) : (
-                    delegates.map((del) => (
+                    currentDelegates.map((del) => (
                       <tr key={del.id}>
                         <td>
-                          <img
+                          <ImageWithSpinner
                             src={
                               del.photoUrl || "https://via.placeholder.com/150"
                             }
@@ -511,6 +600,66 @@ export default function SynodAdminDashboard() {
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginTop: "1.5rem",
+                  paddingBottom: "1rem",
+                }}
+              >
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderRadius: "6px",
+                    border: "1px solid #e5e7eb",
+                    background: currentPage === 1 ? "#f9fafb" : "#ffffff",
+                    color: currentPage === 1 ? "#9ca3af" : "#374151",
+                    cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                    fontWeight: 500,
+                  }}
+                >
+                  Previous
+                </button>
+                <span
+                  style={{
+                    fontSize: "0.875rem",
+                    color: "#6b7280",
+                    fontWeight: 500,
+                  }}
+                >
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderRadius: "6px",
+                    border: "1px solid #e5e7eb",
+                    background:
+                      currentPage === totalPages ? "#f9fafb" : "#ffffff",
+                    color: currentPage === totalPages ? "#9ca3af" : "#374151",
+                    cursor:
+                      currentPage === totalPages ? "not-allowed" : "pointer",
+                    fontWeight: 500,
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </main>
       )}
@@ -546,7 +695,7 @@ export default function SynodAdminDashboard() {
                 </div>
 
                 <div className={styles.idCardProfileWrapper}>
-                  <img
+                  <ImageWithSpinner
                     crossOrigin="anonymous"
                     src={
                       selectedDelegate.photoUrl ||
