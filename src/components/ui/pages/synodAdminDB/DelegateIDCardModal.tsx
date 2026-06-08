@@ -108,21 +108,17 @@ export default function DelegateIDCardModal({
                 </div>
                 <div className={styles.idThemeBottom}>
                   <div className={styles.idThemeBottomLeft}>
-                    <span className={styles.idLabel}>DATES</span>
+                    <span className={styles.idLabel}>DATE</span>
                     <div className={styles.idUnderlineLeft}></div>
                     <strong className={styles.idValue}>
-                      8th - 12th
-                      <br />
-                      July, 2026
+                      8th - 12th July, 2026
                     </strong>
                   </div>
                   <div className={styles.idThemeBottomRight}>
                     <span className={styles.idLabel}>VENUE</span>
                     <div className={styles.idUnderlineLeft}></div>
                     <strong className={styles.idValue}>
-                      Cathedral Church of Holy Trinity,
-                      <br />
-                      Calabar, CRS.
+                      Cathedral Church of Holy Trinity, Calabar, CRS.
                     </strong>
                   </div>
                 </div>
