@@ -4,91 +4,20 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-} from "recharts";
 import styles from "./SynodAdminDashboard.module.css";
 import { db } from "../../../../firebase";
 import SEO from "../../page-components/SEO";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
-
-interface Delegate {
-  id: string;
-  title: string;
-  fullName: string;
-  email: string;
-  phone?: string;
-  archdeaconry: string;
-  church: string;
-  designation: string;
-  delegateId: string;
-  photoUrl: string;
-  amountPaid: number;
-  completedAt: string;
-}
-
-const ImageWithSpinner = ({ src, alt, className, crossOrigin }: any) => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  return (
-    <div
-      className={className}
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f3f4f6",
-        flexShrink: 0,
-      }}
-    >
-      {isLoading && (
-        <div style={{ position: "absolute", zIndex: 1 }}>
-          <div
-            style={{
-              width: "20px",
-              height: "20px",
-              border: "2px solid #cbd5e1",
-              borderTopColor: "#c52810",
-              borderRadius: "50%",
-              animation: "spin 1s linear infinite",
-            }}
-          />
-          <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-        </div>
-      )}
-      <img
-        src={src}
-        alt={alt}
-        crossOrigin={crossOrigin}
-        onLoad={() => setIsLoading(false)}
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          opacity: isLoading ? 0 : 1,
-          transition: "opacity 0.3s ease-in-out",
-        }}
-      />
-    </div>
-  );
-};
+import { Delegate } from "./types";
+import DashboardCharts from "./DashboardCharts";
+import DelegatesTable from "./DelegatesTable";
+import DelegateIDCardModal from "./DelegateIDCardModal";
 
 export default function SynodAdminDashboard() {
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(
     null,
   );
@@ -182,6 +111,7 @@ export default function SynodAdminDashboard() {
     const cardElement = document.getElementById("delegate-id-card");
     if (!cardElement || !selectedDelegate) return;
 
+    setIsGeneratingPDF(true);
     const toastId = toast.loading("Generating CR80 ID Card...");
 
     try {
@@ -209,6 +139,53 @@ export default function SynodAdminDashboard() {
             el.style.height = `${height}px`;
             el.style.maxWidth = `${width}px`;
             el.style.maxHeight = `${height}px`;
+
+            // Find the image container and manually emulate object-fit: cover
+            // to avoid pixelation issues with background images in html2canvas.
+            const originalImageContainer = document.getElementById(
+              "id-card-delegate-photo",
+            );
+            const originalImg = originalImageContainer?.querySelector("img");
+            const imageContainer = clonedDoc.getElementById(
+              "id-card-delegate-photo",
+            );
+
+            if (
+              imageContainer &&
+              originalImageContainer &&
+              originalImg &&
+              originalImg.naturalWidth
+            ) {
+              const imgElement = imageContainer.querySelector("img");
+              if (imgElement) {
+                const containerW = originalImageContainer.offsetWidth;
+                const containerH = originalImageContainer.offsetHeight;
+                const containerRatio = containerW / containerH;
+                const imgRatio =
+                  originalImg.naturalWidth / originalImg.naturalHeight;
+
+                imgElement.style.objectFit = "fill";
+                imgElement.style.position = "absolute";
+                imgElement.style.maxWidth = "none";
+                imgElement.style.maxHeight = "none";
+
+                if (imgRatio > containerRatio) {
+                  const imgW = containerH * imgRatio;
+                  imgElement.style.height = `${containerH}px`;
+                  imgElement.style.width = `${imgW}px`;
+                  imgElement.style.top = "0px";
+                  imgElement.style.left = `${(containerW - imgW) / 2}px`;
+                  imgElement.style.transform = "none";
+                } else {
+                  const imgH = containerW / imgRatio;
+                  imgElement.style.width = `${containerW}px`;
+                  imgElement.style.height = `${imgH}px`;
+                  imgElement.style.left = "0px";
+                  imgElement.style.top = `${(containerH - imgH) / 2}px`;
+                  imgElement.style.transform = "none";
+                }
+              }
+            }
           }
         },
       });
@@ -234,6 +211,8 @@ export default function SynodAdminDashboard() {
       toast.success("ID Card downloaded successfully!", { id: toastId });
     } catch (error) {
       toast.error("Failed to generate PDF. Please try again.", { id: toastId });
+    } finally {
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -312,31 +291,6 @@ export default function SynodAdminDashboard() {
     value,
   }));
 
-  const PIE_COLORS = [
-    "#c52810",
-    "#f59e0b",
-    "#1f0805",
-    "#3b82f6",
-    "#10b981",
-    "#8b5cf6",
-  ];
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className={styles.customTooltip}>
-          <p className={styles.tooltipLabel}>{label}</p>
-          <p className={styles.tooltipData}>
-            {chartMetric === "revenue" ? "₦" : ""}
-            {payload[0].value.toLocaleString()}{" "}
-            {chartMetric === "revenue" ? "" : "Delegates"}
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className={styles.adminWrapper}>
       <SEO title="Dashboard | Synod Admin" description="Admin Dashboard" />
@@ -372,437 +326,37 @@ export default function SynodAdminDashboard() {
         <div className={styles.loadingState}>Loading encrypted data...</div>
       ) : (
         <main className={styles.mainContent}>
-          {/* ANALYTICS CHARTS SECTION */}
-          <div className={styles.dashboardGrid}>
-            {/* Left: Interactive Bar Chart */}
-            <div className={styles.chartCard}>
-              <div className={styles.chartControlsRow}>
-                <select
-                  value={timeFilter}
-                  onChange={(e) => setTimeFilter(Number(e.target.value))}
-                  className={styles.chartSelect}
-                >
-                  <option value={7}>Last 7 days</option>
-                  <option value={30}>Last 30 days</option>
-                  <option value={90}>Last 90 days</option>
-                </select>
+          <DashboardCharts
+            timeFilter={timeFilter}
+            setTimeFilter={setTimeFilter}
+            chartMetric={chartMetric}
+            setChartMetric={setChartMetric}
+            currentChartTotal={currentChartTotal}
+            chartData={chartData}
+            pieData={pieData}
+          />
 
-                <select
-                  value={chartMetric}
-                  onChange={(e) =>
-                    setChartMetric(e.target.value as "revenue" | "delegates")
-                  }
-                  className={styles.chartSelectBold}
-                >
-                  <option value="revenue">Revenue NGN</option>
-                  <option value="delegates">Registered Delegates</option>
-                </select>
-              </div>
-
-              <div className={styles.chartTotalDisplay}>
-                {chartMetric === "revenue" ? "₦" : ""}
-                {currentChartTotal.toLocaleString()}
-              </div>
-
-              <div className={styles.barChartWrapper}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={chartData}
-                    margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      vertical={false}
-                      stroke="#f0f0f0"
-                    />
-                    <XAxis
-                      dataKey="displayDate"
-                      tick={{ fontSize: 12, fill: "#888" }}
-                      axisLine={false}
-                      tickLine={false}
-                      dy={10}
-                    />
-                    <YAxis
-                      tick={{ fontSize: 12, fill: "#888" }}
-                      axisLine={false}
-                      tickLine={false}
-                      tickFormatter={(value) =>
-                        chartMetric === "revenue" && value >= 1000
-                          ? `${value / 1000}k`
-                          : value
-                      }
-                    />
-                    <Tooltip
-                      content={<CustomTooltip />}
-                      cursor={{ fill: "rgba(0,0,0,0.04)" }}
-                    />
-                    <Bar
-                      dataKey={chartMetric}
-                      fill={chartMetric === "revenue" ? "#dcfce7" : "#dbeafe"}
-                      stroke={chartMetric === "revenue" ? "#22c55e" : "#3b82f6"}
-                      strokeWidth={1}
-                      radius={[4, 4, 0, 0]}
-                      barSize={timeFilter === 7 ? 40 : 15}
-                      animationDuration={1000}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            <div className={styles.pieCard}>
-              <h3 className={styles.pieTitle}>Archdeaconry Breakdown</h3>
-
-              {pieData.length > 0 ? (
-                <div className={styles.pieChartWrapper}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="45%"
-                        innerRadius={60}
-                        outerRadius={90}
-                        paddingAngle={2}
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={PIE_COLORS[index % PIE_COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        formatter={(value: any) => [
-                          `${value || 0} Delegates`,
-                          "Registrations",
-                        ]}
-                        contentStyle={{
-                          borderRadius: "8px",
-                          border: "none",
-                          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                        }}
-                      />
-                      <Legend
-                        verticalAlign="bottom"
-                        height={36}
-                        iconType="circle"
-                        wrapperStyle={{ fontSize: "12px" }}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              ) : (
-                <div className={styles.emptyPie}>No data available yet.</div>
-              )}
-            </div>
-          </div>
-
-          {/* TABLE SECTION */}
-          <div className={styles.tableSection}>
-            <div className={styles.tableHeader}>
-              <h2>Recent Registrations</h2>
-              <div className={styles.headerActions}>
-                <button onClick={fetchDelegates} className={styles.refreshBtn}>
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="23 4 23 10 17 10"></polyline>
-                    <polyline points="1 20 1 14 7 14"></polyline>
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                  </svg>
-                  Refresh
-                </button>
-                <button
-                  onClick={handleDeleteAll}
-                  className={styles.deleteAllBtn}
-                  disabled={delegates.length === 0}
-                >
-                  Danger: Delete All
-                </button>
-              </div>
-            </div>
-
-            <div className={styles.tableContainer}>
-              <table className={styles.dataTable}>
-                <thead>
-                  <tr>
-                    <th>Photo</th>
-                    <th>Unique ID</th>
-                    <th>Full Name</th>
-                    <th>Designation</th>
-                    <th>Archdeaconry</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentDelegates.length === 0 ? (
-                    <tr>
-                      <td colSpan={6} className={styles.emptyState}>
-                        No delegates registered yet.
-                      </td>
-                    </tr>
-                  ) : (
-                    currentDelegates.map((del) => (
-                      <tr key={del.id}>
-                        <td>
-                          <ImageWithSpinner
-                            src={
-                              del.photoUrl || "https://via.placeholder.com/150"
-                            }
-                            alt="Profile"
-                            className={styles.tableAvatar}
-                          />
-                        </td>
-                        <td>
-                          <span className={styles.tagId}>{del.delegateId}</span>
-                        </td>
-                        <td>
-                          <strong>
-                            {del.title} {del.fullName}
-                          </strong>
-                          <br />
-                          <span className={styles.subEmail}>{del.email}</span>
-                          <br />
-                          <span className={styles.subEmail}>
-                            {del.phone || "No phone provided"}
-                          </span>
-                        </td>
-                        <td>{del.designation}</td>
-                        <td>{del.archdeaconry}</td>
-                        <td>
-                          <div className={styles.actionButtons}>
-                            <button
-                              onClick={() => setSelectedDelegate(del)}
-                              className={styles.viewBtn}
-                            >
-                              View ID
-                            </button>
-                            <button
-                              onClick={() => handleDelete(del.id, del.fullName)}
-                              className={styles.deleteBtn}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "1rem",
-                  marginTop: "1.5rem",
-                  paddingBottom: "1rem",
-                }}
-              >
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    borderRadius: "6px",
-                    border: "1px solid #e5e7eb",
-                    background: currentPage === 1 ? "#f9fafb" : "#ffffff",
-                    color: currentPage === 1 ? "#9ca3af" : "#374151",
-                    cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                    fontWeight: 500,
-                  }}
-                >
-                  Previous
-                </button>
-                <span
-                  style={{
-                    fontSize: "0.875rem",
-                    color: "#6b7280",
-                    fontWeight: 500,
-                  }}
-                >
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                  style={{
-                    padding: "0.5rem 1rem",
-                    borderRadius: "6px",
-                    border: "1px solid #e5e7eb",
-                    background:
-                      currentPage === totalPages ? "#f9fafb" : "#ffffff",
-                    color: currentPage === totalPages ? "#9ca3af" : "#374151",
-                    cursor:
-                      currentPage === totalPages ? "not-allowed" : "pointer",
-                    fontWeight: 500,
-                  }}
-                >
-                  Next
-                </button>
-              </div>
-            )}
-          </div>
+          <DelegatesTable
+            delegates={delegates}
+            currentDelegates={currentDelegates}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            fetchDelegates={fetchDelegates}
+            handleDeleteAll={handleDeleteAll}
+            handleDelete={handleDelete}
+            setSelectedDelegate={setSelectedDelegate}
+          />
         </main>
       )}
 
       {selectedDelegate && (
-        <div
-          className={styles.modalOverlay}
-          onClick={() => setSelectedDelegate(null)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className={styles.closeModal}
-              onClick={() => setSelectedDelegate(null)}
-            >
-              ✕
-            </button>
-
-            <div className={styles.idCardPreviewContainer}>
-              <div className={styles.idCard} id="delegate-id-card">
-                <div className={styles.watermarkLogo}></div>
-
-                <div className={styles.idCardHeader}>
-                  <span className={styles.idCardDiocese}>
-                    DIOCESE OF CALABAR
-                  </span>
-                  <span className={styles.idCardCommunion}>
-                    (ANGLICAN COMMUNION)
-                  </span>
-                  <h3 className={styles.idCardTitle}>SYNOD 2026</h3>
-                </div>
-
-                <div className={styles.idCardProfileWrapper}>
-                  <ImageWithSpinner
-                    crossOrigin="anonymous"
-                    src={
-                      selectedDelegate.photoUrl ||
-                      "https://via.placeholder.com/150"
-                    }
-                    alt="Delegate"
-                    className={styles.idCardPhoto}
-                  />
-                </div>
-
-                <div className={styles.idCardBody}>
-                  <h2 className={styles.idCardName}>
-                    {selectedDelegate.title} {selectedDelegate.fullName}
-                  </h2>
-                  <p className={styles.idCardRole}>
-                    {selectedDelegate.designation}
-                  </p>
-
-                  <div className={styles.idThemeCard}>
-                    <div className={styles.idThemeTop}>
-                      <span className={styles.idLabel}>THEME</span>
-                      <div className={styles.idUnderlineCenter}></div>
-                      <strong className={styles.idThemeTitle}>
-                        "Not Offended In Me"
-                      </strong>
-                      <span className={styles.idThemeSub}>Matthew 11:6</span>
-                    </div>
-                    <div className={styles.idThemeBottom}>
-                      <div className={styles.idThemeBottomLeft}>
-                        <span className={styles.idLabel}>DATES</span>
-                        <div className={styles.idUnderlineLeft}></div>
-                        <strong className={styles.idValue}>
-                          8th - 12th
-                          <br />
-                          July, 2026
-                        </strong>
-                      </div>
-                      <div className={styles.idThemeBottomRight}>
-                        <span className={styles.idLabel}>VENUE</span>
-                        <div className={styles.idUnderlineLeft}></div>
-                        <strong className={styles.idValue}>
-                          Cathedral Church of Holy Trinity,
-                          <br />
-                          Calabar, CRS.
-                        </strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.idDetailsGrid}>
-                    <div className={styles.idDetailBox}>
-                      <span className={styles.idDetailLabel}>ARCHDEACONRY</span>
-                      <strong className={styles.idDetailValue}>
-                        {selectedDelegate.archdeaconry}
-                      </strong>
-                    </div>
-                    <div className={styles.idDetailBox}>
-                      <span className={styles.idDetailLabel}>
-                        CHURCH/PARISH
-                      </span>
-                      <strong className={styles.idDetailValue}>
-                        {selectedDelegate.church}
-                      </strong>
-                    </div>
-                    <div className={styles.idDetailBox}>
-                      <span className={styles.idDetailLabel}>PHONE NUMBER</span>
-                      <strong className={styles.idDetailValue}>
-                        {selectedDelegate.phone || "N/A"}
-                      </strong>
-                    </div>
-                    <div className={styles.idDetailBox}>
-                      <span className={styles.idDetailLabel}>UNIQUE ID</span>
-                      <strong
-                        className={`${styles.idDetailValue} ${styles.idDetailHighlight}`}
-                      >
-                        {selectedDelegate.delegateId}
-                      </strong>
-                    </div>
-                  </div>
-                </div>
-
-                {/* <div className={styles.idCardFooter}>
-                  {selectedDelegate.archdeaconry} •{" "}
-                  {selectedDelegate.delegateId}
-                </div> */}
-              </div>
-            </div>
-
-            <div className={styles.modalActions}>
-              <button className={styles.printBtn} onClick={downloadIDCard}>
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                  <rect x="6" y="14" width="12" height="8"></rect>
-                </svg>
-                Print / Save CR80 ID Card
-              </button>
-            </div>
-          </div>
-        </div>
+        <DelegateIDCardModal
+          selectedDelegate={selectedDelegate}
+          setSelectedDelegate={setSelectedDelegate}
+          downloadIDCard={downloadIDCard}
+          isGeneratingPDF={isGeneratingPDF}
+        />
       )}
     </div>
   );

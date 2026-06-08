@@ -388,7 +388,7 @@
   color: white;
   text-align: center;
   height: 145px;
-  padding-top: 25px;
+  padding-top: 10px;
   box-sizing: border-box;
   z-index: 1;
   position: relative;
@@ -427,7 +427,7 @@
 .idCardProfileWrapper {
   display: flex;
   justify-content: center;
-  margin-top: -35px;
+  margin-top: -25px;
   position: relative;
   z-index: 2;
   height: 110px;
