@@ -10,12 +10,12 @@ import Archdeaconry from "../ui/pages/Archdeaconry";
 import ArchdeaconryDetails from "../ui/pages/ArchdeaconryDetails";
 import NotFound from "../ui/pages/NotFound";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
-// import SynodReg from "../ui/pages/SynodReg";
 import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
 import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
 import EventDetails from "../ui/pages/EventDetails";
 import News from "../ui/pages/News";
 import SynodReg from "../ui/pages/SynodReg";
+import SynodMaintenance from "../ui/pages/SynodMaintenance";
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
   const isAuthenticated = sessionStorage.getItem("synodAdminAuth") === "true";
@@ -51,7 +51,8 @@ function Index() {
           element={<TheMostRevTundeAdeleye />}
         />
         <Route path="/archdeaconries/" element={<Archdeaconry />} />
-        <Route path="/synod-2026/" element={<SynodReg />} />
+        <Route path="/synod-2026/" element={<SynodMaintenance />} />
+        <Route path="/synoddd-2026/" element={<SynodReg />} />
         {/* <Route
           path="/synod-2026/"
           element={
