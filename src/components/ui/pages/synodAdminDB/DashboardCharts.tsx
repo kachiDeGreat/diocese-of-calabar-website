@@ -44,7 +44,7 @@ export default function DashboardCharts({
   pieData,
 }: DashboardChartsProps) {
   const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
+    if (active && payload && payload.length && payload[0].value > 0) {
       return (
         <div className={styles.customTooltip}>
           <p className={styles.tooltipLabel}>{label}</p>
