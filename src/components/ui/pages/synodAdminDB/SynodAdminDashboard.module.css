@@ -624,10 +624,17 @@
   transition: all 0.3s;
 }
 
-.printBtn:hover {
+.printBtn:hover:not(:disabled) {
   background: #000;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.printBtn:disabled {
+  background: #9ca3af;
+  color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 @media (max-width: 400px) {
