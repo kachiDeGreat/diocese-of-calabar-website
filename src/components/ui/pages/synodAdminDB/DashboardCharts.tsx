@@ -1,4 +1,3 @@
-import React from "react";
 import {
   BarChart,
   Bar,
@@ -31,6 +30,8 @@ const PIE_COLORS = [
   "#3b82f6",
   "#10b981",
   "#8b5cf6",
+  "#ec4899",
+  "#06b6d4",
 ];
 
 export default function DashboardCharts({
@@ -94,6 +95,7 @@ export default function DashboardCharts({
             <BarChart
               data={chartData}
               margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+              style={{ outline: "none" }}
             >
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -119,7 +121,10 @@ export default function DashboardCharts({
               />
               <Tooltip
                 content={<CustomTooltip />}
-                cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                cursor={{
+                  fill: "rgba(0,0,0,0.04)",
+                  style: { outline: "none" },
+                }}
               />
               <Bar
                 dataKey={chartMetric}
@@ -129,6 +134,8 @@ export default function DashboardCharts({
                 radius={[4, 4, 0, 0]}
                 barSize={timeFilter === 7 ? 40 : 15}
                 animationDuration={1000}
+                style={{ outline: "none" }}
+                activeBar={false}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -140,20 +147,22 @@ export default function DashboardCharts({
         {pieData.length > 0 ? (
           <div className={styles.pieChartWrapper}>
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart style={{ outline: "none" }}>
                 <Pie
                   data={pieData}
-                  cx="50%"
-                  cy="45%"
+                  cx="40%"
+                  cy="50%"
                   innerRadius={60}
                   outerRadius={90}
                   paddingAngle={2}
                   dataKey="value"
+                  style={{ outline: "none" }}
                 >
                   {pieData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={PIE_COLORS[index % PIE_COLORS.length]}
+                      style={{ outline: "none" }}
                     />
                   ))}
                 </Pie>
@@ -169,8 +178,9 @@ export default function DashboardCharts({
                   }}
                 />
                 <Legend
-                  verticalAlign="bottom"
-                  height={36}
+                  layout="vertical"
+                  verticalAlign="middle"
+                  align="right"
                   iconType="circle"
                   wrapperStyle={{ fontSize: "12px" }}
                 />
