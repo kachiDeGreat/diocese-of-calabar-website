@@ -163,7 +163,7 @@ export default function DelegateIDCardModal({
             disabled={!isReadyToDownload}
           >
             {isGeneratingPDF ? (
-              "Generating PDF..."
+              "Generating Image..."
             ) : !isReadyToDownload ? (
               "Loading ID Card Images..."
             ) : (

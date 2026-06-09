@@ -3,7 +3,6 @@ import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import styles from "./SynodAdminDashboard.module.css";
 import { db } from "../../../../firebase";
 import SEO from "../../page-components/SEO";
@@ -114,106 +113,102 @@ export default function SynodAdminDashboard() {
     setIsGeneratingPDF(true);
     const toastId = toast.loading("Generating CR80 ID Card...");
 
-    try {
-      // 1. Grab the exact on-screen pixel dimensions before doing anything
-      const { width, height } = cardElement.getBoundingClientRect();
+    // Yield to the browser main thread to allow React to update the UI
+    setTimeout(async () => {
+      try {
+        // 1. Grab the exact on-screen pixel dimensions before doing anything
+        const { width, height } = cardElement.getBoundingClientRect();
 
-      const canvas = await html2canvas(cardElement, {
-        scale: 4, // High resolution
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#ffffff",
-        // 2. Force the canvas to respect these exact dimensions
-        width: width,
-        height: height,
-        windowWidth: document.documentElement.offsetWidth,
-        windowHeight: document.documentElement.offsetHeight,
-        scrollY: -window.scrollY,
-        onclone: (clonedDoc) => {
-          const el = clonedDoc.getElementById("delegate-id-card");
-          if (el) {
-            el.style.transform = "none";
-            el.style.margin = "0";
-            // 3. Lock the cloned DOM node so flexbox/grid cannot compress it
-            el.style.width = `${width}px`;
-            el.style.height = `${height}px`;
-            el.style.maxWidth = `${width}px`;
-            el.style.maxHeight = `${height}px`;
+        const canvas = await html2canvas(cardElement, {
+          scale: 4, // High resolution
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#ffffff",
+          // 2. Force the canvas to respect these exact dimensions
+          width: width,
+          height: height,
+          windowWidth: document.documentElement.offsetWidth,
+          windowHeight: document.documentElement.offsetHeight,
+          scrollY: -window.scrollY,
+          onclone: (clonedDoc) => {
+            const el = clonedDoc.getElementById("delegate-id-card");
+            if (el) {
+              el.style.transform = "none";
+              el.style.margin = "0";
+              // 3. Lock the cloned DOM node so flexbox/grid cannot compress it
+              el.style.width = `${width}px`;
+              el.style.height = `${height}px`;
+              el.style.maxWidth = `${width}px`;
+              el.style.maxHeight = `${height}px`;
 
-            // Find the image container and manually emulate object-fit: cover
-            // to avoid pixelation issues with background images in html2canvas.
-            const originalImageContainer = document.getElementById(
-              "id-card-delegate-photo",
-            );
-            const originalImg = originalImageContainer?.querySelector("img");
-            const imageContainer = clonedDoc.getElementById(
-              "id-card-delegate-photo",
-            );
+              // Find the image container and manually emulate object-fit: cover
+              // to avoid pixelation issues with background images in html2canvas.
+              const originalImageContainer = document.getElementById(
+                "id-card-delegate-photo",
+              );
+              const originalImg = originalImageContainer?.querySelector("img");
+              const imageContainer = clonedDoc.getElementById(
+                "id-card-delegate-photo",
+              );
 
-            if (
-              imageContainer &&
-              originalImageContainer &&
-              originalImg &&
-              originalImg.naturalWidth
-            ) {
-              const imgElement = imageContainer.querySelector("img");
-              if (imgElement) {
-                const containerW = originalImageContainer.offsetWidth;
-                const containerH = originalImageContainer.offsetHeight;
-                const containerRatio = containerW / containerH;
-                const imgRatio =
-                  originalImg.naturalWidth / originalImg.naturalHeight;
+              if (
+                imageContainer &&
+                originalImageContainer &&
+                originalImg &&
+                originalImg.naturalWidth
+              ) {
+                const imgElement = imageContainer.querySelector("img");
+                if (imgElement) {
+                  const containerW = originalImageContainer.offsetWidth;
+                  const containerH = originalImageContainer.offsetHeight;
+                  const containerRatio = containerW / containerH;
+                  const imgRatio =
+                    originalImg.naturalWidth / originalImg.naturalHeight;
 
-                imgElement.style.objectFit = "fill";
-                imgElement.style.position = "absolute";
-                imgElement.style.maxWidth = "none";
-                imgElement.style.maxHeight = "none";
+                  imgElement.style.objectFit = "fill";
+                  imgElement.style.position = "absolute";
+                  imgElement.style.maxWidth = "none";
+                  imgElement.style.maxHeight = "none";
 
-                if (imgRatio > containerRatio) {
-                  const imgW = containerH * imgRatio;
-                  imgElement.style.height = `${containerH}px`;
-                  imgElement.style.width = `${imgW}px`;
-                  imgElement.style.top = "0px";
-                  imgElement.style.left = `${(containerW - imgW) / 2}px`;
-                  imgElement.style.transform = "none";
-                } else {
-                  const imgH = containerW / imgRatio;
-                  imgElement.style.width = `${containerW}px`;
-                  imgElement.style.height = `${imgH}px`;
-                  imgElement.style.left = "0px";
-                  imgElement.style.top = `${(containerH - imgH) / 2}px`;
-                  imgElement.style.transform = "none";
+                  if (imgRatio > containerRatio) {
+                    const imgW = containerH * imgRatio;
+                    imgElement.style.height = `${containerH}px`;
+                    imgElement.style.width = `${imgW}px`;
+                    imgElement.style.top = "0px";
+                    imgElement.style.left = `${(containerW - imgW) / 2}px`;
+                    imgElement.style.transform = "none";
+                  } else {
+                    const imgH = containerW / imgRatio;
+                    imgElement.style.width = `${containerW}px`;
+                    imgElement.style.height = `${imgH}px`;
+                    imgElement.style.left = "0px";
+                    imgElement.style.top = `${(containerH - imgH) / 2}px`;
+                    imgElement.style.transform = "none";
+                  }
                 }
               }
             }
-          }
-        },
-      });
+          },
+        });
 
-      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+        const imgData = canvas.toDataURL("image/png");
 
-      // Calculate final PDF dimensions to match the locked aspect ratio
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = `Synod_2026_ID_${selectedDelegate.delegateId}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
 
-      const pdfWidth = 2.125; // Standard CR80 ID width in inches
-      const pdfHeight = (canvasHeight * pdfWidth) / canvasWidth;
-
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "in",
-        format: [pdfWidth, pdfHeight],
-      });
-
-      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Synod_2026_ID_${selectedDelegate.delegateId}.pdf`);
-
-      toast.success("ID Card downloaded successfully!", { id: toastId });
-    } catch (error) {
-      toast.error("Failed to generate PDF. Please try again.", { id: toastId });
-    } finally {
-      setIsGeneratingPDF(false);
-    }
+        toast.success("ID Card downloaded successfully!", { id: toastId });
+      } catch (error) {
+        toast.error("Failed to generate image. Please try again.", {
+          id: toastId,
+        });
+      } finally {
+        setIsGeneratingPDF(false);
+      }
+    }, 100);
   };
 
   const generateChartData = () => {
