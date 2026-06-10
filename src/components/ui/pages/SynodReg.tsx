@@ -539,21 +539,39 @@ export default function SynodReg() {
                     Please confirm you are not a robot to access the
                     registration form.
                   </p>
-                  <Turnstile
-                    siteKey={process.env.REACT_APP_TURNSTILE_SITE_KEY || ""}
-                    options={{ theme: "light" }}
-                    onSuccess={(token) => {
-                      if (token) {
-                        setTimeout(() => {
-                          setIsTransitioning(true);
-                          setTimeout(() => {
-                            setIsVerifiedRobot(true);
-                            setIsTransitioning(false);
-                          }, 1000);
-                        }, 800);
-                      }
+                  <div
+                    style={{
+                      position: "relative",
+                      minHeight: "65px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                  />
+                  >
+                    {/* Background Spinner */}
+                    <div style={{ position: "absolute", zIndex: 0 }}>
+                      <div className={styles.spinner}></div>
+                    </div>
+
+                    {/* Turnstile Widget */}
+                    <div style={{ position: "relative", zIndex: 1 }}>
+                      <Turnstile
+                        siteKey={process.env.REACT_APP_TURNSTILE_SITE_KEY || ""}
+                        options={{ theme: "light" }}
+                        onSuccess={(token) => {
+                          if (token) {
+                            setTimeout(() => {
+                              setIsTransitioning(true);
+                              setTimeout(() => {
+                                setIsVerifiedRobot(true);
+                                setIsTransitioning(false);
+                              }, 1000);
+                            }, 800);
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <motion.div
