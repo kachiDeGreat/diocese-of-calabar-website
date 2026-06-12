@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import styles from "../styles/SynodReg.module.css";
 import SEO from "../page-components/SEO";
 import LazyImage from "../page-components/LazyImage";
-import { Turnstile } from "@marsidev/react-turnstile";
 
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase";
@@ -34,8 +33,6 @@ export default function SynodReg() {
   const [delegateId, setDelegateId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const uploadAbortControllerRef = useRef<AbortController | null>(null);
-  const [isVerifiedRobot, setIsVerifiedRobot] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const [manualReference, setManualReference] = useState("");
@@ -505,195 +502,123 @@ export default function SynodReg() {
 
           {step === 1 && (
             <div className={styles.stepContent}>
-              {isTransitioning ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "60px 20px",
-                    textAlign: "center",
-                  }}
-                >
-                  <div className={styles.spinner}></div>
-                  <h4 style={{ marginTop: "24px", color: "#4b5563" }}>
-                    Securely loading form...
-                  </h4>
-                </motion.div>
-              ) : !isVerifiedRobot ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    padding: "40px 20px",
-                    textAlign: "center",
-                  }}
-                >
-                  <h3 style={{ marginBottom: "16px", fontSize: "1.5rem" }}>
-                    Security Check
-                  </h3>
-                  <p style={{ marginBottom: "32px", color: "#4b5563" }}>
-                    Please confirm you are not a robot to access the
-                    registration form.
-                  </p>
-                  <div
-                    style={{
-                      position: "relative",
-                      minHeight: "65px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    {/* Background Spinner */}
-                    <div style={{ position: "absolute", zIndex: 0 }}>
-                      <div className={styles.spinner}></div>
-                    </div>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className={styles.formHeader}>
+                  <h3>Delegate Information</h3>
+                  <p>Provide accurate details for your tag.</p>
+                </div>
 
-                    {/* Turnstile Widget */}
-                    <div style={{ position: "relative", zIndex: 1 }}>
-                      <Turnstile
-                        siteKey={process.env.REACT_APP_TURNSTILE_SITE_KEY || ""}
-                        options={{ theme: "light" }}
-                        onSuccess={(token) => {
-                          if (token) {
-                            setTimeout(() => {
-                              setIsTransitioning(true);
-                              setTimeout(() => {
-                                setIsVerifiedRobot(true);
-                                setIsTransitioning(false);
-                              }, 1000);
-                            }, 800);
-                          }
-                        }}
-                      />
-                    </div>
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label>Title *</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Rev, Rev. Can, Ven, Chief, Mr."
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Full Name *</label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      placeholder="e.g. John Doe"
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Email Address *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="For your receipt"
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Phone Number *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone || ""}
+                      onChange={handleInputChange}
+                      placeholder="e.g. 08012345678"
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Archdeaconry *</label>
+                    <select
+                      name="archdeaconry"
+                      value={formData.archdeaconry}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Archdeaconry</option>
+                      <option value="Akampka Archdeaconry">
+                        Akampka Archdeaconry
+                      </option>
+                      <option value="Ascension Archdeaconry">
+                        Ascension Archdeaconry
+                      </option>
+                      <option value="Calabar Archdeaconry">
+                        Calabar Archdeaconry
+                      </option>
+                      <option value="Cathedral Archdeaconry">
+                        Cathedral Archdeaconry
+                      </option>
+                      <option value="Christ-church Deanery">
+                        Christ-church Deanery
+                      </option>
+                      <option value="Efut Deanery">Efut Deanery</option>
+                    </select>
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Church / Parish Name *</label>
+                    <input
+                      type="text"
+                      name="church"
+                      value={formData.church}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Holy Trinity"
+                    />
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <label>Designation *</label>
+                    <select
+                      name="designation"
+                      value={formData.designation}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select your Designation</option>
+                      <option value="Clergy">Clergy</option>
+                      <option value="Lay Synod Delegate">
+                        Lay Synod Delegate
+                      </option>
+                      <option value="Diocesan Official">
+                        Diocesan Official
+                      </option>
+                      <option value="Bishop's Nominee">Bishop's Nominee</option>
+                      <option value="Guest Speaker">Guest Speaker</option>
+                    </select>
                   </div>
                 </div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div className={styles.formHeader}>
-                    <h3>Delegate Information</h3>
-                    <p>Provide accurate details for your tag.</p>
-                  </div>
 
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label>Title *</label>
-                      <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        placeholder="e.g. Rev, Rev. Can, Ven, Chief, Mr."
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Full Name *</label>
-                      <input
-                        type="text"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        placeholder="e.g. John Doe"
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Email Address *</label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="For your receipt"
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Phone Number *</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone || ""}
-                        onChange={handleInputChange}
-                        placeholder="e.g. 08012345678"
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Archdeaconry *</label>
-                      <select
-                        name="archdeaconry"
-                        value={formData.archdeaconry}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select Archdeaconry</option>
-                        <option value="Akampka Archdeaconry">
-                          Akampka Archdeaconry
-                        </option>
-                        <option value="Ascension Archdeaconry">
-                          Ascension Archdeaconry
-                        </option>
-                        <option value="Calabar Archdeaconry">
-                          Calabar Archdeaconry
-                        </option>
-                        <option value="Cathedral Archdeaconry">
-                          Cathedral Archdeaconry
-                        </option>
-                        <option value="Christ-church Deanery">
-                          Christ-church Deanery
-                        </option>
-                        <option value="Efut Deanery">Efut Deanery</option>
-                      </select>
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Church / Parish Name *</label>
-                      <input
-                        type="text"
-                        name="church"
-                        value={formData.church}
-                        onChange={handleInputChange}
-                        placeholder="e.g. Holy Trinity"
-                      />
-                    </div>
-                    <div className={styles.inputGroup}>
-                      <label>Designation *</label>
-                      <select
-                        name="designation"
-                        value={formData.designation}
-                        onChange={handleInputChange}
-                      >
-                        <option value="">Select your Designation</option>
-                        <option value="Clergy">Clergy</option>
-                        <option value="Lay Synod Delegate">
-                          Lay Synod Delegate
-                        </option>
-                        <option value="Diocesan Official">
-                          Diocesan Official
-                        </option>
-                        <option value="Bishop's Nominee">
-                          Bishop's Nominee
-                        </option>
-                        <option value="Guest Speaker">Guest Speaker</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className={styles.buttonContainer}>
-                    <span className={styles.requiredNote}>
-                      * All fields required
-                    </span>
-                    <button className={styles.nextBtn} onClick={nextStep}>
-                      Next Step →
-                    </button>
-                  </div>
-                </motion.div>
-              )}
+                <div className={styles.buttonContainer}>
+                  <span className={styles.requiredNote}>
+                    * All fields required
+                  </span>
+                  <button className={styles.nextBtn} onClick={nextStep}>
+                    Next Step →
+                  </button>
+                </div>
+              </motion.div>
             </div>
           )}
 
