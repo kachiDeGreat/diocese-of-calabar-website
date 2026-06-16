@@ -15,6 +15,7 @@ import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
 import EventDetails from "../ui/pages/EventDetails";
 import News from "../ui/pages/News";
 import SynodReg from "../ui/pages/SynodReg";
+import Donate from "../ui/pages/Donate";
 // import SynodMaintenance from "../ui/pages/SynodMaintenance";
 
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
@@ -66,17 +67,8 @@ function Index() {
         <Route path="/archdeaconries/:slug" element={<ArchdeaconryDetails />} />
         <Route path="/news_and_events" element={<News />} />
         <Route path="/news_and_events/:slug" element={<EventDetails />} />
+        <Route path="/give" element={<Donate />} />
 
-        <Route
-          path="/give"
-          element={
-            <NotFound
-              is404={false}
-              title="Coming Soon"
-              message="Our online giving portal is currently being set up. Check back soon!"
-            />
-          }
-        />
         <Route
           path="/vacancies"
           element={
