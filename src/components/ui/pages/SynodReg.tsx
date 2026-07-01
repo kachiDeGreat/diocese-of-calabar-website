@@ -190,7 +190,7 @@ export default function SynodReg() {
     scrollToFormTop();
   };
 
-  const amount = 10350;
+  const amount = 15350;
 
   const paystackConfig = {
     reference: new Date().getTime().toString(),
@@ -713,6 +713,39 @@ export default function SynodReg() {
 
           {step === 3 && (
             <div className={styles.stepContent}>
+              <div
+                style={{
+                  backgroundColor: "#fffbeb",
+                  border: "1px solid #fde68a",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "12px",
+                  marginBottom: "24px",
+                  color: "#92400e",
+                }}
+              >
+                <div style={{ flexShrink: 0, marginTop: "2px" }}>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                  </svg>
+                </div>
+                <div>
+                  <strong style={{ display: "block" }}>
+                    Late Registration
+                  </strong>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>
+                    The registration fee now includes a late registration
+                    charge.
+                  </p>
+                </div>
+              </div>
               <div className={styles.paymentSummary}>
                 <h4>Registration Fee</h4>
                 <h3>Synod 2026 Delegate Access</h3>
@@ -726,10 +759,13 @@ export default function SynodReg() {
 
                 <ul className={styles.feeBreakdown}>
                   <li>
-                    <span>Synod Registration:</span> <span>₦10,000</span>
+                    <span>Synod Registration:</span> <span>₦15,000</span>
                   </li>
                   <li>
                     <span>Processing Fee:</span> <span>₦350</span>
+                  </li>
+                  <li style={{ color: "#c52810", fontWeight: "bold" }}>
+                    <span>(Includes late registration fee)</span>
                   </li>
                 </ul>
 

@@ -1,0 +1,374 @@
+/* MODAL OVERLAY & CONTAINER */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.batchWideModalContent {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  width: 95%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.closeModal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f3f4f6;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+.closeModal:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.batchHeader {
+  margin-bottom: 25px;
+}
+
+.batchHeader h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+}
+
+.batchHeader p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* TWO COLUMN LAYOUT */
+.batchTwoColumnLayout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex: 1;
+  min-height: 400px;
+}
+
+.batchLeftColumn {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e5e7eb;
+  padding-right: 20px;
+}
+
+.batchRightColumn {
+  display: flex;
+  flex-direction: column;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* CONTROLS (Left Side) */
+.batchControls {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.dateInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.dateInputGroup label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.dateInputGroup input {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.filterBtn {
+  padding: 8px 15px;
+  background: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 35px; /* Aligns with inputs */
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.filterBtn:hover {
+  background: #374151;
+}
+
+/* SELECTION LIST (Left Side) */
+.batchSelectionArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.textLinkBtn {
+  background: none;
+  border: none;
+  color: #0ba4db;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.delegateListScroll {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.delegateCheckboxRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delegateCheckboxRow:last-child {
+  border-bottom: none;
+}
+
+.delegateCheckboxRow:hover {
+  background: #f9fafb;
+}
+
+.delegateRowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.delegateRowInfo strong {
+  font-size: 0.9rem;
+  color: #1f2937;
+}
+
+.delegateRowInfo span {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* PREVIEW AREA (Right Side) */
+.previewHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+}
+
+.previewHeaderRow h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+}
+
+.previewHeaderRow span {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.emptyPreviewState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  font-style: italic;
+  text-align: center;
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 15px;
+  overflow-y: auto;
+  max-height: 400px;
+  padding-right: 5px;
+}
+
+/* MINI ID CARDS */
+.miniIdCard {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+}
+
+.miniIdTop {
+  background: #c52810;
+  height: 40px;
+  width: 100%;
+}
+
+.miniIdPhoto {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  margin-top: -25px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.miniIdBody {
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.miniIdName {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.miniIdRole {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #c52810;
+  font-weight: 600;
+}
+
+.miniIdCode {
+  background: #f3f4f6;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #4b5563;
+  margin-top: 5px;
+}
+
+/* FOOTER & ACTIONS */
+.batchFooterFull {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.progressBarWrapper {
+  width: 100%;
+  max-width: 400px;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.3s ease;
+}
+
+.payBtn {
+  background-color: #c52810;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.payBtn:hover:not(:disabled) {
+  background-color: #a0200d;
+}
+
+.payBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .batchTwoColumnLayout {
+    grid-template-columns: 1fr;
+  }
+  .batchLeftColumn {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding-right: 0;
+    padding-bottom: 20px;
+  }
+}

@@ -12,11 +12,13 @@ import { Delegate } from "./types";
 import DashboardCharts from "./DashboardCharts";
 import DelegatesTable from "./DelegatesTable";
 import DelegateIDCardModal from "./DelegateIDCardModal";
+import BatchIDDownloader from "./BatchIDDownloader";
 
 export default function SynodAdminDashboard() {
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(
     null,
   );
@@ -28,7 +30,7 @@ export default function SynodAdminDashboard() {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 500;
 
   const navigate = useNavigate();
 
@@ -312,9 +314,20 @@ export default function SynodAdminDashboard() {
           <div className={styles.logoBox}>Diocese of Calabar</div>
           <h1>Synod 2026 Operations</h1>
         </div>
-        <button onClick={handleLogout} className={styles.logoutBtn}>
-          Secure Logout
-        </button>
+        <div style={{ display: "flex", gap: "15px" }}>
+          {/* New Button Here! */}
+          <button
+            onClick={() => setIsBatchModalOpen(true)}
+            className={styles.payBtn}
+            style={{ margin: 0, padding: "8px 16px" }}
+          >
+            Batch ID Download
+          </button>
+
+          <button onClick={handleLogout} className={styles.logoutBtn}>
+            Secure Logout
+          </button>
+        </div>
       </header>
 
       {isLoading ? (
@@ -351,6 +364,12 @@ export default function SynodAdminDashboard() {
           setSelectedDelegate={setSelectedDelegate}
           downloadIDCard={downloadIDCard}
           isGeneratingPDF={isGeneratingPDF}
+        />
+      )}
+      {isBatchModalOpen && (
+        <BatchIDDownloader
+          delegates={delegates}
+          onClose={() => setIsBatchModalOpen(false)}
         />
       )}
     </div>

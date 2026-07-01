@@ -643,3 +643,144 @@
     margin: -1rem 0;
   }
 }
+
+/* Batch Downloader Styles */
+.batchCardWrapper {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+}
+
+.batchHeader h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+}
+
+.batchHeader p {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.batchControls {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.dateInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dateInputGroup label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.dateInputGroup input {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.filterBtn {
+  padding: 10px 20px;
+  background: #1f2937;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 42px; /* Matches input height */
+}
+
+.batchResults {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.textLinkBtn {
+  background: none;
+  border: none;
+  color: #0ba4db;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delegateListScroll {
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.delegateCheckboxRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.delegateCheckboxRow:last-child {
+  border-bottom: none;
+}
+
+.delegateCheckboxRow:hover {
+  background: #f9fafb;
+}
+
+.delegateRowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.delegateRowInfo strong {
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.delegateRowInfo span {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.batchFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progressBarWrapper {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.3s ease;
+}
