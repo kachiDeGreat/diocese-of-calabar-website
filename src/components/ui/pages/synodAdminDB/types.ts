@@ -11,4 +11,5 @@ export interface Delegate {
   photoUrl: string;
   amountPaid: number;
   completedAt: string;
+  paymentReference?: string;
 }

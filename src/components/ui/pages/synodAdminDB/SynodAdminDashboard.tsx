@@ -1,24 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import styles from "./SynodAdminDashboard.module.css";
-import { db } from "../../../../firebase";
+import { db, auth } from "../../../../firebase";
 import SEO from "../../page-components/SEO";
 import { signOut } from "firebase/auth";
-import { auth } from "../../../../firebase";
 import { Delegate } from "./types";
 import DashboardCharts from "./DashboardCharts";
 import DelegatesTable from "./DelegatesTable";
 import DelegateIDCardModal from "./DelegateIDCardModal";
-import BatchIDDownloader from "./BatchIDDownloader";
 
 export default function SynodAdminDashboard() {
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(
     null,
   );
@@ -28,7 +27,11 @@ export default function SynodAdminDashboard() {
   );
   const [timeFilter, setTimeFilter] = useState<number>(30);
 
-  // Pagination states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchMode, setSearchMode] = useState<"name_phone" | "reference">(
+    "name_phone",
+  );
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 500;
 
@@ -108,6 +111,75 @@ export default function SynodAdminDashboard() {
     }
   };
 
+  const generateFullRegPDF = () => {
+    const doc = new jsPDF("landscape");
+
+    doc.setFontSize(16);
+    doc.text("Synod 2026 - Registrations & Archdeaconry Breakdown", 14, 15);
+
+    const breakdown = delegates.reduce(
+      (acc, del) => {
+        const arch = del.archdeaconry || "Unknown";
+        acc[arch] = (acc[arch] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const summaryData = Object.entries(breakdown).map(([name, count]) => [
+      name,
+      count.toString(),
+    ]);
+    summaryData.push(["TOTAL DELEGATES", delegates.length.toString()]);
+
+    doc.setFontSize(12);
+    doc.text("Archdeaconry Summary", 14, 25);
+
+    autoTable(doc, {
+      startY: 30,
+      head: [["Archdeaconry", "Delegate Count"]],
+      body: summaryData,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [31, 8, 5] },
+      tableWidth: 120,
+    });
+
+    const finalY = (doc as any).lastAutoTable.finalY || 30;
+
+    doc.text("Full Delegate Roster", 14, finalY + 15);
+
+    const tableData = filteredDelegates.map((del) => [
+      del.delegateId,
+      `${del.title} ${del.fullName}`,
+      del.designation,
+      del.archdeaconry,
+      del.church,
+      del.email,
+      del.phone || "N/A",
+    ]);
+
+    autoTable(doc, {
+      startY: finalY + 20,
+      head: [
+        [
+          "Unique ID",
+          "Full Name",
+          "Designation",
+          "Archdeaconry",
+          "Church",
+          "Email",
+          "Phone",
+        ],
+      ],
+      body: tableData,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [197, 40, 16] },
+    });
+
+    doc.save("Synod_2026_Registrations.pdf");
+    toast.success("PDF Downloaded successfully!");
+  };
+
   const downloadIDCard = async () => {
     const cardElement = document.getElementById("delegate-id-card");
     if (!cardElement || !selectedDelegate) return;
@@ -115,18 +187,15 @@ export default function SynodAdminDashboard() {
     setIsGeneratingPDF(true);
     const toastId = toast.loading("Generating CR80 ID Card...");
 
-    // Yield to the browser main thread to allow React to update the UI
     setTimeout(async () => {
       try {
-        // 1. Grab the exact on-screen pixel dimensions before doing anything
         const { width, height } = cardElement.getBoundingClientRect();
 
         const canvas = await html2canvas(cardElement, {
-          scale: 4, // High resolution
+          scale: 4,
           useCORS: true,
           allowTaint: true,
           backgroundColor: "#ffffff",
-          // 2. Force the canvas to respect these exact dimensions
           width: width,
           height: height,
           windowWidth: document.documentElement.offsetWidth,
@@ -137,14 +206,11 @@ export default function SynodAdminDashboard() {
             if (el) {
               el.style.transform = "none";
               el.style.margin = "0";
-              // 3. Lock the cloned DOM node so flexbox/grid cannot compress it
               el.style.width = `${width}px`;
               el.style.height = `${height}px`;
               el.style.maxWidth = `${width}px`;
               el.style.maxHeight = `${height}px`;
 
-              // Find the image container and manually emulate object-fit: cover
-              // to avoid pixelation issues with background images in html2canvas.
               const originalImageContainer = document.getElementById(
                 "id-card-delegate-photo",
               );
@@ -194,7 +260,6 @@ export default function SynodAdminDashboard() {
         });
 
         const imgData = canvas.toDataURL("image/png");
-
         const link = document.createElement("a");
         link.href = imgData;
         link.download = `Synod_2026_ID_${selectedDelegate.delegateId}.png`;
@@ -253,18 +318,35 @@ export default function SynodAdminDashboard() {
 
   const chartData = generateChartData();
 
-  const totalPages = Math.ceil(delegates.length / itemsPerPage);
+  const filteredDelegates = useMemo(() => {
+    if (!searchQuery) return delegates;
+    const query = searchQuery.toLowerCase();
+
+    return delegates.filter((del) => {
+      if (searchMode === "name_phone") {
+        const nameMatch = `${del.title} ${del.fullName}`
+          .toLowerCase()
+          .includes(query);
+        const phoneMatch = del.phone?.toLowerCase().includes(query);
+        return nameMatch || phoneMatch;
+      } else {
+        return del.paymentReference?.toLowerCase().includes(query);
+      }
+    });
+  }, [delegates, searchQuery, searchMode]);
+
+  const totalPages = Math.ceil(filteredDelegates.length / itemsPerPage);
 
   useEffect(() => {
-    if (delegates.length === 0) {
+    if (filteredDelegates.length === 0) {
       setCurrentPage(1);
     } else if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
     }
-  }, [delegates.length, totalPages, currentPage]);
+  }, [filteredDelegates.length, totalPages, currentPage]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentDelegates = delegates.slice(
+  const currentDelegates = filteredDelegates.slice(
     startIndex,
     startIndex + itemsPerPage,
   );
@@ -294,18 +376,8 @@ export default function SynodAdminDashboard() {
       <Toaster
         position="top-right"
         toastOptions={{
-          success: {
-            style: {
-              background: "#0e9f6e",
-              color: "#fff",
-            },
-          },
-          error: {
-            style: {
-              background: "#c52810",
-              color: "#fff",
-            },
-          },
+          success: { style: { background: "#0e9f6e", color: "#fff" } },
+          error: { style: { background: "#c52810", color: "#fff" } },
         }}
       />
 
@@ -315,15 +387,13 @@ export default function SynodAdminDashboard() {
           <h1>Synod 2026 Operations</h1>
         </div>
         <div style={{ display: "flex", gap: "15px" }}>
-          {/* New Button Here! */}
           <button
-            onClick={() => setIsBatchModalOpen(true)}
+            onClick={generateFullRegPDF}
             className={styles.payBtn}
             style={{ margin: 0, padding: "8px 16px" }}
           >
-            Batch ID Download
+            Download Full Reg PDF
           </button>
-
           <button onClick={handleLogout} className={styles.logoutBtn}>
             Secure Logout
           </button>
@@ -345,7 +415,7 @@ export default function SynodAdminDashboard() {
           />
 
           <DelegatesTable
-            delegates={delegates}
+            delegates={filteredDelegates}
             currentDelegates={currentDelegates}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -354,6 +424,10 @@ export default function SynodAdminDashboard() {
             handleDeleteAll={handleDeleteAll}
             handleDelete={handleDelete}
             setSelectedDelegate={setSelectedDelegate}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchMode={searchMode}
+            setSearchMode={setSearchMode}
           />
         </main>
       )}
@@ -364,12 +438,6 @@ export default function SynodAdminDashboard() {
           setSelectedDelegate={setSelectedDelegate}
           downloadIDCard={downloadIDCard}
           isGeneratingPDF={isGeneratingPDF}
-        />
-      )}
-      {isBatchModalOpen && (
-        <BatchIDDownloader
-          delegates={delegates}
-          onClose={() => setIsBatchModalOpen(false)}
         />
       )}
     </div>

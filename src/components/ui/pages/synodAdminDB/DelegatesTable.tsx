@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./SynodAdminDashboard.module.css";
 import ImageWithSpinner from "./ImageWithSpinner";
 import { Delegate } from "./types";
+import SearchControls from "./SearchControls";
 
 interface DelegatesTableProps {
   delegates: Delegate[];
@@ -13,6 +14,10 @@ interface DelegatesTableProps {
   handleDeleteAll: () => void;
   handleDelete: (id: string, name: string) => void;
   setSelectedDelegate: (delegate: Delegate | null) => void;
+  searchQuery: string;
+  setSearchQuery: (val: string) => void;
+  searchMode: "name_phone" | "reference";
+  setSearchMode: (val: "name_phone" | "reference") => void;
 }
 
 export default function DelegatesTable({
@@ -25,9 +30,20 @@ export default function DelegatesTable({
   handleDeleteAll,
   handleDelete,
   setSelectedDelegate,
+  searchQuery,
+  setSearchQuery,
+  searchMode,
+  setSearchMode,
 }: DelegatesTableProps) {
   return (
     <div className={styles.tableSection}>
+      <SearchControls
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchMode={searchMode}
+        setSearchMode={setSearchMode}
+      />
+
       <div className={styles.tableHeader}>
         <h2>Recent Registrations</h2>
         <div className={styles.headerActions}>
@@ -74,7 +90,7 @@ export default function DelegatesTable({
             {currentDelegates.length === 0 ? (
               <tr>
                 <td colSpan={6} className={styles.emptyState}>
-                  No delegates registered yet.
+                  No delegates found.
                 </td>
               </tr>
             ) : (
