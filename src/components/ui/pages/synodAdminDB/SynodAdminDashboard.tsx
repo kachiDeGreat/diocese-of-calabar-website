@@ -18,19 +18,13 @@ export default function SynodAdminDashboard() {
   const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(
-    null,
-  );
+  const [selectedDelegate, setSelectedDelegate] = useState<Delegate | null>(null);
 
-  const [chartMetric, setChartMetric] = useState<"revenue" | "delegates">(
-    "revenue",
-  );
+  const [chartMetric, setChartMetric] = useState<"revenue" | "delegates">("revenue");
   const [timeFilter, setTimeFilter] = useState<number>(30);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchMode, setSearchMode] = useState<"name_phone" | "reference">(
-    "name_phone",
-  );
+  const [searchMode, setSearchMode] = useState<"name_phone" | "reference">("name_phone");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 500;
@@ -40,16 +34,13 @@ export default function SynodAdminDashboard() {
   const fetchDelegates = async () => {
     setIsLoading(true);
     try {
-      const querySnapshot = await getDocs(
-        collection(db, "synod_registrations"),
-      );
+      const querySnapshot = await getDocs(collection(db, "synod_registrations"));
       const data: Delegate[] = [];
       querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() } as Delegate);
       });
       data.sort(
-        (a, b) =>
-          new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
+        (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
       );
       setDelegates(data);
     } catch (error) {
@@ -64,11 +55,7 @@ export default function SynodAdminDashboard() {
   }, []);
 
   const handleDelete = async (id: string, name: string) => {
-    if (
-      window.confirm(
-        `Are you sure you want to delete ${name}? This cannot be undone.`,
-      )
-    ) {
+    if (window.confirm(`Are you sure you want to delete ${name}? This cannot be undone.`)) {
       try {
         await deleteDoc(doc(db, "synod_registrations", id));
         setDelegates(delegates.filter((d) => d.id !== id));
@@ -80,9 +67,7 @@ export default function SynodAdminDashboard() {
   };
 
   const handleDeleteAll = async () => {
-    const confirmText = prompt(
-      "Type 'DELETE ALL' to confirm wiping the entire registration database.",
-    );
+    const confirmText = prompt("Type 'DELETE ALL' to confirm wiping the entire registration database.");
     if (confirmText === "DELETE ALL") {
       try {
         setIsLoading(true);
@@ -113,70 +98,79 @@ export default function SynodAdminDashboard() {
 
   const generateFullRegPDF = () => {
     const doc = new jsPDF("landscape");
-
+    
     doc.setFontSize(16);
-    doc.text("Synod 2026 - Registrations & Archdeaconry Breakdown", 14, 15);
+    doc.text("Synod 2026 - Registrations by Archdeaconry", 14, 15);
 
-    const breakdown = delegates.reduce(
-      (acc, del) => {
-        const arch = del.archdeaconry || "Unknown";
-        acc[arch] = (acc[arch] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
+    const groupedDelegates = filteredDelegates.reduce((acc, del) => {
+      const arch = del.archdeaconry || "Unknown Archdeaconry";
+      if (!acc[arch]) acc[arch] = [];
+      acc[arch].push(del);
+      return acc;
+    }, {} as Record<string, Delegate[]>);
 
-    const summaryData = Object.entries(breakdown).map(([name, count]) => [
-      name,
-      count.toString(),
-    ]);
-    summaryData.push(["TOTAL DELEGATES", delegates.length.toString()]);
+    const themeColors: [number, number, number][] = [
+      [197, 40, 16],
+      [31, 138, 112],
+      [43, 84, 126],
+      [184, 134, 11],
+      [102, 51, 153],
+      [210, 105, 30],
+      [0, 128, 128],
+      [128, 0, 0],
+      [85, 107, 47],
+      [72, 61, 139]
+    ];
 
-    doc.setFontSize(12);
-    doc.text("Archdeaconry Summary", 14, 25);
+    let currentY = 25;
+    let colorIndex = 0;
 
-    autoTable(doc, {
-      startY: 30,
-      head: [["Archdeaconry", "Delegate Count"]],
-      body: summaryData,
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [31, 8, 5] },
-      tableWidth: 120,
-    });
+    Object.entries(groupedDelegates)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .forEach(([archdeaconry, archDelegates]) => {
+        if (currentY > doc.internal.pageSize.getHeight() - 30) {
+          doc.addPage();
+          currentY = 20;
+        }
 
-    const finalY = (doc as any).lastAutoTable.finalY || 30;
+        const headColor = themeColors[colorIndex % themeColors.length];
 
-    doc.text("Full Delegate Roster", 14, finalY + 15);
+        doc.setFontSize(14);
+        doc.setTextColor(headColor[0], headColor[1], headColor[2]);
+        doc.text(`${archdeaconry} (${archDelegates.length} Delegates)`, 14, currentY);
 
-    const tableData = filteredDelegates.map((del) => [
-      del.delegateId,
-      `${del.title} ${del.fullName}`,
-      del.designation,
-      del.archdeaconry,
-      del.church,
-      del.email,
-      del.phone || "N/A",
-    ]);
+        const tableData = archDelegates.map((del) => [
+          del.delegateId,
+          `${del.title} ${del.fullName}`,
+          del.designation,
+          del.church,
+          del.email,
+          del.phone || "N/A",
+        ]);
 
-    autoTable(doc, {
-      startY: finalY + 20,
-      head: [
-        [
-          "Unique ID",
-          "Full Name",
-          "Designation",
-          "Archdeaconry",
-          "Church",
-          "Email",
-          "Phone",
-        ],
-      ],
-      body: tableData,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [197, 40, 16] },
-    });
+        autoTable(doc, {
+          startY: currentY + 5,
+          head: [["Unique ID", "Full Name", "Designation", "Church", "Email", "Phone"]],
+          body: tableData,
+          styles: { fontSize: 8 },
+          headStyles: { fillColor: headColor },
+          margin: { bottom: 20 },
+        });
 
-    doc.save("Synod_2026_Registrations.pdf");
+        currentY = (doc as any).lastAutoTable.finalY + 15;
+        colorIndex++;
+      });
+
+    if (currentY > doc.internal.pageSize.getHeight() - 20) {
+      doc.addPage();
+      currentY = 20;
+    }
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(14);
+    doc.text(`Total Registered Delegates: ${filteredDelegates.length}`, 14, currentY);
+
+    doc.save("Synod_2026_Archdeaconry_Breakdown.pdf");
     toast.success("PDF Downloaded successfully!");
   };
 
@@ -211,27 +205,17 @@ export default function SynodAdminDashboard() {
               el.style.maxWidth = `${width}px`;
               el.style.maxHeight = `${height}px`;
 
-              const originalImageContainer = document.getElementById(
-                "id-card-delegate-photo",
-              );
+              const originalImageContainer = document.getElementById("id-card-delegate-photo");
               const originalImg = originalImageContainer?.querySelector("img");
-              const imageContainer = clonedDoc.getElementById(
-                "id-card-delegate-photo",
-              );
+              const imageContainer = clonedDoc.getElementById("id-card-delegate-photo");
 
-              if (
-                imageContainer &&
-                originalImageContainer &&
-                originalImg &&
-                originalImg.naturalWidth
-              ) {
+              if (imageContainer && originalImageContainer && originalImg && originalImg.naturalWidth) {
                 const imgElement = imageContainer.querySelector("img");
                 if (imgElement) {
                   const containerW = originalImageContainer.offsetWidth;
                   const containerH = originalImageContainer.offsetHeight;
                   const containerRatio = containerW / containerH;
-                  const imgRatio =
-                    originalImg.naturalWidth / originalImg.naturalHeight;
+                  const imgRatio = originalImg.naturalWidth / originalImg.naturalHeight;
 
                   imgElement.style.objectFit = "fill";
                   imgElement.style.position = "absolute";
@@ -269,9 +253,7 @@ export default function SynodAdminDashboard() {
 
         toast.success("ID Card downloaded successfully!", { id: toastId });
       } catch (error) {
-        toast.error("Failed to generate image. Please try again.", {
-          id: toastId,
-        });
+        toast.error("Failed to generate image. Please try again.", { id: toastId });
       } finally {
         setIsGeneratingPDF(false);
       }
@@ -291,10 +273,7 @@ export default function SynodAdminDashboard() {
       const d = new Date(now);
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().split("T")[0];
-      const displayStr = d.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
+      const displayStr = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
       daysArray.push({
         fullDate: dateStr,
         displayDate: displayStr,
@@ -324,9 +303,7 @@ export default function SynodAdminDashboard() {
 
     return delegates.filter((del) => {
       if (searchMode === "name_phone") {
-        const nameMatch = `${del.title} ${del.fullName}`
-          .toLowerCase()
-          .includes(query);
+        const nameMatch = `${del.title} ${del.fullName}`.toLowerCase().includes(query);
         const phoneMatch = del.phone?.toLowerCase().includes(query);
         return nameMatch || phoneMatch;
       } else {
@@ -346,24 +323,17 @@ export default function SynodAdminDashboard() {
   }, [filteredDelegates.length, totalPages, currentPage]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentDelegates = filteredDelegates.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+  const currentDelegates = filteredDelegates.slice(startIndex, startIndex + itemsPerPage);
 
   const currentChartTotal = chartData.reduce(
-    (sum, day) =>
-      sum + (chartMetric === "revenue" ? day.revenue : day.delegates),
-    0,
+    (sum, day) => sum + (chartMetric === "revenue" ? day.revenue : day.delegates),
+    0
   );
 
-  const archBreakdown = delegates.reduce(
-    (acc, del) => {
-      acc[del.archdeaconry] = (acc[del.archdeaconry] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  const archBreakdown = delegates.reduce((acc, del) => {
+    acc[del.archdeaconry] = (acc[del.archdeaconry] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   const pieData = Object.entries(archBreakdown).map(([name, value]) => ({
     name: name || "Unknown",
