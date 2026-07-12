@@ -95,7 +95,7 @@ function BishopIntro() {
               }}
             >
               <LazyImage
-                src="https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p"
+                src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/wnpxtpcee40rzbs4gt4p"
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
                 placeholderColor="#f4f4f4"

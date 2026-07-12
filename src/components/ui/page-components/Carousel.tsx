@@ -18,7 +18,8 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: "https://dropimg.onyekachi.dev/hpfnhz8bd605x50szxot",
+    image:
+      "https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/hpfnhz8bd605x50szxot",
     title: (
       <>
         Diocese of Calabar

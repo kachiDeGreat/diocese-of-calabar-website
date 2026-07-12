@@ -9,7 +9,7 @@ function The_Most_Rev_Tunde_Adeleye() {
         title="Former Archbishop of Niger-Delta Province & Bishop of Calabar | The Most Rev. Tunde Adeleye"
         description="Explore the biography, legacy, and teachings of The Most Rev. Tunde Adeleye, the former Lord Bishop of Calabar and Archbishop of the Niger Delta Province."
         url="/former-bishop-of-calabar/"
-        image="https://dropimg.onyekachi.dev/rgam72tuhgjfako1q0ix"
+        image="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/rgam72tuhgjfako1q0ix"
       />
       <Banner title="Former Bishop of Calabar" />
       <FormerBishop />

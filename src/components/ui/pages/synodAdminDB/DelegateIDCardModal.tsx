@@ -44,7 +44,7 @@ export default function DelegateIDCardModal({
 
         {/* Hidden image to track watermark loading for html2canvas */}
         <img
-          src="https://dropimg.onyekachi.dev/xfljke7ynfyzfte6symi"
+          src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/xfljke7ynfyzfte6symi"
           alt="watermark-preload"
           style={{ display: "none" }}
           onLoad={() => setIsWatermarkLoaded(true)}

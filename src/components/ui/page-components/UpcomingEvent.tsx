@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { motion, Variants } from "framer-motion";
 import styles from "../styles/UpcomingEvent.module.css";
 import Button from "./button";
@@ -22,7 +22,7 @@ const staggerContainer: Variants = {
 };
 
 const UpcomingEvent = () => {
-  const navigate = useNavigate();
+
   const targetDate = new Date("2026-07-08T08:00:00").getTime();
 
   const [timeLeft, setTimeLeft] = useState({
@@ -134,21 +134,10 @@ const UpcomingEvent = () => {
           <motion.div variants={fadeInUp}>
             <Button
               size="medium"
-              onClick={() => navigate("/synod-2026")}
-              style={{ width: "30%" }}
+              onClick={() => {}}
+              style={{ width: "auto", opacity: 0.8, cursor: "not-allowed", backgroundColor: "#555" }}
             >
-              REGISTER NOW
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
+              Synod registration has ended
             </Button>
           </motion.div>
         </motion.div>

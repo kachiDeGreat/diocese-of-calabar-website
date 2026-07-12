@@ -9,7 +9,7 @@ function Bishop_of_calabar() {
         title="The Bishop of Calabar"
         description="Meet The Rt. Rev'd. Prof. Nneoyi Onen Egbe, Lord Bishop of Calabar, and explore his messages, biography, and teachings."
         url="/bishop-of-calabar/"
-        image="https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p"
+        image="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/wnpxtpcee40rzbs4gt4p"
       />
       <Banner title="Bishop of Calabar Diocese" />
       <BishopIntro />

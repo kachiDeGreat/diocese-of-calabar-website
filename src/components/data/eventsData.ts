@@ -117,7 +117,7 @@ export const eventsData: EventData[] = [
     date: "APRIL 20, 2026",
     title:
       "Upcoming: Foundation Laying Service for the Diocesan Women Retreat Centre",
-    image: "https://dropimg.onyekachi.dev/qtfltwjrr3pdr3fvcfqv",
+    image: "https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/qtfltwjrr3pdr3fvcfqv",
     category: "Upcoming Event",
     content: [
       "The Anglican Diocese of Calabar cordially invites all clergy, lay delegates, parishioners, and well-wishers to a highly anticipated and historic occasion: the Foundation Laying Service of the brand new Diocesan Women Retreat Centre.",
@@ -136,7 +136,7 @@ export const eventsData: EventData[] = [
     slug: "https://blog.anglicandioceseofcalabar.org/news/2026-diocesan-prayer-convocation",
     date: "APRIL 19, 2026",
     title: "2026 Diocesan Prayer Convocation: Enriched By Him In Everything",
-    image: "https://dropimg.onyekachi.dev/uzqgclibqdvtgusovg1b",
+    image: "https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/uzqgclibqdvtgusovg1b",
     category: "Convocation",
     content: [
       "From Thursday, April 16th to Sunday, April 19th, 2026, the Anglican Diocese of Calabar gathered at Holy Trinity College, Asari Eso Layout, for a spiritually transformative Diocesan Prayer Convocation. Anchored on the Pauline envisioned theme, 'Enriched by Him in Everything' (1 Cor 1:5), the four-day convocation was a period of deep spiritual renewal, intense prayer, fasting, and profound scriptural learning.",

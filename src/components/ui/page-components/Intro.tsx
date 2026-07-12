@@ -41,7 +41,6 @@ function Intro() {
             <motion.div
               className={styles.imageContainer}
               variants={fadeInUp}
-             
               style={{
                 width: "100%",
                 maxWidth: "400px",
@@ -50,7 +49,7 @@ function Intro() {
               }}
             >
               <LazyImage
-                src="https://dropimg.onyekachi.dev/wnpxtpcee40rzbs4gt4p"
+                src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/wnpxtpcee40rzbs4gt4p"
                 alt="The Rt. Rev'd. Prof. Nneoyi Onen Egbe - Lord Bishop of Calabar"
                 className={styles.bishopImage}
                 placeholderColor="#f4f4f4"
@@ -62,9 +61,7 @@ function Intro() {
               <h3 className={styles.cardBishopName}>
                 The Rt. Rev'd. Prof. Nneoyi Onen Egbe
               </h3>
-              <p className={styles.cardCredentials}>
-                B.Th, B.Sc, M.Sc, Ph.D
-              </p>
+              <p className={styles.cardCredentials}>B.Th, B.Sc, M.Sc, Ph.D</p>
               <p className={styles.cardBishopTitle}>Lord Bishop of Calabar</p>
             </motion.div>
           </div>

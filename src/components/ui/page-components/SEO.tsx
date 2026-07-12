@@ -11,7 +11,8 @@ export default function SEO({ title, description, image, url }: SEOProps) {
   const siteName = "Diocese of Calabar";
   const fullTitle = `${title} | ${siteName}`;
 
-  const defaultImage = "https://dropimg.onyekachi.dev/hpfnhz8bd605x50szxot";
+  const defaultImage =
+    "https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/hpfnhz8bd605x50szxot";
 
   const finalImage = image || defaultImage;
 

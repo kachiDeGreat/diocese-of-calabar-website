@@ -441,7 +441,7 @@ export default function SynodReg() {
           <div className={styles.heroImageCol}>
             <div className={styles.imageCard}>
               <LazyImage
-                src="https://dropimg.onyekachi.dev/ht6wzjquxxibzidswokz"
+                src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/ht6wzjquxxibzidswokz"
                 alt="Bishop image"
                 className={styles.personImage}
               />

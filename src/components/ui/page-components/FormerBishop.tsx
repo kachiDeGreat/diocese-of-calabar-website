@@ -99,7 +99,7 @@ function FormerBishop() {
               }}
             >
               <LazyImage
-                src="https://dropimg.onyekachi.dev/rgam72tuhgjfako1q0ix"
+                src="https://drop-bibbi4ujk-onyekachidegreats-projects.vercel.app/rgam72tuhgjfako1q0ix"
                 alt="The Most Rev. Tunde Adeleye - Former Bishop of Calabar"
                 className={styles.bishopImage}
                 placeholderColor="#e0e0e0"
