@@ -113,3 +113,36 @@
 .readMoreBtn:hover {
   gap: 12px;
 }
+.filterContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.filterBtn {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #555;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+  background: #f0f0f0;
+}
+
+.filterBtnActive {
+  background: #c52810;
+  color: #fff;
+  border-color: #c52810;
+}
+
+.filterBtnActive:hover {
+  background: #a9220d;
+}

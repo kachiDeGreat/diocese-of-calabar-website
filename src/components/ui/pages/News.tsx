@@ -1,16 +1,35 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import SEO from "../page-components/SEO";
 import Banner from "../page-components/Banner";
 import LazyImage from "../page-components/LazyImage";
 import styles from "../styles/News.module.css";
-import { eventsData } from "../../data/eventsData";
+import { EventData, eventsData } from "../../data/eventsData";
 
 export default function News() {
+  const [activeCategory, setActiveCategory] = useState("All");
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const categories = ["All", ...Array.from(new Set(eventsData.map(e => e.category)))];
+
+  let displayedEvents: EventData[] = [];
+  if (activeCategory === "All") {
+    // Show max 3 from each category
+    const categoryMap = new Map();
+    eventsData.forEach(event => {
+      const count = categoryMap.get(event.category) || 0;
+      if (count < 3) {
+        displayedEvents.push(event);
+        categoryMap.set(event.category, count + 1);
+      }
+    });
+  } else {
+    displayedEvents = eventsData.filter(e => e.category === activeCategory);
+  }
 
   return (
     <HelmetProvider>
@@ -23,8 +42,20 @@ export default function News() {
 
       <section className={styles.newsSection}>
         <div className="container">
+          <div className={styles.filterContainer}>
+            {categories.map((category, index) => (
+              <button
+                key={index}
+                className={`${styles.filterBtn} ${activeCategory === category ? styles.filterBtnActive : ""}`}
+                onClick={() => setActiveCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
           <div className={styles.newsGrid}>
-            {eventsData.map((event) => (
+            {displayedEvents.map((event) => (
               <div key={event.id} className={styles.newsCard}>
                 <div className={styles.imageContainer}>
                   <LazyImage
