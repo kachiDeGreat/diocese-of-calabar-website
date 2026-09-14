@@ -10,7 +10,11 @@ import Archdeaconry from "../ui/pages/Archdeaconry";
 import ArchdeaconryDetails from "../ui/pages/ArchdeaconryDetails";
 import NotFound from "../ui/pages/NotFound";
 import ScrollToTop from "../ui/page-components/ScrollToTop ";
-import SynodAdminLogin from "../ui/pages/synodAdminDB/SynodAdminLogin";
+import AdminLogin from "../ui/pages/admin/AdminLogin";
+import AdminLayout from "../ui/pages/admin/AdminLayout";
+import AdminDashboard from "../ui/pages/admin/AdminDashboard";
+import CreateBlogPost from "../ui/pages/admin/CreateBlogPost";
+import BlogList from "../ui/pages/admin/BlogList";
 import SynodAdminDashboard from "../ui/pages/synodAdminDB/SynodAdminDashboard";
 import EventDetails from "../ui/pages/EventDetails";
 import News from "../ui/pages/News";
@@ -18,12 +22,33 @@ import SynodReg from "../ui/pages/SynodReg";
 import Donate from "../ui/pages/Donate";
 // import SynodMaintenance from "../ui/pages/SynodMaintenance";
 
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
+
 const ProtectedAdminRoute = ({ children }: { children: ReactNode }) => {
-  const isAuthenticated = sessionStorage.getItem("synodAdminAuth") === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        // Fallback for backwards compatibility with Synod admin session
+        const sessionAuth = sessionStorage.getItem("synodAdminAuth") === "true";
+        setIsAuthenticated(sessionAuth);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>; // Could use the LineLoader here
+  }
+
   return isAuthenticated ? (
     <>{children}</>
   ) : (
-    <Navigate to="/synod-2026-admin" replace />
+    <Navigate to="/admin/login" replace />
   );
 };
 
@@ -327,15 +352,27 @@ function Index() {
         />
 
         {/* admin routes */}
-        <Route path="/synod-2026-admin" element={<SynodAdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        
+        {/* Redirect old synod route to new admin login */}
+        <Route path="/synod-2026-admin" element={<Navigate to="/admin/login" replace />} />
+
         <Route
-          path="/synod-2026-admin/dashboard"
+          path="/admin"
           element={
             <ProtectedAdminRoute>
-              <SynodAdminDashboard />
+              <AdminLayout />
             </ProtectedAdminRoute>
           }
-        />
+        >
+          {/* Default admin route redirects to dashboard */}
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="synod" element={<SynodAdminDashboard />} />
+          <Route path="blog" element={<BlogList />} />
+          <Route path="blog/create" element={<CreateBlogPost />} />
+          <Route path="blog/edit/:id" element={<CreateBlogPost />} />
+        </Route>
 
         <Route path="*" element={<NotFound />} />
       </Routes>
