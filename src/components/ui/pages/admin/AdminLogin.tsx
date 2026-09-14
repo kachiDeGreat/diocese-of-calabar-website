@@ -1,41 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import styles from "./SynodAdminLogin.module.css";
+import styles from "./AdminLogin.module.css";
 // import SEO from "../../page-components/SEO";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../../firebase";
 
-export default function SynodAdminLogin() {
+export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
 
-    sessionStorage.setItem("synodAdminAuth", "true");
+      // Keep this for backward compatibility with Synod routes if needed
+      sessionStorage.setItem("synodAdminAuth", "true"); 
 
-    toast.success("Login Successful!");
-    navigate("/synod-2026-admin/dashboard");
-  } catch (error: any) {
-    console.error(error);
-    toast.error("Invalid admin email or password.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+      toast.success("Login Successful!");
+      navigate("/admin/dashboard");
+    } catch (error: any) {
+      console.error(error);
+      toast.error("Invalid admin email or password.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.pageWrapper}>
       {/* <SEO
-        title="Synod Admin Portal | Synod 2026"
-        description="Secure login for the Diocese of Calabar Synod Admin Portal."
+        title="Admin Portal | Diocese of Calabar"
+        description="Secure login for the Diocese of Calabar Admin Portal."
       />*/}
       <Toaster
         position="top-right"
@@ -75,7 +76,7 @@ const handleLogin = async (e: React.FormEvent) => {
         </div>
         <h2>Desktop Required</h2>
         <p>
-          The Synod Admin Dashboard is highly detailed and requires a larger
+          The Admin Dashboard is highly detailed and requires a larger
           screen.
         </p>
         <p className={styles.subText}>
@@ -92,8 +93,8 @@ const handleLogin = async (e: React.FormEvent) => {
               <span className={styles.badgeDot}></span>
               Diocese of Calabar
             </div>
-            <h2>Synod Admin Portal</h2>
-            <p>Sign in to manage Synod delegates and revenue.</p>
+            <h2>Admin Portal</h2>
+            <p>Sign in to manage the Diocese website and portals.</p>
           </div>
 
           <form onSubmit={handleLogin} className={styles.loginForm}>

@@ -15,7 +15,7 @@ function App() {
 
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/synod-2026-admin");
+  const isAdminRoute = location.pathname.startsWith("/admin") || location.pathname.startsWith("/synod-2026-admin");
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
