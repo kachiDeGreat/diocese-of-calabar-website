@@ -240,17 +240,17 @@
 .editorWrapper {
   background-color: white;
   border-radius: 8px;
-  overflow: hidden;
 }
 
 .quillEditor {
-  height: 400px;
-  display: flex;
-  flex-direction: column;
+  min-height: 400px;
 }
 
 /* React Quill Styles Overrides */
 :global(.ql-toolbar) {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   border-color: #d1d5db !important;
@@ -263,12 +263,11 @@
   border-color: #d1d5db !important;
   font-size: 1rem !important;
   font-family: inherit !important;
-  flex: 1;
+  min-height: 350px;
 }
 
 :global(.ql-editor) {
-  height: 100%;
-  overflow-y: auto;
+  min-height: 350px;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }

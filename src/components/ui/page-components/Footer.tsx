@@ -14,7 +14,7 @@ export default function Footer() {
                 <div className={styles.logoArea}>
                   <div className={styles.logoContainer}>
                     <img
-                      src="https://i.ibb.co/5hHtYQVs/logo-alt-removebg-preview-1.png"
+                      src="https://i.postimg.cc/vBndrCv5/favicon.png"
                       alt="Logo"
                       className={styles.logo}
                     />
